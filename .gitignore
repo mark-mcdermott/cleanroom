@@ -29,3 +29,4 @@ playwright/.cache/
 
 # Coverage
 coverage/
+.mcp.json
