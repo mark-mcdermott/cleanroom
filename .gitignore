@@ -1,0 +1,31 @@
+# Dependencies
+node_modules
+
+# Build outputs
+.svelte-kit
+build
+dist
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# IDE
+.vscode
+.idea
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Test results
+test-results/
+playwright-report/
+playwright/.cache/
+
+# Coverage
+coverage/
