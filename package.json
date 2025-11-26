@@ -44,5 +44,8 @@
   "type": "module",
   "engines": {
     "node": ">=22"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": []
   }
 }
