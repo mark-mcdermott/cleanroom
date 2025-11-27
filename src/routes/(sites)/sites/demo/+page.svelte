@@ -3,7 +3,7 @@
 </script>
 
 <svelte:head>
-	<title>Demo Page - Cleanroom</title>
+	<title>Demo Site - Cleanroom</title>
 	<meta name="description" content="Demo page example from Cleanroom" />
 </svelte:head>
 
@@ -12,7 +12,7 @@
 	<div class="px-8 py-6">
 		<div class="flex items-center gap-2 text-2xl">
 			<span>🦫</span>
-			<span class="font-semibold tracking-tight">Demo Page</span>
+			<span class="font-semibold tracking-tight">Demo Site</span>
 		</div>
 		<a
 			href="/"
@@ -30,7 +30,7 @@
 					class="text-4xl sm:text-5xl font-semibold tracking-tight flex items-center justify-center gap-3"
 				>
 					<span class="text-5xl sm:text-6xl">🦫</span>
-					Demo Page
+					Demo Site
 				</h1>
 				<p class="text-zinc-600 text-lg mt-6 max-w-md mx-auto px-4">
 					A simple demo page with no navigation or responsive breakpoints.
