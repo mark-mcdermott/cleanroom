@@ -27,15 +27,6 @@ async function isGhLoggedIn(): Promise<boolean> {
 	}
 }
 
-// Helper to check if user is logged into wrangler
-async function isWranglerLoggedIn(): Promise<boolean> {
-	try {
-		const { stdout } = await execAsync('wrangler whoami');
-		return !stdout.includes('Not logged in');
-	} catch {
-		return false;
-	}
-}
 
 // Helper to detect OS
 function getOS(): 'macos' | 'linux' | 'windows' {
@@ -108,47 +99,6 @@ async function setupDependencies(): Promise<boolean> {
 	}
 	p.log.success('GitHub CLI authenticated');
 
-	// Check and install wrangler
-	spinner.start('Checking Wrangler CLI...');
-	const hasWrangler = await commandExists('wrangler');
-
-	if (!hasWrangler) {
-		spinner.message('Installing Wrangler CLI...');
-		try {
-			await execAsync('npm install -g wrangler');
-			spinner.message('Wrangler CLI installed!');
-		} catch {
-			spinner.stop('Failed to install Wrangler CLI');
-			p.log.error('Please install Wrangler manually: npm install -g wrangler');
-			return false;
-		}
-	}
-	spinner.stop('Wrangler CLI ready');
-
-	// Check wrangler login status
-	const wranglerLoggedIn = await isWranglerLoggedIn();
-	if (!wranglerLoggedIn) {
-		p.log.warn('You need to log in to Cloudflare');
-		p.note('Run: wrangler login', 'Cloudflare Login Required');
-
-		const loginConfirm = await p.confirm({
-			message: 'Press Enter after logging in to continue',
-			initialValue: true
-		});
-
-		if (p.isCancel(loginConfirm)) {
-			p.cancel('Setup cancelled');
-			process.exit(0);
-		}
-
-		// Verify login
-		if (!(await isWranglerLoggedIn())) {
-			p.log.error('Wrangler login required. Please run: wrangler login');
-			return false;
-		}
-	}
-	p.log.success('Wrangler CLI authenticated');
-
 	return true;
 }
 
@@ -162,45 +112,6 @@ async function getGitHubUsername(): Promise<string | null> {
 	}
 }
 
-// Wait for Cloudflare Pages deployment to complete
-async function waitForDeployment(
-	projectName: string,
-	spinner: ReturnType<typeof p.spinner>
-): Promise<{ success: boolean; url?: string }> {
-	const maxAttempts = 60; // 5 minutes max (5 second intervals)
-	let attempts = 0;
-
-	while (attempts < maxAttempts) {
-		try {
-			const { stdout } = await execAsync(
-				`wrangler pages deployment list --project-name=${projectName} --json`
-			);
-			const deployments = JSON.parse(stdout);
-
-			if (deployments && deployments.length > 0) {
-				const latest = deployments[0];
-				const status = latest.deployment_trigger?.metadata?.status || latest.latest_stage?.name;
-
-				if (status === 'success' || latest.latest_stage?.name === 'deploy' && latest.latest_stage?.status === 'success') {
-					return { success: true, url: latest.url || `https://${projectName}.pages.dev` };
-				} else if (status === 'failure' || latest.latest_stage?.status === 'failure') {
-					return { success: false };
-				}
-
-				// Update spinner with current stage
-				const stageName = latest.latest_stage?.name || 'initializing';
-				spinner.message(`Deploying... (${stageName})`);
-			}
-		} catch {
-			// API call failed, keep trying
-		}
-
-		await new Promise((resolve) => setTimeout(resolve, 5000)); // Wait 5 seconds
-		attempts++;
-	}
-
-	return { success: false }; // Timeout
-}
 
 async function main() {
 	console.clear();
@@ -364,81 +275,36 @@ async function main() {
 		);
 	}
 
-	// Create Cloudflare Pages project
-	spinner.start('Creating Cloudflare Pages project...');
-	let pagesProjectCreated = false;
+	// Guide user to create Cloudflare Pages project with Git integration
+	p.note(
+		[
+			'Now let\'s deploy to Cloudflare Pages:',
+			'',
+			'1. Go to https://dash.cloudflare.com/',
+			'2. Click "Workers & Pages" in the left sidebar',
+			'3. Click "Create" button',
+			'4. Click "Pages" tab, then "Connect to Git"',
+			'5. Select your GitHub account and the repo you just created',
+			'6. Configure build settings:',
+			`   • Project name: ${slug}`,
+			'   • Production branch: main',
+			'   • Build command: pnpm build',
+			'   • Build output directory: .svelte-kit/cloudflare',
+			'7. Expand "Environment variables" and add:',
+			'   • Variable name: NODE_VERSION',
+			'   • Value: 22',
+			'8. Click "Save and Deploy"'
+		].join('\n'),
+		'Create Cloudflare Pages Project'
+	);
 
-	try {
-		await execAsync(`wrangler pages project create ${slug} --production-branch=main`);
-		spinner.stop('Cloudflare Pages project created!');
-		pagesProjectCreated = true;
-		config.cloudflare.configured = true;
-		p.log.success(`Pages URL: https://${slug}.pages.dev`);
-	} catch (error) {
-		spinner.stop('Failed to create Cloudflare Pages project');
-		const errorMsg = error instanceof Error ? error.message : 'Unknown error';
+	await p.confirm({
+		message: 'Press Enter when the deployment is complete',
+		initialValue: true
+	});
 
-		// Check if project already exists
-		if (errorMsg.includes('already exists')) {
-			p.log.warn(`Project "${slug}" already exists in Cloudflare Pages`);
-			pagesProjectCreated = true;
-			config.cloudflare.configured = true;
-		} else {
-			p.log.error(`Cloudflare error: ${errorMsg}`);
-		}
-	}
-
-	if (pagesProjectCreated) {
-		// Guide user to connect GitHub (required for automatic deployments)
-		p.note(
-			[
-				'Connect your GitHub repo to enable automatic deployments:',
-				'',
-				'1. Go to https://dash.cloudflare.com/ > Workers & Pages',
-				`2. Click on "${slug}"`,
-				'3. Go to Settings > Builds & deployments',
-				'4. Click "Connect to Git" and select your repo',
-				'5. Set build command: pnpm build',
-				'6. Set output directory: .svelte-kit/cloudflare',
-				'7. Add environment variable: NODE_VERSION = 22',
-				'8. Click "Save and Deploy"'
-			].join('\n'),
-			'Connect GitHub to Cloudflare Pages'
-		);
-
-		await p.confirm({
-			message: 'Press Enter after connecting and deploying',
-			initialValue: true
-		});
-
-		// Wait for deployment to complete
-		spinner.start('Waiting for deployment...');
-		const deployResult = await waitForDeployment(slug, spinner);
-
-		if (deployResult.success) {
-			spinner.stop('Deployment successful!');
-			p.log.success(`Live at: ${deployResult.url}`);
-		} else {
-			spinner.stop('Deployment may still be in progress');
-			p.log.warn(
-				`Check status at: https://dash.cloudflare.com/ > Workers & Pages > ${slug}`
-			);
-		}
-	} else {
-		p.note(
-			[
-				'You can create the project manually:',
-				'1. Go to https://dash.cloudflare.com/',
-				'2. Click "Workers & Pages" in the left sidebar',
-				'3. Click the "Create" button',
-				'4. Connect to Git and select your repo',
-				'5. Set build command: pnpm build',
-				'6. Set output directory: .svelte-kit/cloudflare',
-				'7. Add environment variable: NODE_VERSION = 22'
-			].join('\n'),
-			'Manual Cloudflare Pages Setup'
-		);
-	}
+	config.cloudflare.configured = true;
+	p.log.success(`Site deployed to https://${slug}.pages.dev`);
 
 	// Domain setup
 	const hasDomain = await p.confirm({
