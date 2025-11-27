@@ -25,6 +25,7 @@ export function getDesktopOnlyNav(config: ProjectConfig, links?: { href: string;
 }
 
 // Full Nav - with mobile menu (hamburger → drawer)
+// Note: Requires `let mobileMenuOpen = $state(false);` in the parent component's script
 export function getNav(
 	config: ProjectConfig,
 	links: { href: string; label: string }[]
@@ -48,11 +49,7 @@ export function getNav(
 		)
 		.join('\n\t\t\t\t\t');
 
-	return `<script lang="ts">
-	let mobileMenuOpen = $state(false);
-</script>
-
-<nav class="w-full flex items-center justify-between px-8 py-6">
+	return `<nav class="w-full flex items-center justify-between px-8 py-6">
 	<a href="/" class="text-2xl no-underline hover:no-underline">
 		${logoDisplay}
 	</a>
@@ -165,6 +162,7 @@ export function getFooter(config: ProjectConfig): string {
 }
 
 // Header with border (for multi-page sites)
+// Note: Requires `let mobileMenuOpen = $state(false);` in the parent component's script
 export function getHeader(config: ProjectConfig, links: { href: string; label: string }[]): string {
 	const logoDisplay =
 		config.logo.type === 'emoji'
@@ -185,11 +183,7 @@ export function getHeader(config: ProjectConfig, links: { href: string; label: s
 		)
 		.join('\n\t\t\t\t\t');
 
-	return `<script lang="ts">
-	let mobileMenuOpen = $state(false);
-</script>
-
-<header class="border-b">
+	return `<header class="border-b">
 	<div class="mx-auto max-w-6xl px-6 sm:px-10 h-16 flex items-center justify-between">
 		<a href="/" class="font-semibold text-lg tracking-tight flex items-center gap-2">
 			${logoDisplay}

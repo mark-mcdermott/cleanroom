@@ -27,6 +27,7 @@ function getLayoutSvelte(config: ProjectConfig): string {
 	import '../app.css';
 
 	let { children } = $props();
+	let mobileMenuOpen = $state(false);
 </script>
 
 <div class="min-h-dvh flex flex-col">

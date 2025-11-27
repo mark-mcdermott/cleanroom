@@ -57,10 +57,22 @@
   },
   "dependencies": {
     "@clack/prompts": "^0.11.0",
+    "@lucia-auth/adapter-drizzle": "^1.1.0",
     "@neondatabase/serverless": "^1.0.2",
+    "@node-rs/argon2": "^2.0.2",
+    "@tailwindcss/vite": "^4.1.17",
     "@tanstack/svelte-query": "^6.0.9",
+    "bits-ui": "^2.14.4",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
     "drizzle-orm": "^0.44.7",
     "drizzle-zod": "^0.8.3",
+    "lucia": "^3.2.2",
+    "lucide-svelte": "^0.555.0",
+    "mode-watcher": "^1.1.0",
+    "svelte-sonner": "^1.0.6",
+    "tailwind-merge": "^3.4.0",
+    "tailwindcss": "^4.1.17",
     "zod": "^4.1.13"
   }
 }

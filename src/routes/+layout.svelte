@@ -1,5 +1,7 @@
 <script lang="ts">
+	import '../app.css';
 	import { QueryClient, QueryClientProvider } from '@tanstack/svelte-query';
+	import { AuthNav } from '$lib/components/blocks';
 
 	const queryClient = new QueryClient({
 		defaultOptions: {
@@ -10,9 +12,10 @@
 		}
 	});
 
-	let { children } = $props();
+	let { children, data } = $props();
 </script>
 
 <QueryClientProvider client={queryClient}>
+	<AuthNav user={data.user} />
 	{@render children()}
 </QueryClientProvider>

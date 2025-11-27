@@ -58,10 +58,12 @@ describe('Component Templates', () => {
 			{ href: '#about', label: 'About' }
 		];
 
-		it('includes mobile menu state', () => {
+		it('references mobile menu state (defined in parent)', () => {
 			const nav = getNav(baseConfig, links);
+			// mobileMenuOpen is referenced but defined in parent component's script
 			expect(nav).toContain('mobileMenuOpen');
-			expect(nav).toContain('$state(false)');
+			// The $state declaration is in the layout, not the component template
+			expect(nav).not.toContain('<script');
 		});
 
 		it('includes hamburger button', () => {
