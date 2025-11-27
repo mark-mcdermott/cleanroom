@@ -142,12 +142,20 @@ export function getSectionHero(config: ProjectConfig, sections: string[]): strin
 
 // Section component
 export function getSection(id: string, title: string, content: string): string {
-	return `<section id="${id}" class="py-24 px-8">
+	// Split content by double newlines to create paragraphs
+	const paragraphs = content
+		.split('\n\n')
+		.map((p) => p.trim())
+		.filter((p) => p.length > 0)
+		.map((p) => `<p class="text-zinc-600 text-lg mb-4 last:mb-0">${p}</p>`)
+		.join('\n\t\t\t');
+
+	return `<section id="${id}" class="py-24 px-8 scroll-mt-20">
 	<div class="max-w-4xl mx-auto">
 		<h2 class="text-3xl font-semibold tracking-tight mb-6">${title}</h2>
-		<p class="text-zinc-600 text-lg">
-			${content}
-		</p>
+		<div class="space-y-4">
+			${paragraphs}
+		</div>
 	</div>
 </section>`;
 }

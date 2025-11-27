@@ -114,6 +114,7 @@ export function getAppCss(): string {
   html {
     font-family: "Inter", system-ui, sans-serif;
     @apply antialiased bg-white text-zinc-900;
+    scroll-behavior: smooth;
   }
 
   body {
