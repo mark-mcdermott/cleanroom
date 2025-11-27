@@ -1,5 +1,6 @@
 <script lang="ts">
-	// Landing Sections - Single page with section nav & mobile menu
+	import { ArrowLeft } from 'lucide-svelte';
+
 	let mobileMenuOpen = $state(false);
 
 	const sections = [
@@ -11,16 +12,29 @@
 </script>
 
 <svelte:head>
-	<title>Willy's Treasure Hunt</title>
-	<meta name="description" content="A landing page with scroll sections showcasing Cleanroom" />
+	<title>Landing Page (Jump Links) - Cleanroom</title>
+	<meta name="description" content="Landing page with scroll sections example from Cleanroom" />
 </svelte:head>
 
 <div class="min-h-dvh flex flex-col">
-	<!-- Nav -->
-	<nav class="w-full flex items-center justify-between px-8 py-6">
-		<a href="/sites/landing-sections" class="text-2xl no-underline hover:no-underline">
+	<!-- Site header with back link -->
+	<div class="px-8 pt-6 pb-2">
+		<div class="flex items-center gap-2 text-2xl">
 			<span>🦫</span>
+			<span class="font-semibold tracking-tight">Landing Page (Jump Links)</span>
+		</div>
+		<a
+			href="/"
+			class="inline-flex items-center gap-1 text-sm text-zinc-500 hover:text-zinc-700 mt-2"
+		>
+			<ArrowLeft class="w-4 h-4" />
+			Back to Cleanroom
 		</a>
+	</div>
+
+	<!-- Nav -->
+	<nav class="w-full flex items-center justify-between px-8 py-4">
+		<div></div>
 
 		<!-- Desktop Navigation -->
 		<div class="hidden md:flex gap-6 items-center">
@@ -64,7 +78,7 @@
 			<!-- Drawer -->
 			<div class="absolute left-0 top-0 h-full w-64 bg-white shadow-xl">
 				<div class="flex items-center justify-between p-4 border-b">
-					<span class="font-semibold">Willy's Treasure Hunt</span>
+					<span class="font-semibold">Sections</span>
 					<button onclick={() => (mobileMenuOpen = false)} aria-label="Close menu">
 						<svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 							<path
@@ -93,14 +107,17 @@
 
 	<main class="flex-1">
 		<!-- Hero -->
-		<div class="w-full flex justify-center items-center text-center min-h-[80vh]">
+		<div class="w-full flex justify-center items-center text-center min-h-[60vh]">
 			<div class="my-16 sm:my-24">
 				<h1
 					class="text-4xl sm:text-5xl font-semibold tracking-tight flex items-center justify-center gap-3"
 				>
 					<span class="text-5xl sm:text-6xl">🦫</span>
-					Willy's Treasure Hunt
+					Landing Page
 				</h1>
+				<p class="text-zinc-600 text-lg mt-4 max-w-md mx-auto px-4">
+					A landing page with section navigation and mobile menu.
+				</p>
 				<div class="flex flex-wrap justify-center gap-4 mt-8">
 					{#each sections as section}
 						<a href="#{section.id}" class="btn btn-light">{section.title}</a>
@@ -228,12 +245,6 @@
 			</div>
 		</section>
 	</main>
-
-	<footer class="border-t">
-		<div class="mx-auto max-w-6xl px-6 sm:px-10 py-8 text-sm text-zinc-600">
-			&copy; {new Date().getFullYear()} Willy's Treasure Hunt
-		</div>
-	</footer>
 </div>
 
 <style>
