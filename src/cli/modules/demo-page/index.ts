@@ -9,7 +9,8 @@ import {
 	getGitignore,
 	getAppCss,
 	getAppHtml,
-	getAppDts
+	getAppDts,
+	getLayoutTs
 } from '../base/files';
 import { getSimpleHero } from '../base/components';
 
@@ -61,6 +62,7 @@ export const demoPageModule: GeneratorModule = {
 
 		// Write route files
 		await writeFile(join(outputDir, 'src', 'routes', '+layout.svelte'), getLayoutSvelte());
+		await writeFile(join(outputDir, 'src', 'routes', '+layout.ts'), getLayoutTs());
 		await writeFile(join(outputDir, 'src', 'routes', '+page.svelte'), getPageSvelte(config));
 
 		// Copy logo if it's a file

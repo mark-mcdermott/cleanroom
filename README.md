@@ -13,10 +13,12 @@ The CLI will guide you through:
 1. **Project name** - Name your project
 2. **Logo** - Use an image file or emoji
 3. **Site type** - Choose from:
-   - Simple demo page (single page, no nav)
-   - Simple landing page (single page, responsive)
+   - Simple demo page
+   - Simple landing page (responsive)
    - Landing page with scroll sections (section nav & mobile menu)
    - Simple static site (multiple pages with nav)
+
+   All site types are **prerendered** at build time for fast static hosting, with **SPA-like client-side navigation** (no page reloads after initial load). No SSR runtime required.
 4. **GitHub** - Automatically creates a repo and pushes code
 5. **Cloudflare Pages** - Guides you through deployment setup
 6. **Custom domain** - Optional Namecheap domain configuration

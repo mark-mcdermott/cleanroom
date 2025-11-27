@@ -9,7 +9,8 @@ import {
 	getGitignore,
 	getAppCss,
 	getAppHtml,
-	getAppDts
+	getAppDts,
+	getLayoutTs
 } from '../base/files';
 import { getNav, getSectionHero, getSection, getFooter } from '../base/components';
 
@@ -131,6 +132,7 @@ export const landingSectionsModule: GeneratorModule = {
 
 		// Write route files
 		await writeFile(join(outputDir, 'src', 'routes', '+layout.svelte'), getLayoutSvelte(config));
+		await writeFile(join(outputDir, 'src', 'routes', '+layout.ts'), getLayoutTs());
 		await writeFile(join(outputDir, 'src', 'routes', '+page.svelte'), getPageSvelte(config));
 
 		// Copy logo if it's a file

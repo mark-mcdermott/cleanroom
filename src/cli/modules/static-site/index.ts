@@ -9,7 +9,8 @@ import {
 	getGitignore,
 	getAppCss,
 	getAppHtml,
-	getAppDts
+	getAppDts,
+	getLayoutTs
 } from '../base/files';
 import { getHeader, getFooter } from '../base/components';
 
@@ -132,6 +133,7 @@ export const staticSiteModule: GeneratorModule = {
 
 		// Write route files
 		await writeFile(join(outputDir, 'src', 'routes', '+layout.svelte'), getLayoutSvelte(config));
+		await writeFile(join(outputDir, 'src', 'routes', '+layout.ts'), getLayoutTs());
 		await writeFile(join(outputDir, 'src', 'routes', '+page.svelte'), getHomePageSvelte(config));
 		await writeFile(
 			join(outputDir, 'src', 'routes', 'about', '+page.svelte'),

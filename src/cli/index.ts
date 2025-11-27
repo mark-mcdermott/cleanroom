@@ -188,22 +188,22 @@ async function main() {
 			{
 				value: 'demo-page',
 				label: 'Simple demo page',
-				hint: 'Single page, no nav/mobile-menu, no breakpoints'
+				hint: 'Prerendered, SPA-like navigation, no SSR'
 			},
 			{
 				value: 'landing-simple',
 				label: 'Simple landing page',
-				hint: 'Single page, no nav/mobile-menu, responsive'
+				hint: 'Prerendered, SPA-like navigation, responsive'
 			},
 			{
 				value: 'landing-sections',
 				label: 'Landing page with scroll sections',
-				hint: 'Single page with section nav & mobile menu'
+				hint: 'Prerendered, SPA-like navigation, section nav & mobile menu'
 			},
 			{
 				value: 'static-site',
 				label: 'Simple static site',
-				hint: 'Multiple pages with nav & mobile menu'
+				hint: 'Prerendered, SPA-like navigation, multiple pages'
 			}
 		]
 	});

@@ -201,6 +201,13 @@ export {};
 `;
 }
 
+export function getLayoutTs(): string {
+	return `// Prerender all pages at build time for static hosting
+// Client-side navigation still works (SPA-like, no page reloads)
+export const prerender = true;
+`;
+}
+
 function slugify(text: string): string {
 	return text
 		.toLowerCase()
