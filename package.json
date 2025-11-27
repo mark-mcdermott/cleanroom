@@ -6,6 +6,7 @@
     "dev": "vite dev",
     "build": "vite build",
     "preview": "vite preview",
+    "cli": "npx tsx src/cli/index.ts",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:push": "drizzle-kit push",
@@ -41,6 +42,7 @@
     "prettier-plugin-svelte": "^3.0.0",
     "svelte": "^5.0.0",
     "svelte-check": "^4.0.0",
+    "tsx": "^4.20.6",
     "typescript": "^5.0.0",
     "typescript-eslint": "^8.0.0",
     "vite": "^5.0.0",
@@ -54,6 +56,7 @@
     "onlyBuiltDependencies": []
   },
   "dependencies": {
+    "@clack/prompts": "^0.11.0",
     "@neondatabase/serverless": "^1.0.2",
     "@tanstack/svelte-query": "^6.0.9",
     "drizzle-orm": "^0.44.7",

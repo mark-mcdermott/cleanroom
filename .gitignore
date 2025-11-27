@@ -29,4 +29,9 @@ playwright/.cache/
 
 # Coverage
 coverage/
+
+# Generated projects
+generated/
+
+# MCP config
 .mcp.json
