@@ -205,10 +205,11 @@ test.describe('CLI Generator Integration Tests', () => {
 			const content = await page.content();
 			expect(content).toContain('Test App');
 
-			// Verify sections exist
-			await expect(page.locator('#features')).toBeVisible();
-			await expect(page.locator('#about')).toBeVisible();
-			await expect(page.locator('#contact')).toBeVisible();
+			// Verify sections exist (Willy Wombat pirate story)
+			await expect(page.locator('#the-map')).toBeVisible();
+			await expect(page.locator('#the-crew')).toBeVisible();
+			await expect(page.locator('#the-voyage')).toBeVisible();
+			await expect(page.locator('#the-treasure')).toBeVisible();
 		} finally {
 			await cleanup(ctx);
 		}

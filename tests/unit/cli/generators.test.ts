@@ -95,9 +95,10 @@ describe('Generator Modules', () => {
 			expect(layout).toContain('nav');
 
 			const page = await readFile(join(testDir, 'src', 'routes', '+page.svelte'), 'utf-8');
-			expect(page).toContain('id="features"');
-			expect(page).toContain('id="about"');
-			expect(page).toContain('id="contact"');
+			expect(page).toContain('id="the-map"');
+			expect(page).toContain('id="the-crew"');
+			expect(page).toContain('id="the-voyage"');
+			expect(page).toContain('id="the-treasure"');
 		});
 	});
 

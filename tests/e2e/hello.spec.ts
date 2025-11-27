@@ -1,9 +1,9 @@
 import { expect, test } from '@playwright/test';
 
-test.describe('Hello World Page', () => {
-	test('home page displays Hello World heading', async ({ page }) => {
+test.describe('Home Page', () => {
+	test('home page displays Cleanroom heading', async ({ page }) => {
 		await page.goto('/');
-		await expect(page.locator('h1')).toHaveText('Hello World');
+		await expect(page.locator('h1')).toHaveText('Cleanroom');
 	});
 
 	test('home page has correct title', async ({ page }) => {
