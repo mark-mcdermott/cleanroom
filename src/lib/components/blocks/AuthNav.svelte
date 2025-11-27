@@ -42,9 +42,10 @@
 	<a
 		href="/"
 		data-testid="nav-logo"
-		class="text-2xl no-underline hover:no-underline cursor-pointer"
+		class="flex items-center gap-2 no-underline hover:no-underline cursor-pointer"
 	>
-		✨
+		<img src="/logo.png" alt="Cleanroom" class="w-8 h-8" />
+		<span class="font-semibold text-lg tracking-tight">cleanroom</span>
 	</a>
 
 	<!-- Desktop Navigation - hidden on mobile -->
