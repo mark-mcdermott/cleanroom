@@ -1,16 +1,32 @@
 <script lang="ts">
-	// SimpleHero - A minimal hero section with the Cleanroom branding
+	// SimpleHero - A minimal hero section with logo and project name
+	interface Props {
+		projectName?: string;
+		logoEmoji?: string;
+		logoSrc?: string;
+		tagline?: string;
+	}
+
+	let {
+		projectName = 'Cleanroom',
+		logoEmoji = '✨',
+		logoSrc,
+		tagline = 'Less Boilerplate, More Boil'
+	}: Props = $props();
 </script>
 
 <div class="w-full flex justify-center items-center text-center min-h-[60vh]">
-	<div class="my-32 sm:my-48 text-[5.5px] sm:text-[7px] md:text-[10px]">
-		<h1 class="text-[8em] font-light leading-[1.1] text-[#282828]">
-			<span class="text-[0.56em] block mb-[-1.75em] mt-0 whitespace-nowrap">
-				Cleanroom
-			</span>
-			<br />
-			<span class="font-sans font-bold tracking-[-0.04em]">LESS BOILERPLATE</span>
-			<br />& <span class="font-sans font-bold tracking-[-0.04em]">MORE BOIL</span>
+	<div class="my-32 sm:my-48">
+		<h1 class="text-4xl sm:text-5xl font-semibold tracking-tight flex items-center justify-center gap-3">
+			{#if logoSrc}
+				<img src={logoSrc} alt={projectName} class="w-12 h-12 sm:w-16 sm:h-16" />
+			{:else}
+				<span class="text-5xl sm:text-6xl">{logoEmoji}</span>
+			{/if}
+			{projectName}
 		</h1>
+		{#if tagline}
+			<p class="text-zinc-600 text-lg mt-4">{tagline}</p>
+		{/if}
 	</div>
 </div>
