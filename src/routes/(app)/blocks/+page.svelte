@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { SimpleHero, SimpleNav } from '$lib/components/blocks';
+	import { Hero, Nav } from '$lib/components/blocks';
 </script>
 
 <svelte:head>
@@ -13,12 +13,12 @@
 		Pre-built, composable sections for building pages quickly.
 	</p>
 
-	<!-- SimpleNav -->
+	<!-- Nav -->
 	<section class="mb-12">
-		<h2>SimpleNav</h2>
+		<h2>Nav</h2>
 		<p class="text-zinc-600 mb-4">A simple navigation bar with logo and links.</p>
 		<div class="border rounded-xl overflow-hidden bg-white">
-			<SimpleNav
+			<Nav
 				projectName="My App"
 				logoEmoji="🚀"
 				links={[
@@ -30,12 +30,12 @@
 		</div>
 	</section>
 
-	<!-- SimpleHero -->
+	<!-- Hero -->
 	<section class="mb-12">
-		<h2>SimpleHero</h2>
+		<h2>Hero</h2>
 		<p class="text-zinc-600 mb-4">A centered hero section with logo and project name.</p>
 		<div class="border rounded-xl overflow-hidden bg-white">
-			<SimpleHero projectName="My Awesome App" logoEmoji="✨" />
+			<Hero projectName="My Awesome App" logoEmoji="✨" />
 		</div>
 	</section>
 
@@ -69,10 +69,10 @@
 		<h2>Usage</h2>
 		<p class="text-zinc-600 mb-4">Import blocks from the blocks module:</p>
 		<pre
-			class="bg-zinc-50 border border-zinc-200 rounded-xl p-4 text-sm overflow-x-auto"><code>{`import { SimpleHero, SimpleNav, AuthNav, AvatarMenu } from '$lib/components/blocks';
+			class="bg-zinc-50 border border-zinc-200 rounded-xl p-4 text-sm overflow-x-auto"><code>{`import { Hero, Nav, AuthNav, AvatarMenu } from '$lib/components/blocks';
 
-// SimpleNav
-<SimpleNav
+// Nav
+<Nav
   projectName="My App"
   logoEmoji="🚀"
   links={[
@@ -81,8 +81,8 @@
   ]}
 />
 
-// SimpleHero
-<SimpleHero projectName="My App" logoEmoji="✨" />
+// Hero
+<Hero projectName="My App" logoEmoji="✨" />
 
 // AuthNav (typically in root layout)
 <AuthNav user={data.user} />`}</code></pre>
