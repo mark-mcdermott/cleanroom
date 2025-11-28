@@ -209,6 +209,78 @@ describe('Generator Modules', () => {
 			// SSR sites should NOT have +layout.ts with prerender = true
 			await expect(access(join(testDir, 'src', 'routes', '+layout.ts'))).rejects.toThrow();
 		});
+
+		it('shows hero buttons when no modules selected', async () => {
+			const config = { ...baseConfig, siteType: 'ssr-site' as const, modules: [] };
+			await modules['ssr-site'].generate(config, testDir);
+
+			const page = await readFile(join(testDir, 'src', 'routes', '+page.svelte'), 'utf-8');
+			expect(page).toContain('Learn More');
+			expect(page).toContain('Get in Touch');
+			expect(page).toContain('href="/about"');
+			expect(page).toContain('href="/contact"');
+		});
+
+		it('hides hero buttons when modules are selected', async () => {
+			const config = { ...baseConfig, siteType: 'ssr-site' as const, modules: ['auth'] };
+			await modules['ssr-site'].generate(config, testDir);
+
+			const page = await readFile(join(testDir, 'src', 'routes', '+page.svelte'), 'utf-8');
+			expect(page).not.toContain('Learn More');
+			expect(page).not.toContain('Get in Touch');
+		});
+
+		it('shows Modules Added section with auth module', async () => {
+			const config = { ...baseConfig, siteType: 'ssr-site' as const, modules: ['auth'] };
+			await modules['ssr-site'].generate(config, testDir);
+
+			const page = await readFile(join(testDir, 'src', 'routes', '+page.svelte'), 'utf-8');
+			expect(page).toContain('Modules Added');
+			expect(page).toContain('🔐');
+			expect(page).toContain('Authentication');
+		});
+
+		it('shows Modules Added section with blog module', async () => {
+			const config = { ...baseConfig, siteType: 'ssr-site' as const, modules: ['blog'] };
+			await modules['ssr-site'].generate(config, testDir);
+
+			const page = await readFile(join(testDir, 'src', 'routes', '+page.svelte'), 'utf-8');
+			expect(page).toContain('Modules Added');
+			expect(page).toContain('📝');
+			expect(page).toContain('Blog');
+		});
+
+		it('shows Modules Added section with office-users module', async () => {
+			const config = { ...baseConfig, siteType: 'ssr-site' as const, modules: ['office-users'] };
+			await modules['ssr-site'].generate(config, testDir);
+
+			const page = await readFile(join(testDir, 'src', 'routes', '+page.svelte'), 'utf-8');
+			expect(page).toContain('Modules Added');
+			expect(page).toContain('👥');
+			expect(page).toContain('The Office Users');
+		});
+
+		it('shows multiple modules in Modules Added section', async () => {
+			const config = { ...baseConfig, siteType: 'ssr-site' as const, modules: ['auth', 'blog', 'office-users'] };
+			await modules['ssr-site'].generate(config, testDir);
+
+			const page = await readFile(join(testDir, 'src', 'routes', '+page.svelte'), 'utf-8');
+			expect(page).toContain('Modules Added');
+			expect(page).toContain('🔐');
+			expect(page).toContain('Authentication');
+			expect(page).toContain('📝');
+			expect(page).toContain('Blog');
+			expect(page).toContain('👥');
+			expect(page).toContain('The Office Users');
+		});
+
+		it('does not show Modules Added section when no modules selected', async () => {
+			const config = { ...baseConfig, siteType: 'ssr-site' as const, modules: [] };
+			await modules['ssr-site'].generate(config, testDir);
+
+			const page = await readFile(join(testDir, 'src', 'routes', '+page.svelte'), 'utf-8');
+			expect(page).not.toContain('Modules Added');
+		});
 	});
 
 	describe('all modules', () => {

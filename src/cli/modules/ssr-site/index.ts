@@ -44,11 +44,54 @@ function getLayoutSvelte(config: ProjectConfig): string {
 `;
 }
 
+const moduleEmojis: Record<string, { emoji: string; label: string }> = {
+	auth: { emoji: '🔐', label: 'Authentication' },
+	blog: { emoji: '📝', label: 'Blog' },
+	'office-users': { emoji: '👥', label: 'The Office Users' }
+};
+
+function getModulesListHtml(modules: string[]): string {
+	if (modules.length === 0) return '';
+
+	const items = modules
+		.map((mod) => {
+			const { emoji, label } = moduleEmojis[mod] || { emoji: '📦', label: mod };
+			return `			<div class="flex gap-4 items-center">
+				<div class="text-2xl">${emoji}</div>
+				<h3 class="font-medium">${label}</h3>
+			</div>`;
+		})
+		.join('\n');
+
+	return `
+	<!-- Modules Added -->
+	<div class="py-8">
+		<h2 class="text-xl font-semibold mb-6">Modules Added</h2>
+		<div class="space-y-4">
+${items}
+		</div>
+	</div>
+`;
+}
+
 function getHomePageSvelte(config: ProjectConfig): string {
 	const logoDisplay =
 		config.logo.type === 'emoji'
 			? `<span class="text-5xl sm:text-6xl">${config.logo.value}</span>`
 			: `<img src="/logo.png" alt="${config.projectName}" class="w-12 h-12 sm:w-16 sm:h-16" />`;
+
+	const hasModules = config.modules.length > 0;
+
+	// Only show hero buttons if no modules are selected
+	const heroButtons = hasModules
+		? ''
+		: `
+		<div class="flex flex-wrap justify-center gap-3 mt-6">
+			<a href="/about" class="btn btn-dark">Learn More</a>
+			<a href="/contact" class="btn btn-light">Get in Touch</a>
+		</div>`;
+
+	const modulesSection = getModulesListHtml(config.modules);
 
 	return `<svelte:head>
 	<title>${config.projectName}</title>
@@ -64,13 +107,9 @@ function getHomePageSvelte(config: ProjectConfig): string {
 		</h1>
 		<p class="text-zinc-600 text-lg mt-4 max-w-2xl mx-auto">
 			A multi-page server-side rendered site with responsive navigation and smooth page transitions. Unlike static sites, pages are rendered on each request—ideal for authenticated content, user dashboards, or dynamic data.
-		</p>
-		<div class="flex flex-wrap justify-center gap-3 mt-6">
-			<a href="/about" class="btn btn-dark">Learn More</a>
-			<a href="/contact" class="btn btn-light">Get in Touch</a>
-		</div>
+		</p>${heroButtons}
 	</div>
-
+${modulesSection}
 	<!-- Features Section -->
 	<div class="py-8">
 		<h2 class="text-2xl font-semibold tracking-tight text-center mb-8">Why SSR?</h2>
