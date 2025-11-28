@@ -56,7 +56,7 @@ function getModulesListHtml(modules: string[]): string {
 	const items = modules
 		.map((mod) => {
 			const { emoji, label } = moduleEmojis[mod] || { emoji: '📦', label: mod };
-			return `			<div class="flex gap-4 items-center">
+			return `			<div class="flex gap-4 items-center justify-center">
 				<div class="text-2xl">${emoji}</div>
 				<h3 class="font-medium">${label}</h3>
 			</div>`;
@@ -65,7 +65,7 @@ function getModulesListHtml(modules: string[]): string {
 
 	return `
 	<!-- Modules Added -->
-	<div class="py-8">
+	<div class="py-8 text-center">
 		<h2 class="text-xl font-semibold mb-6">Modules Added</h2>
 		<div class="space-y-4">
 ${items}
