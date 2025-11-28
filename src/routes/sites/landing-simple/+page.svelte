@@ -3,7 +3,7 @@
 </script>
 
 <svelte:head>
-	<title>Landing Page (No Nav) - Cleanroom</title>
+	<title>Landing Simple - Cleanroom</title>
 	<meta name="description" content="Simple landing page example from Cleanroom" />
 </svelte:head>
 
@@ -12,7 +12,7 @@
 	<div class="px-8 py-6">
 		<div class="flex items-center gap-2 text-2xl">
 			<span>🦫</span>
-			<span class="font-semibold tracking-tight">Landing Page (No Nav)</span>
+			<span class="font-semibold tracking-tight">Landing Simple</span>
 		</div>
 		<a
 			href="/"
@@ -30,12 +30,18 @@
 					class="text-4xl sm:text-5xl font-semibold tracking-tight flex items-center justify-center gap-3"
 				>
 					<span class="text-5xl sm:text-6xl">🦫</span>
-					Landing Page
+					Landing Simple
 				</h1>
 				<p class="text-zinc-600 text-lg mt-6 max-w-md mx-auto px-4">
-					A simple landing page with responsive design but no navigation.
+					A simple landing page with footer but no navigation menu.
 				</p>
 			</div>
 		</div>
 	</main>
+
+	<footer class="border-t py-6">
+		<div class="text-center text-sm text-zinc-500">
+			© {new Date().getFullYear()} Landing Simple
+		</div>
+	</footer>
 </div>
