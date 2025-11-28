@@ -21,8 +21,15 @@ const defaultPages = [
 	{ href: '/contact', label: 'Contact' }
 ];
 
+const authPages = [
+	{ href: '/login', label: 'Log In' },
+	{ href: '/signup', label: 'Sign Up' }
+];
+
 function getLayoutSvelte(config: ProjectConfig): string {
-	const header = getHeader(config, defaultPages);
+	const hasAuth = config.modules.includes('auth');
+	const pages = hasAuth ? [...defaultPages, ...authPages] : defaultPages;
+	const header = getHeader(config, pages);
 	const footer = getFooter(config);
 
 	return `<script lang="ts">

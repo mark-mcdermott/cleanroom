@@ -11,6 +11,8 @@
 		{ href: '/modules/auth/about', label: 'About' },
 		{ href: '/modules/auth/services', label: 'Services' },
 		{ href: '/modules/auth/contact', label: 'Contact' },
+		{ href: '/modules/auth/login', label: 'Log In', hideWhenAuth: true, testId: 'nav-login' },
+		{ href: '/modules/auth/signup', label: 'Sign Up', hideWhenAuth: true, testId: 'nav-signup' },
 		{
 			icon: Github,
 			iconSize: 'lg',
