@@ -12,7 +12,7 @@
 	<div class="grid md:grid-cols-2 gap-12">
 		<!-- Contact Form -->
 		<div>
-			<h2 class="text-xl font-semibold mb-6">Send a Message</h2>
+			<h2 class="text-xl font-semibold mt-0 mb-6">Send a Message</h2>
 			<form class="space-y-6">
 				<div>
 					<label for="name" class="block text-sm font-medium text-zinc-700 mb-2">Name</label>
@@ -72,7 +72,7 @@
 
 		<!-- Contact Info -->
 		<div>
-			<h2 class="text-xl font-semibold mb-6">Other Ways to Reach Us</h2>
+			<h2 class="text-xl font-semibold mt-0 mb-6">Other Ways to Reach Us</h2>
 
 			<div class="space-y-6">
 				<div class="flex gap-4">

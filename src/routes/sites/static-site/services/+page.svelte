@@ -86,7 +86,7 @@
 
 	<!-- Process Section -->
 	<section class="bg-zinc-50 rounded-2xl p-8">
-		<h2 class="text-2xl font-semibold mb-8 text-center">How We Work</h2>
+		<h2 class="text-2xl font-semibold mt-0 mb-8 text-center">How We Work</h2>
 		<div class="grid md:grid-cols-4 gap-6">
 			<div class="text-center">
 				<div class="w-10 h-10 bg-zinc-900 text-white rounded-full flex items-center justify-center mx-auto mb-3 font-semibold">1</div>

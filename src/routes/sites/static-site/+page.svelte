@@ -11,7 +11,7 @@
 			Static Site
 		</h1>
 		<p class="text-zinc-600 text-lg max-w-2xl mx-auto mb-8">
-			A multi-page static site with responsive navigation, smooth page transitions, and multiple content pages. Perfect for portfolios, documentation, or small business websites.
+			A multi-page static site with responsive navigation, smooth page transitions, and multiple content pages. Perfect for portfolios, documentation, or small business websites. SPA-like feel (no page refreshes), but just prerendered (no SSR/SPA).
 		</p>
 		<div class="flex gap-4 justify-center flex-wrap">
 			<a
@@ -31,7 +31,7 @@
 
 	<!-- Features -->
 	<section class="mb-20">
-		<h2 class="text-2xl font-semibold mb-8 text-center">What's Included</h2>
+		<h2 class="text-2xl font-semibold mt-0 mb-8 text-center">What's Included</h2>
 		<div class="grid md:grid-cols-3 gap-8">
 			<div class="text-center p-6">
 				<div class="text-4xl mb-4">🎨</div>
@@ -59,7 +59,7 @@
 
 	<!-- CTA -->
 	<section class="bg-zinc-50 rounded-2xl p-8 text-center">
-		<h2 class="text-2xl font-semibold mb-4">Ready to Explore?</h2>
+		<h2 class="text-2xl font-semibold mt-0 mb-4">Ready to Explore?</h2>
 		<p class="text-zinc-600 mb-6">
 			Navigate through the pages using the menu above to see how a complete static site works.
 		</p>

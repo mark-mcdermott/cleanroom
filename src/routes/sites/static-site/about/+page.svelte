@@ -8,7 +8,7 @@
 
 	<!-- Story Section -->
 	<section class="mb-16">
-		<h2 class="text-2xl font-semibold mb-6">Our Story</h2>
+		<h2 class="text-2xl font-semibold mt-0 mb-6">Our Story</h2>
 		<div class="prose prose-zinc max-w-none">
 			<p class="text-zinc-600 leading-relaxed mb-4">
 				It all started in a cozy burrow beneath the eucalyptus trees. Willy Wombat had a vision: to create websites that were as sturdy and well-crafted as the tunnels he dug. After years of perfecting his craft underground, he emerged with a revolutionary approach to web development.
@@ -24,7 +24,7 @@
 
 	<!-- Team Section -->
 	<section class="mb-16">
-		<h2 class="text-2xl font-semibold mb-8">The Team</h2>
+		<h2 class="text-2xl font-semibold mt-0 mb-8">The Team</h2>
 		<div class="grid md:grid-cols-3 gap-8">
 			<div class="text-center">
 				<div class="text-6xl mb-4">🦫</div>
@@ -55,7 +55,7 @@
 
 	<!-- Values Section -->
 	<section class="bg-zinc-50 rounded-2xl p-8">
-		<h2 class="text-2xl font-semibold mb-6 text-center">Our Values</h2>
+		<h2 class="text-2xl font-semibold mt-0 mb-6 text-center">Our Values</h2>
 		<div class="grid md:grid-cols-2 gap-6">
 			<div class="flex gap-4">
 				<span class="text-2xl">🏗️</span>
