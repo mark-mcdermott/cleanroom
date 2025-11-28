@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { Flame } from 'lucide-svelte';
 	import type { Snippet } from 'svelte';
 
 	interface Props {
@@ -9,19 +8,15 @@
 		// Logo next to the title - can be text/emoji, image path, or use logoIcon snippet for icons/SVGs
 		logo?: string;
 		logoIcon?: Snippet;
-		tagline?: string;
-		showFlame?: boolean;
 		description?: string;
 		children?: Snippet;
 	}
 
 	let {
-		title = 'cleanroom',
+		title = 'My App',
 		image,
 		logo,
 		logoIcon,
-		tagline = 'Less Boilerplate, More Boil',
-		showFlame = false,
 		description,
 		children
 	}: Props = $props();
@@ -30,14 +25,16 @@
 	const isLogoImage = $derived(logo?.startsWith('/') || logo?.startsWith('http') || logo?.endsWith('.png') || logo?.endsWith('.jpg') || logo?.endsWith('.svg'));
 </script>
 
-<div class="flex justify-center items-center min-h-[70vh] px-6">
-	<div class="card w-full max-w-md text-center space-y-6">
+<div class="w-full flex justify-center items-center text-center min-h-[50vh]">
+	<div class="my-16">
 		{#if image}
-			<div class="flex justify-center mb-4">
+			<div class="flex justify-center mb-6">
 				<img src={image} alt={title} class="w-16 h-16" />
 			</div>
 		{/if}
-		<h1 class="flex items-center justify-center gap-3">
+		<h1
+			class="text-4xl sm:text-5xl font-semibold tracking-tight flex items-center justify-center gap-3"
+		>
 			{#if logoIcon}
 				<span class="text-5xl sm:text-6xl">
 					{@render logoIcon()}
@@ -51,18 +48,8 @@
 			{/if}
 			{title}
 		</h1>
-		{#if tagline}
-			<h2
-				class="flex items-center justify-center gap-1 text-zinc-700 font-medium tracking-hero text-base !mt-2"
-			>
-				{tagline}
-				{#if showFlame}
-					<Flame class="w-4 h-4 text-orange-500" />
-				{/if}
-			</h2>
-		{/if}
 		{#if description}
-			<p class="text-zinc-600 text-lg mt-3">
+			<p class="text-zinc-600 text-lg mt-6 max-w-md mx-auto px-4">
 				{description}
 			</p>
 		{/if}

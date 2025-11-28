@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Hero, Nav } from '$lib/components/blocks';
+	import { Hero, SimpleNav } from '$lib/components/blocks';
 </script>
 
 <svelte:head>
@@ -13,14 +13,14 @@
 		Pre-built, composable sections for building pages quickly.
 	</p>
 
-	<!-- Nav -->
+	<!-- SimpleNav -->
 	<section class="mb-12">
-		<h2>Nav</h2>
+		<h2>SimpleNav</h2>
 		<p class="text-zinc-600 mb-4">A simple navigation bar with logo and links.</p>
 		<div class="border rounded-xl overflow-hidden bg-white">
-			<Nav
-				projectName="My App"
-				logoEmoji="🚀"
+			<SimpleNav
+				siteName="My App"
+				logo="🚀"
 				links={[
 					{ href: '#', label: 'Home' },
 					{ href: '#', label: 'About' },
@@ -33,21 +33,32 @@
 	<!-- Hero -->
 	<section class="mb-12">
 		<h2>Hero</h2>
-		<p class="text-zinc-600 mb-4">A centered hero section with logo and project name.</p>
+		<p class="text-zinc-600 mb-4">
+			A centered hero section with title and (optional) logo, tagline, description, and CTA buttons.
+		</p>
 		<div class="border rounded-xl overflow-hidden bg-white">
-			<Hero projectName="My Awesome App" logoEmoji="✨" />
+			<Hero
+				title="My Awesome App"
+				logo="✨"
+				tagline="Build Something Great"
+				showFlame={true}
+				description="A short description of your amazing project."
+			>
+				<a href="#" class="btn btn-dark">Get Started</a>
+				<a href="#" class="btn btn-light">Learn More</a>
+			</Hero>
 		</div>
 	</section>
 
-	<!-- AuthNav -->
+	<!-- Nav -->
 	<section class="mb-12">
-		<h2>AuthNav</h2>
+		<h2>Nav</h2>
 		<p class="text-zinc-600 mb-4">
 			The navigation bar you see at the top of this site. Includes authentication state handling,
 			mobile responsive menu, and avatar dropdown.
 		</p>
 		<div class="text-sm text-zinc-500 bg-zinc-50 rounded-lg p-4">
-			<code>AuthNav</code> is already rendered in the root layout. See the navigation above for a live
+			<code>Nav</code> is already rendered in the root layout. See the navigation above for a live
 			example.
 		</div>
 	</section>
@@ -59,7 +70,7 @@
 			A dropdown menu triggered by a user avatar, typically used for account actions.
 		</p>
 		<div class="text-sm text-zinc-500 bg-zinc-50 rounded-lg p-4">
-			<code>AvatarMenu</code> is used within <code>AuthNav</code> when a user is logged in. Sign in to
+			<code>AvatarMenu</code> is used within <code>Nav</code> when a user is logged in. Sign in to
 			see it in action.
 		</div>
 	</section>
@@ -69,22 +80,37 @@
 		<h2>Usage</h2>
 		<p class="text-zinc-600 mb-4">Import blocks from the blocks module:</p>
 		<pre
-			class="bg-zinc-50 border border-zinc-200 rounded-xl p-4 text-sm overflow-x-auto"><code>{`import { Hero, Nav, AuthNav, AvatarMenu } from '$lib/components/blocks';
+			class="bg-zinc-50 border border-zinc-200 rounded-xl p-4 text-sm overflow-x-auto"><code>{`import { Hero, SimpleNav, Nav, AvatarMenu } from '$lib/components/blocks';
 
-// Nav
-<Nav
-  projectName="My App"
-  logoEmoji="🚀"
+// SimpleNav (logo can be emoji, image path, or use logoIcon snippet for icons/SVGs)
+<SimpleNav
+  siteName="My App"
+  logo="🚀"
   links={[
     { href: '/', label: 'Home' },
     { href: '/about', label: 'About' }
   ]}
 />
 
-// Hero
-<Hero projectName="My App" logoEmoji="✨" />
+// Hero (logo can be emoji, image path, or use logoIcon snippet for icons/SVGs)
+<Hero
+  title="My App"
+  logo="✨"
+  tagline="Your tagline here"
+  showFlame={true}
+  description="A short description"
+>
+  <a href="/start" class="btn btn-dark">Get Started</a>
+</Hero>
 
-// AuthNav (typically in root layout)
-<AuthNav user={data.user} />`}</code></pre>
+// Hero with image above title
+<Hero
+  title="My App"
+  image="/header-image.png"
+  logo="🚀"
+/>
+
+// Nav (typically in root layout)
+<Nav user={data.user} />`}</code></pre>
 	</section>
 </div>

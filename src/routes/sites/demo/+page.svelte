@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { ArrowLeft } from 'lucide-svelte';
+	import { FloatingHero } from '$lib/components/blocks';
 </script>
 
 <svelte:head>
@@ -24,18 +25,10 @@
 	</div>
 
 	<main class="flex-1">
-		<div class="w-full flex justify-center items-center text-center min-h-[50vh]">
-			<div class="my-16">
-				<h1
-					class="text-4xl sm:text-5xl font-semibold tracking-tight flex items-center justify-center gap-3"
-				>
-					<span class="text-5xl sm:text-6xl">🦫</span>
-					Demo Site
-				</h1>
-				<p class="text-zinc-600 text-lg mt-6 max-w-md mx-auto px-4">
-					A simple demo page with no navigation or responsive breakpoints.
-				</p>
-			</div>
-		</div>
+		<FloatingHero
+			title="Demo Site"
+			logo="🦫"
+			description="A simple demo page with no navigation or responsive breakpoints."
+		/>
 	</main>
 </div>

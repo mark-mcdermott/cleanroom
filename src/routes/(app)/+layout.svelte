@@ -1,12 +1,12 @@
 <script lang="ts">
-	import { AuthNav } from '$lib/components/blocks';
+	import { Nav } from '$lib/components/blocks';
 	import { Database, CheckCircle, XCircle } from 'lucide-svelte';
 
 	let { children, data } = $props();
 </script>
 
 <div class="min-h-dvh flex flex-col">
-	<AuthNav user={data.user} />
+	<Nav siteName="cleanroom" logo="/logo.png" user={data.user} />
 
 	<main class="flex-1">
 		{@render children()}
