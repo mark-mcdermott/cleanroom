@@ -6,6 +6,7 @@
 		title?: string;
 		// Image above the title (centered)
 		image?: string;
+		imageSize?: 'sm' | 'md' | 'lg';
 		// Logo next to the title - can be text/emoji, image path, or use logoIcon snippet for icons/SVGs
 		logo?: string;
 		logoIcon?: Snippet;
@@ -18,6 +19,7 @@
 	let {
 		title = 'cleanroom',
 		image,
+		imageSize = 'sm',
 		logo,
 		logoIcon,
 		tagline = 'Less Boilerplate, More Boil',
@@ -25,6 +27,12 @@
 		description,
 		children
 	}: Props = $props();
+
+	const imageSizeClasses = {
+		sm: 'w-16 h-16',
+		md: 'w-32 h-32',
+		lg: 'w-48 h-48'
+	};
 
 	// Detect if logo is an image path or text/emoji
 	const isLogoImage = $derived(logo?.startsWith('/') || logo?.startsWith('http') || logo?.endsWith('.png') || logo?.endsWith('.jpg') || logo?.endsWith('.svg'));
@@ -34,7 +42,7 @@
 	<div class="card w-full max-w-md text-center space-y-6">
 		{#if image}
 			<div class="flex justify-center mb-4">
-				<img src={image} alt={title} class="w-16 h-16" />
+				<img src={image} alt={title} class={imageSizeClasses[imageSize]} />
 			</div>
 		{/if}
 		<h1 class="flex items-center justify-center gap-3">

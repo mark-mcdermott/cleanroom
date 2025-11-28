@@ -1,6 +1,5 @@
 <script lang="ts">
-	import { ArrowLeft } from 'lucide-svelte';
-	import { FloatingHero } from '$lib/components/blocks';
+	import { Nav, FloatingHero, BackLink } from '$lib/components/blocks';
 </script>
 
 <svelte:head>
@@ -9,20 +8,9 @@
 </svelte:head>
 
 <div class="min-h-dvh flex flex-col">
-	<!-- Site header -->
-	<div class="px-8 py-6">
-		<div class="flex items-center gap-2 text-2xl">
-			<span>🦫</span>
-			<span class="font-semibold tracking-tight">Demo Site</span>
-		</div>
-		<a
-			href="/"
-			class="inline-flex items-center gap-1 text-sm text-zinc-500 hover:text-zinc-700 mt-2"
-		>
-			<ArrowLeft class="w-4 h-4" />
-			Back to cleanroom
-		</a>
-	</div>
+	<Nav siteName="Demo Site" logo="🦫" />
+
+	<BackLink href="/" label="Back to cleanroom" />
 
 	<main class="flex-1">
 		<FloatingHero

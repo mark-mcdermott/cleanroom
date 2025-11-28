@@ -11,7 +11,9 @@
 
 <Hero
 	title="cleanroom"
-	logo="/logo.png"
+	image="/willie.png"
+	imageSize="lg"
+	logo="/skull.svg"
 	tagline="Less Boilerplate, More Boil"
 	showFlame={true}
 	description="Minimal SvelteKit starter with auth, database & edge deployment"

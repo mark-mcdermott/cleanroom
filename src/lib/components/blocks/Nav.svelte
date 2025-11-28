@@ -1,25 +1,18 @@
 <script lang="ts">
+	import { enhance } from '$app/forms';
 	import { Button, Sheet, DropdownMenu } from '$lib/components/ui';
 	import { Menu, ChevronDown } from 'lucide-svelte';
-	import AvatarMenu from './AvatarMenu.svelte';
 	import type { Snippet } from 'svelte';
-
-	interface NavLink {
-		href: string;
-		label: string;
-		testId?: string;
-	}
+	import type { NavLink, DropdownLink, AvatarConfig } from './types';
 
 	interface Props {
 		siteName?: string;
-		// Logo next to site name - can be text/emoji, image path, or use logoIcon snippet for icons/SVGs
 		logo?: string;
 		logoIcon?: Snippet;
 		user?: { id: string; email: string; name?: string | null } | null;
 		isAdmin?: boolean;
-		galleryLinks?: NavLink[];
-		publicAuthLinks?: NavLink[];
-		adminLinks?: NavLink[];
+		links?: NavLink[];
+		avatar?: AvatarConfig;
 	}
 
 	let {
@@ -28,36 +21,52 @@
 		logoIcon,
 		user = null,
 		isAdmin = false,
-		galleryLinks = [
-			{ href: '/components', label: 'components', testId: 'nav-components' },
-			{ href: '/blocks', label: 'blocks', testId: 'nav-blocks' }
-		],
-		publicAuthLinks = [
-			{ href: '/login', label: 'login', testId: 'nav-login' },
-			{ href: '/signup', label: 'signup', testId: 'nav-signup' }
-		],
-		adminLinks = [{ href: '/admin', label: 'admin', testId: 'nav-admin' }]
+		links = [],
+		avatar
 	}: Props = $props();
 
 	// Detect if logo is an image path or text/emoji
-	const isLogoImage = $derived(logo?.startsWith('/') || logo?.startsWith('http') || logo?.endsWith('.png') || logo?.endsWith('.jpg') || logo?.endsWith('.svg'));
+	const isLogoImage = $derived(
+		logo?.startsWith('/') ||
+			logo?.startsWith('http') ||
+			logo?.endsWith('.png') ||
+			logo?.endsWith('.jpg') ||
+			logo?.endsWith('.svg')
+	);
 
 	let mobileMenuOpen = $state(false);
-	let sitesExpanded = $state(false);
+	let expandedDropdowns = $state<Record<string, boolean>>({});
 
 	const isLoggedIn = $derived(!!user);
 	const userEmail = $derived(user?.email || '');
+	const avatarLetter = $derived(userEmail ? userEmail.charAt(0).toUpperCase() : 'U');
 
-	const siteLinks = [
-		{ href: '/sites/demo', label: 'demo', testId: 'nav-sites-demo' },
-		{ href: '/sites/landing-simple', label: 'landing (no nav)', testId: 'nav-sites-landing-simple' },
-		{
-			href: '/sites/landing-sections',
-			label: 'landing (jump links)',
-			testId: 'nav-sites-landing-sections'
-		},
-		{ href: '/sites/static-site', label: 'static site', testId: 'nav-sites-static-site' }
-	];
+	// Compute avatar config
+	const showAvatar = $derived(avatar?.show !== false && isLoggedIn);
+	const avatarLinks = $derived<DropdownLink[]>(avatar?.links ?? []);
+
+	// Filter links based on auth state
+	function shouldShowLink(link: NavLink): boolean {
+		if (link.requiresAuth && !isLoggedIn) return false;
+		if (link.requiresAdmin && !isAdmin) return false;
+		if (link.hideWhenAuth && isLoggedIn) return false;
+		return true;
+	}
+
+	const visibleLinks = $derived(links.filter(shouldShowLink));
+
+	function toggleDropdown(label: string) {
+		expandedDropdowns[label] = !expandedDropdowns[label];
+	}
+
+	function buildDataAttrs(data?: Record<string, string>): Record<string, string> {
+		if (!data) return {};
+		const result: Record<string, string> = {};
+		for (const [key, value] of Object.entries(data)) {
+			result[`data-${key}`] = value;
+		}
+		return result;
+	}
 </script>
 
 <nav data-testid="nav" class="w-full flex items-center justify-between px-8 py-6">
@@ -85,71 +94,133 @@
 
 	<!-- Desktop Navigation - hidden on mobile -->
 	<div class="hidden md:flex gap-6 items-center">
-		<!-- Gallery links - always visible -->
-		{#each galleryLinks as link}
-			<a
-				href={link.href}
-				data-testid={link.testId}
-				class="text-sm text-zinc-700 hover:text-zinc-900 transition-colors cursor-pointer"
-			>
-				{link.label}
-			</a>
-		{/each}
-
-		<!-- Sites dropdown -->
-		<DropdownMenu.Root>
-			<DropdownMenu.Trigger>
-				<button
-					data-testid="nav-sites"
-					class="text-sm text-zinc-700 hover:text-zinc-900 transition-colors cursor-pointer flex items-center gap-1"
-				>
-					sites
-					<ChevronDown class="h-3 w-3" />
-				</button>
-			</DropdownMenu.Trigger>
-			<DropdownMenu.Content>
-				{#each siteLinks as link}
-					<DropdownMenu.Item>
-						<a
-							href={link.href}
-							data-testid={link.testId}
-							class="flex items-center w-full cursor-pointer"
-						>
-							{link.label}
-						</a>
-					</DropdownMenu.Item>
-				{/each}
-			</DropdownMenu.Content>
-		</DropdownMenu.Root>
-
-		<!-- Auth state navigation -->
-		{#if !isLoggedIn}
-			<!-- Public auth links -->
-			{#each publicAuthLinks as link}
+		{#each visibleLinks as link}
+			{#if link.children}
+				<!-- Dropdown link -->
+				<DropdownMenu.Root>
+					<DropdownMenu.Trigger
+						data-testid={link.testId}
+						id={link.id}
+						class="text-sm text-zinc-700 hover:text-zinc-900 transition-colors cursor-pointer flex items-center gap-1 {link.class ?? ''}"
+						{...buildDataAttrs(link.data)}
+					>
+						{#if link.icon}
+							{@const Icon = link.icon}
+							<Icon class="h-4 w-4" />
+						{/if}
+						{link.label}
+						<ChevronDown class="h-3 w-3" />
+					</DropdownMenu.Trigger>
+					<DropdownMenu.Content>
+						{#each link.children as child}
+							{#if child.separator}
+								<DropdownMenu.Separator />
+							{/if}
+							<DropdownMenu.Item>
+								{#if child.action}
+									<form action={child.action} method={child.method ?? 'POST'} use:enhance class="w-full">
+										<button
+											type="submit"
+											data-testid={child.testId}
+											id={child.id}
+											class="flex items-center gap-2 cursor-pointer w-full text-left {child.class ?? ''}"
+											{...buildDataAttrs(child.data)}
+										>
+											{#if child.icon}
+												{@const ChildIcon = child.icon}
+												<ChildIcon class="h-4 w-4" />
+											{/if}
+											{child.label}
+										</button>
+									</form>
+								{:else}
+									<a
+										href={child.href ?? '#'}
+										data-testid={child.testId}
+										id={child.id}
+										class="flex items-center gap-2 w-full cursor-pointer {child.class ?? ''}"
+										{...buildDataAttrs(child.data)}
+									>
+										{#if child.icon}
+											{@const ChildIcon = child.icon}
+												<ChildIcon class="h-4 w-4" />
+										{/if}
+										{child.label}
+									</a>
+								{/if}
+							</DropdownMenu.Item>
+						{/each}
+					</DropdownMenu.Content>
+				</DropdownMenu.Root>
+			{:else}
+				<!-- Regular link -->
 				<a
-					href={link.href}
+					href={link.href ?? '#'}
 					data-testid={link.testId}
-					class="text-sm text-zinc-700 hover:text-zinc-900 transition-colors cursor-pointer"
+					id={link.id}
+					class="text-sm text-zinc-700 hover:text-zinc-900 transition-colors cursor-pointer flex items-center gap-1 {link.class ?? ''}"
+					{...buildDataAttrs(link.data)}
 				>
+					{#if link.icon}
+						{@const Icon = link.icon}
+								<Icon class="h-4 w-4" />
+					{/if}
 					{link.label}
 				</a>
-			{/each}
-		{:else}
-			<!-- Admin link (only for admins) -->
-			{#if isAdmin}
-				{#each adminLinks as link}
-					<a
-						href={link.href}
-						data-testid={link.testId}
-						class="text-sm text-zinc-700 hover:text-zinc-900 transition-colors cursor-pointer"
-					>
-						{link.label}
-					</a>
-				{/each}
 			{/if}
+		{/each}
 
-			<!-- Avatar Menu -->
-			<AvatarMenu userEmail={userEmail} userId={user?.id} />
+		<!-- Avatar (shown when logged in) -->
+		{#if showAvatar}
+			<DropdownMenu.Root>
+				<DropdownMenu.Trigger
+					data-testid="nav-avatar"
+					class="w-8 h-8 rounded-full bg-zinc-300 flex items-center justify-center text-zinc-600 text-xs cursor-pointer hover:bg-zinc-400 transition-colors focus:outline-none focus:ring-2 focus:ring-zinc-500"
+					aria-label="User menu"
+				>
+					{avatarLetter}
+				</DropdownMenu.Trigger>
+				<DropdownMenu.Content data-testid="nav-user-menu" class="w-48">
+					{#each avatarLinks as link}
+						{#if link.separator}
+							<DropdownMenu.Separator />
+						{/if}
+						<DropdownMenu.Item>
+							{#if link.action}
+								<form action={link.action} method={link.method ?? 'POST'} use:enhance class="w-full">
+									<button
+										type="submit"
+										data-testid={link.testId}
+										id={link.id}
+										class="flex items-center gap-2 cursor-pointer w-full text-left {link.class ?? ''}"
+										{...buildDataAttrs(link.data)}
+									>
+										{#if link.icon}
+											{@const Icon = link.icon}
+								<Icon class="h-4 w-4" />
+										{/if}
+										{link.label}
+									</button>
+								</form>
+							{:else}
+								<a
+									href={link.href ?? '#'}
+									data-testid={link.testId}
+									id={link.id}
+									class="flex items-center gap-2 cursor-pointer w-full {link.class ?? ''}"
+									{...buildDataAttrs(link.data)}
+								>
+									{#if link.icon}
+										{@const Icon = link.icon}
+								<Icon class="h-4 w-4" />
+									{/if}
+									{link.label}
+								</a>
+							{/if}
+						</DropdownMenu.Item>
+					{/each}
+				</DropdownMenu.Content>
+			</DropdownMenu.Root>
 		{/if}
 	</div>
 
@@ -174,74 +245,127 @@
 				{/if}
 			</Sheet.Header>
 			<div class="flex flex-col gap-4 mt-6 px-4">
-				<!-- Gallery links - always visible -->
-				{#each galleryLinks as link}
-					<a
-						href={link.href}
-						data-testid={link.testId}
-						class="text-sm text-zinc-700 hover:text-zinc-900 transition-colors cursor-pointer"
-						onclick={() => (mobileMenuOpen = false)}
-					>
-						{link.label}
-					</a>
-				{/each}
-
-				<!-- Sites expandable section -->
-				<div>
-					<button
-						class="text-sm text-zinc-700 hover:text-zinc-900 transition-colors cursor-pointer flex items-center gap-1 w-full"
-						onclick={() => (sitesExpanded = !sitesExpanded)}
-					>
-						sites
-						<ChevronDown class="h-3 w-3 transition-transform {sitesExpanded ? 'rotate-180' : ''}" />
-					</button>
-					{#if sitesExpanded}
-						<div class="ml-4 mt-2 flex flex-col gap-2">
-							{#each siteLinks as link}
-								<a
-									href={link.href}
-									data-testid={link.testId}
-									class="text-sm text-zinc-600 hover:text-zinc-900 transition-colors cursor-pointer"
-									onclick={() => (mobileMenuOpen = false)}
-								>
-									{link.label}
-								</a>
-							{/each}
+				{#each visibleLinks as link}
+					{#if link.children}
+						<!-- Expandable section for dropdowns -->
+						<div>
+							<button
+								class="text-sm text-zinc-700 hover:text-zinc-900 transition-colors cursor-pointer flex items-center gap-1 w-full {link.class ?? ''}"
+								data-testid={link.testId}
+								id={link.id}
+								onclick={() => toggleDropdown(link.label)}
+								{...buildDataAttrs(link.data)}
+							>
+								{#if link.icon}
+									{@const Icon = link.icon}
+								<Icon class="h-4 w-4" />
+								{/if}
+								{link.label}
+								<ChevronDown class="h-3 w-3 transition-transform {expandedDropdowns[link.label] ? 'rotate-180' : ''}" />
+							</button>
+							{#if expandedDropdowns[link.label]}
+								<div class="ml-4 mt-2 flex flex-col gap-2">
+									{#each link.children as child}
+										{#if child.action}
+											<form action={child.action} method={child.method ?? 'POST'} use:enhance class="w-full">
+												<button
+													type="submit"
+													data-testid={child.testId}
+													id={child.id}
+													class="text-sm text-zinc-600 hover:text-zinc-900 transition-colors cursor-pointer flex items-center gap-2 {child.class ?? ''}"
+													{...buildDataAttrs(child.data)}
+												>
+													{#if child.icon}
+														{@const ChildIcon = child.icon}
+												<ChildIcon class="h-4 w-4" />
+													{/if}
+													{child.label}
+												</button>
+											</form>
+										{:else}
+											<a
+												href={child.href ?? '#'}
+												data-testid={child.testId}
+												id={child.id}
+												class="text-sm text-zinc-600 hover:text-zinc-900 transition-colors cursor-pointer flex items-center gap-2 {child.class ?? ''}"
+												onclick={() => (mobileMenuOpen = false)}
+												{...buildDataAttrs(child.data)}
+											>
+												{#if child.icon}
+													{@const ChildIcon = child.icon}
+												<ChildIcon class="h-4 w-4" />
+												{/if}
+												{child.label}
+											</a>
+										{/if}
+									{/each}
+								</div>
+							{/if}
 						</div>
-					{/if}
-				</div>
-
-				<!-- Auth state navigation -->
-				{#if !isLoggedIn}
-					<!-- Public auth links -->
-					{#each publicAuthLinks as link}
+					{:else}
+						<!-- Regular link -->
 						<a
-							href={link.href}
+							href={link.href ?? '#'}
 							data-testid={link.testId}
-							class="text-sm text-zinc-700 hover:text-zinc-900 transition-colors cursor-pointer"
+							id={link.id}
+							class="text-sm text-zinc-700 hover:text-zinc-900 transition-colors cursor-pointer flex items-center gap-1 {link.class ?? ''}"
 							onclick={() => (mobileMenuOpen = false)}
+							{...buildDataAttrs(link.data)}
 						>
+							{#if link.icon}
+								{@const Icon = link.icon}
+								<Icon class="h-4 w-4" />
+							{/if}
 							{link.label}
 						</a>
-					{/each}
-				{:else}
-					<!-- Admin link (only for admins) -->
-					{#if isAdmin}
-						{#each adminLinks as link}
-							<a
-								href={link.href}
-								data-testid={link.testId}
-								class="text-sm text-zinc-700 hover:text-zinc-900 transition-colors cursor-pointer"
-								onclick={() => (mobileMenuOpen = false)}
-							>
-								{link.label}
-							</a>
-						{/each}
 					{/if}
+				{/each}
 
-					<!-- Avatar Menu in mobile drawer -->
+				<!-- Avatar Menu in mobile drawer -->
+				{#if showAvatar}
 					<div class="pt-4 border-t">
-						<AvatarMenu userEmail={userEmail} userId={user?.id} />
+						<div class="flex items-center gap-3 mb-3">
+							<div class="w-8 h-8 rounded-full bg-zinc-300 flex items-center justify-center text-zinc-600 text-xs">
+								{avatarLetter}
+							</div>
+							<span class="text-sm text-zinc-600">{userEmail}</span>
+						</div>
+						<div class="flex flex-col gap-2">
+							{#each avatarLinks as link}
+								{#if link.action}
+									<form action={link.action} method={link.method ?? 'POST'} use:enhance class="w-full">
+										<button
+											type="submit"
+											data-testid={link.testId}
+											id={link.id}
+											class="text-sm text-zinc-600 hover:text-zinc-900 transition-colors cursor-pointer flex items-center gap-2 w-full {link.class ?? ''}"
+											{...buildDataAttrs(link.data)}
+										>
+											{#if link.icon}
+												{@const Icon = link.icon}
+								<Icon class="h-4 w-4" />
+											{/if}
+											{link.label}
+										</button>
+									</form>
+								{:else}
+									<a
+										href={link.href ?? '#'}
+										data-testid={link.testId}
+										id={link.id}
+										class="text-sm text-zinc-600 hover:text-zinc-900 transition-colors cursor-pointer flex items-center gap-2 {link.class ?? ''}"
+										onclick={() => (mobileMenuOpen = false)}
+										{...buildDataAttrs(link.data)}
+									>
+										{#if link.icon}
+											{@const Icon = link.icon}
+								<Icon class="h-4 w-4" />
+										{/if}
+										{link.label}
+									</a>
+								{/if}
+							{/each}
+						</div>
 					</div>
 				{/if}
 			</div>

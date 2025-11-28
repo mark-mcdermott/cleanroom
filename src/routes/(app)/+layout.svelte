@@ -1,40 +1,19 @@
 <script lang="ts">
-	import { Nav } from '$lib/components/blocks';
-	import { Database, CheckCircle, XCircle } from 'lucide-svelte';
+	import { Nav, Footer } from '$lib/components/blocks';
+	import { defaultNavLinks, getDefaultAvatarLinks } from '$lib/config/nav';
 
 	let { children, data } = $props();
+
+	const profileUrl = $derived(data.user?.id ? `/u/${data.user.id}` : '#');
+	const avatarLinks = $derived(getDefaultAvatarLinks(profileUrl));
 </script>
 
 <div class="min-h-dvh flex flex-col">
-	<Nav siteName="cleanroom" logo="/logo.png" user={data.user} />
+	<Nav siteName="cleanroom" logo="/skull.svg" user={data.user} links={defaultNavLinks} avatar={{ links: avatarLinks }} />
 
 	<main class="flex-1">
 		{@render children()}
 	</main>
 
-	<footer class="border-t">
-		<div
-			class="mx-auto max-w-6xl px-6 sm:px-10 py-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-zinc-600"
-		>
-			<div class="flex items-center gap-2">
-				<img src="/logo.png" alt="cleanroom" class="w-5 h-5" />
-				<span>&copy; {new Date().getFullYear()} cleanroom</span>
-			</div>
-			<div class="flex items-center gap-4">
-				{#if data.dbConnected}
-					<span class="flex items-center gap-1 text-emerald-600">
-						<Database class="w-4 h-4" />
-						<CheckCircle class="w-3 h-3" />
-						<span class="text-xs">Connected</span>
-					</span>
-				{:else}
-					<span class="flex items-center gap-1 text-zinc-400">
-						<Database class="w-4 h-4" />
-						<XCircle class="w-3 h-3" />
-						<span class="text-xs">Not connected</span>
-					</span>
-				{/if}
-			</div>
-		</div>
-	</footer>
+	<Footer siteName="cleanroom" logo="/skull.svg" showDbStatus={true} dbConnected={data.dbConnected} />
 </div>
