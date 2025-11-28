@@ -44,7 +44,8 @@
 			href: '/sites/landing-sections',
 			label: 'landing (jump links)',
 			testId: 'nav-sites-landing-sections'
-		}
+		},
+		{ href: '/sites/static-site', label: 'static site', testId: 'nav-sites-static-site' }
 	];
 </script>
 
