@@ -11,12 +11,18 @@
 	];
 </script>
 
+<style>
+	:global(html) {
+		scroll-behavior: smooth;
+	}
+</style>
+
 <svelte:head>
 	<title>Landing Sections - Cleanroom</title>
 	<meta name="description" content="Landing page with sections example from Cleanroom" />
 </svelte:head>
 
-<div class="min-h-dvh flex flex-col scroll-smooth">
+<div class="min-h-dvh flex flex-col">
 	<!-- Navigation -->
 	<nav class="sticky top-0 bg-white/80 backdrop-blur-sm border-b z-50">
 		<div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
