@@ -7,7 +7,9 @@ import {
 	getGitignore,
 	getAppCss,
 	getAppHtml,
-	getAppDts
+	getAppDts,
+	getEmojiFaviconSvg,
+	getFaviconExtension
 } from '../../../src/cli/modules/base/files';
 import type { ProjectConfig } from '../../../src/cli/modules/types';
 
@@ -190,6 +192,96 @@ describe('File Templates', () => {
 		it('sets lang attribute', () => {
 			const html = getAppHtml(baseConfig);
 			expect(html).toContain('lang="en"');
+		});
+
+		it('generates SVG data URL favicon for emoji logos', () => {
+			const html = getAppHtml(baseConfig);
+			expect(html).toContain('data:image/svg+xml');
+			expect(html).toContain(encodeURIComponent('🚀'));
+		});
+
+		it('references favicon file for file logos', () => {
+			const fileConfig = { ...baseConfig, logo: { type: 'file' as const, value: '/path/to/logo.png' } };
+			const html = getAppHtml(fileConfig);
+			expect(html).toContain('%sveltekit.assets%/favicon.png');
+			expect(html).toContain('type="image/png"');
+		});
+
+		it('handles SVG file logos', () => {
+			const svgConfig = { ...baseConfig, logo: { type: 'file' as const, value: '/path/to/logo.svg' } };
+			const html = getAppHtml(svgConfig);
+			expect(html).toContain('%sveltekit.assets%/favicon.svg');
+			expect(html).toContain('type="image/svg+xml"');
+		});
+
+		it('handles JPG file logos', () => {
+			const jpgConfig = { ...baseConfig, logo: { type: 'file' as const, value: '/path/to/logo.jpg' } };
+			const html = getAppHtml(jpgConfig);
+			expect(html).toContain('%sveltekit.assets%/favicon.jpeg');
+			expect(html).toContain('type="image/jpeg"');
+		});
+	});
+
+	describe('getEmojiFaviconSvg', () => {
+		it('returns a data URL', () => {
+			const svg = getEmojiFaviconSvg('🚀');
+			expect(svg).toMatch(/^data:image\/svg\+xml,/);
+		});
+
+		it('contains the emoji', () => {
+			const svg = getEmojiFaviconSvg('🎉');
+			expect(svg).toContain(encodeURIComponent('🎉'));
+		});
+
+		it('creates valid SVG structure', () => {
+			const svg = getEmojiFaviconSvg('✨');
+			expect(svg).toContain(encodeURIComponent('<svg'));
+			expect(svg).toContain(encodeURIComponent('</svg>'));
+			expect(svg).toContain(encodeURIComponent('<text'));
+		});
+
+		it('handles different emojis', () => {
+			const emojis = ['🔥', '💻', '🎨', '📱'];
+			for (const emoji of emojis) {
+				const svg = getEmojiFaviconSvg(emoji);
+				expect(svg).toContain(encodeURIComponent(emoji));
+			}
+		});
+	});
+
+	describe('getFaviconExtension', () => {
+		it('extracts png extension', () => {
+			expect(getFaviconExtension('/path/to/logo.png')).toBe('png');
+		});
+
+		it('extracts svg extension', () => {
+			expect(getFaviconExtension('/path/to/logo.svg')).toBe('svg');
+		});
+
+		it('normalizes jpg to jpeg', () => {
+			expect(getFaviconExtension('/path/to/logo.jpg')).toBe('jpeg');
+		});
+
+		it('handles uppercase extensions', () => {
+			expect(getFaviconExtension('/path/to/logo.PNG')).toBe('png');
+			expect(getFaviconExtension('/path/to/logo.SVG')).toBe('svg');
+			expect(getFaviconExtension('/path/to/logo.JPG')).toBe('jpeg');
+		});
+
+		it('defaults to png for no extension', () => {
+			expect(getFaviconExtension('/path/to/logo')).toBe('png');
+		});
+
+		it('handles gif extension', () => {
+			expect(getFaviconExtension('/path/to/logo.gif')).toBe('gif');
+		});
+
+		it('handles webp extension', () => {
+			expect(getFaviconExtension('/path/to/logo.webp')).toBe('webp');
+		});
+
+		it('handles ico extension', () => {
+			expect(getFaviconExtension('/path/to/logo.ico')).toBe('ico');
 		});
 	});
 

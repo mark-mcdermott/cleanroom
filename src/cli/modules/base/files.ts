@@ -169,12 +169,42 @@ export function getAppCss(): string {
 `;
 }
 
+export function getEmojiFaviconSvg(emoji: string): string {
+	// URL-encode the SVG for use in data URL
+	const svg = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>${emoji}</text></svg>`;
+	return `data:image/svg+xml,${encodeURIComponent(svg)}`;
+}
+
+export function getFaviconExtension(filePath: string): string {
+	const lastDotIndex = filePath.lastIndexOf('.');
+	// No extension found - default to png
+	if (lastDotIndex === -1 || lastDotIndex === filePath.length - 1) {
+		return 'png';
+	}
+	const ext = filePath.slice(lastDotIndex + 1).toLowerCase();
+	// Normalize common extensions
+	if (ext === 'jpg') return 'jpeg';
+	return ext;
+}
+
 export function getAppHtml(config: ProjectConfig): string {
+	let faviconLink: string;
+
+	if (config.logo.type === 'emoji') {
+		// Use inline SVG data URL for emoji favicons
+		faviconLink = `<link rel="icon" href="${getEmojiFaviconSvg(config.logo.value)}" />`;
+	} else {
+		// Reference the copied favicon file
+		const ext = getFaviconExtension(config.logo.value);
+		const mimeType = ext === 'svg' ? 'image/svg+xml' : `image/${ext}`;
+		faviconLink = `<link rel="icon" type="${mimeType}" href="%sveltekit.assets%/favicon.${ext}" />`;
+	}
+
 	return `<!doctype html>
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
-		<link rel="icon" href="%sveltekit.assets%/favicon.png" />
+		${faviconLink}
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		%sveltekit.head%
 	</head>

@@ -10,7 +10,8 @@ import {
 	getAppCss,
 	getAppHtml,
 	getAppDts,
-	getLayoutTs
+	getLayoutTs,
+	getFaviconExtension
 } from '../base/files';
 import { getNav, getSectionHero, getSection, getFooter } from '../base/components';
 
@@ -135,10 +136,11 @@ export const landingSectionsModule: GeneratorModule = {
 		await writeFile(join(outputDir, 'src', 'routes', '+layout.ts'), getLayoutTs());
 		await writeFile(join(outputDir, 'src', 'routes', '+page.svelte'), getPageSvelte(config));
 
-		// Copy logo if it's a file
+		// Copy favicon if logo is a file
 		if (config.logo.type === 'file') {
 			try {
-				await copyFile(config.logo.value, join(outputDir, 'static', 'logo.png'));
+				const ext = getFaviconExtension(config.logo.value);
+				await copyFile(config.logo.value, join(outputDir, 'static', `favicon.${ext}`));
 			} catch {
 				// Logo file doesn't exist or can't be copied
 			}
