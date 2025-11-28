@@ -3,6 +3,13 @@ import { createDb } from '$lib/server/db';
 import type { Handle } from '@sveltejs/kit';
 
 export const handle: Handle = async ({ event, resolve }) => {
+	// Skip auth for prerendered static sites routes
+	if (event.url.pathname.startsWith('/sites/')) {
+		event.locals.user = null;
+		event.locals.session = null;
+		return resolve(event);
+	}
+
 	const databaseUrl = event.platform?.env?.DATABASE_URL;
 
 	if (!databaseUrl) {
