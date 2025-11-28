@@ -4,12 +4,13 @@
 	interface Props {
 		href?: string;
 		label?: string;
+		maxWidth?: string;
 	}
 
-	let { href = '/', label = 'Back' }: Props = $props();
+	let { href = '/', label = 'Back', maxWidth }: Props = $props();
 </script>
 
-<div class="px-8">
+<div class="{maxWidth ? `w-full ${maxWidth} mx-auto` : ''} px-6">
 	<a
 		{href}
 		class="inline-flex items-center gap-1 text-sm text-zinc-500 hover:text-zinc-700"

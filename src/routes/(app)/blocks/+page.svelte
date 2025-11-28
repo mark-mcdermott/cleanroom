@@ -38,7 +38,7 @@
 		</p>
 		<div class="border rounded-xl overflow-hidden bg-white">
 			<Hero
-				title="My Awesome App"
+				title="My App"
 				logo="✨"
 				tagline="Build Something Great"
 				showFlame={true}

@@ -9,6 +9,10 @@
 		logo?: string;
 		logoIcon?: Snippet;
 		description?: string;
+		// Max width for description text (e.g., 'max-w-md', 'max-w-2xl')
+		descriptionWidth?: string;
+		// If true, hero takes only the space needed by its content (no min-height)
+		inline?: boolean;
 		children?: Snippet;
 	}
 
@@ -18,6 +22,8 @@
 		logo,
 		logoIcon,
 		description,
+		descriptionWidth = 'max-w-md',
+		inline = false,
 		children
 	}: Props = $props();
 
@@ -25,8 +31,8 @@
 	const isLogoImage = $derived(logo?.startsWith('/') || logo?.startsWith('http') || logo?.endsWith('.png') || logo?.endsWith('.jpg') || logo?.endsWith('.svg'));
 </script>
 
-<div class="w-full flex justify-center items-center text-center min-h-[50vh]">
-	<div class="my-16">
+<div class="w-full flex justify-center items-center text-center {inline ? '' : 'min-h-[50vh]'}">
+	<div class="py-16">
 		{#if image}
 			<div class="flex justify-center mb-6">
 				<img src={image} alt={title} class="w-16 h-16" />
@@ -49,7 +55,7 @@
 			{title}
 		</h1>
 		{#if description}
-			<p class="text-zinc-600 text-lg mt-6 max-w-md mx-auto px-4">
+			<p class="text-zinc-600 text-lg mt-6 {descriptionWidth} mx-auto px-4">
 				{description}
 			</p>
 		{/if}

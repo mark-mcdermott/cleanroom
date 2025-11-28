@@ -130,7 +130,7 @@
 	}
 
 	h2 {
-		@apply font-semibold tracking-tight text-2xl mt-10 mb-4;
+		@apply font-semibold tracking-tight text-2xl mb-4;
 		line-height: 1.05;
 		letter-spacing: -0.04em;
 	}

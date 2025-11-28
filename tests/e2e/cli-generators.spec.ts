@@ -30,7 +30,7 @@ async function setupGeneratedSite(
 	const testDir = join(tmpdir(), `cleanroom-e2e-${moduleName}-${Date.now()}`);
 	await mkdir(testDir, { recursive: true });
 
-	const config = { ...baseConfig, siteType: moduleName };
+	const config: ProjectConfig = { ...baseConfig, siteType: moduleName as ProjectConfig['siteType'] };
 	await modules[moduleName].generate(config, testDir);
 
 	return { testDir, devProcess: null, port };

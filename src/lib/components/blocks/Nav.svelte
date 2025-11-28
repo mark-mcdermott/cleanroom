@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
+	import { page } from '$app/stores';
 	import { Button, Sheet, DropdownMenu } from '$lib/components/ui';
 	import { Menu, ChevronDown } from 'lucide-svelte';
 	import type { Snippet } from 'svelte';
@@ -13,6 +14,8 @@
 		isAdmin?: boolean;
 		links?: NavLink[];
 		avatar?: AvatarConfig;
+		// Optional max-width for the nav content (e.g., 'max-w-6xl', 'max-w-4xl')
+		maxWidth?: string;
 	}
 
 	let {
@@ -22,7 +25,8 @@
 		user = null,
 		isAdmin = false,
 		links = [],
-		avatar
+		avatar,
+		maxWidth
 	}: Props = $props();
 
 	// Detect if logo is an image path or text/emoji
@@ -55,8 +59,13 @@
 
 	const visibleLinks = $derived(links.filter(shouldShowLink));
 
-	function toggleDropdown(label: string) {
-		expandedDropdowns[label] = !expandedDropdowns[label];
+	function toggleDropdown(key: string) {
+		expandedDropdowns[key] = !expandedDropdowns[key];
+	}
+
+	// Get a unique key for dropdown state (label, testId, or href)
+	function getDropdownKey(link: NavLink): string {
+		return link.label ?? link.testId ?? link.href ?? 'dropdown';
 	}
 
 	function buildDataAttrs(data?: Record<string, string>): Record<string, string> {
@@ -67,9 +76,20 @@
 		}
 		return result;
 	}
+
+	// Check if a link is active (matches current path)
+	function isActive(href: string | undefined): boolean {
+		if (!href) return false;
+		const currentPath = $page.url.pathname;
+		// For jump links (starting with #), never mark as active
+		if (href.startsWith('#')) return false;
+		// Exact match
+		return currentPath === href;
+	}
 </script>
 
-<nav data-testid="nav" class="w-full flex items-center justify-between px-8 py-6">
+<nav data-testid="nav" class="w-full {maxWidth ? '' : 'flex items-center justify-between px-8'} py-6">
+	<div class="{maxWidth ? `${maxWidth} mx-auto px-6 flex items-center justify-between` : 'contents'}">
 	<!-- Logo -->
 	<a
 		href="/"
@@ -108,7 +128,7 @@
 							{@const Icon = link.icon}
 							<Icon class="h-4 w-4" />
 						{/if}
-						{link.label}
+						{#if link.label}{link.label}{/if}
 						<ChevronDown class="h-3 w-3" />
 					</DropdownMenu.Trigger>
 					<DropdownMenu.Content>
@@ -158,14 +178,14 @@
 					href={link.href ?? '#'}
 					data-testid={link.testId}
 					id={link.id}
-					class="text-sm text-zinc-700 hover:text-zinc-900 transition-colors cursor-pointer flex items-center gap-1 {link.class ?? ''}"
+					class="text-sm text-zinc-700 hover:text-zinc-900 transition-colors cursor-pointer flex items-center gap-1 {isActive(link.href) ? 'font-semibold' : ''} {link.class ?? ''}"
 					{...buildDataAttrs(link.data)}
 				>
 					{#if link.icon}
 						{@const Icon = link.icon}
 								<Icon class="h-4 w-4" />
 					{/if}
-					{link.label}
+					{#if link.label}{link.label}{/if}
 				</a>
 			{/if}
 		{/each}
@@ -199,7 +219,7 @@
 											{@const Icon = link.icon}
 								<Icon class="h-4 w-4" />
 										{/if}
-										{link.label}
+										{#if link.label}{link.label}{/if}
 									</button>
 								</form>
 							{:else}
@@ -214,7 +234,7 @@
 										{@const Icon = link.icon}
 								<Icon class="h-4 w-4" />
 									{/if}
-									{link.label}
+									{#if link.label}{link.label}{/if}
 								</a>
 							{/if}
 						</DropdownMenu.Item>
@@ -235,6 +255,7 @@
 	>
 		<Menu class="h-6 w-6" />
 	</Button.Root>
+	</div>
 
 	<!-- Mobile Sheet -->
 	<Sheet.Root bind:open={mobileMenuOpen}>
@@ -253,17 +274,17 @@
 								class="text-sm text-zinc-700 hover:text-zinc-900 transition-colors cursor-pointer flex items-center gap-1 w-full {link.class ?? ''}"
 								data-testid={link.testId}
 								id={link.id}
-								onclick={() => toggleDropdown(link.label)}
+								onclick={() => toggleDropdown(getDropdownKey(link))}
 								{...buildDataAttrs(link.data)}
 							>
 								{#if link.icon}
 									{@const Icon = link.icon}
 								<Icon class="h-4 w-4" />
 								{/if}
-								{link.label}
-								<ChevronDown class="h-3 w-3 transition-transform {expandedDropdowns[link.label] ? 'rotate-180' : ''}" />
+								{#if link.label}{link.label}{/if}
+								<ChevronDown class="h-3 w-3 transition-transform {expandedDropdowns[getDropdownKey(link)] ? 'rotate-180' : ''}" />
 							</button>
-							{#if expandedDropdowns[link.label]}
+							{#if expandedDropdowns[getDropdownKey(link)]}
 								<div class="ml-4 mt-2 flex flex-col gap-2">
 									{#each link.children as child}
 										{#if child.action}
@@ -308,7 +329,7 @@
 							href={link.href ?? '#'}
 							data-testid={link.testId}
 							id={link.id}
-							class="text-sm text-zinc-700 hover:text-zinc-900 transition-colors cursor-pointer flex items-center gap-1 {link.class ?? ''}"
+							class="text-sm text-zinc-700 hover:text-zinc-900 transition-colors cursor-pointer flex items-center gap-1 {isActive(link.href) ? 'font-semibold' : ''} {link.class ?? ''}"
 							onclick={() => (mobileMenuOpen = false)}
 							{...buildDataAttrs(link.data)}
 						>
@@ -316,7 +337,7 @@
 								{@const Icon = link.icon}
 								<Icon class="h-4 w-4" />
 							{/if}
-							{link.label}
+							{#if link.label}{link.label}{/if}
 						</a>
 					{/if}
 				{/each}
@@ -345,7 +366,7 @@
 												{@const Icon = link.icon}
 								<Icon class="h-4 w-4" />
 											{/if}
-											{link.label}
+											{#if link.label}{link.label}{/if}
 										</button>
 									</form>
 								{:else}
@@ -361,7 +382,7 @@
 											{@const Icon = link.icon}
 								<Icon class="h-4 w-4" />
 										{/if}
-										{link.label}
+										{#if link.label}{link.label}{/if}
 									</a>
 								{/if}
 							{/each}

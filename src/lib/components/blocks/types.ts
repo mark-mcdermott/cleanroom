@@ -19,7 +19,7 @@ export interface DropdownLink {
 
 // Main nav link
 export interface NavLink {
-	label: string;
+	label?: string;
 	href?: string;
 	icon?: IconComponent;
 	requiresAuth?: boolean; // only show when logged in
