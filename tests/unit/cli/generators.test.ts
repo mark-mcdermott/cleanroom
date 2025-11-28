@@ -222,7 +222,7 @@ describe('Generator Modules', () => {
 		});
 
 		it('hides hero buttons when modules are selected', async () => {
-			const config = { ...baseConfig, siteType: 'ssr-site' as const, modules: ['auth'] };
+			const config = { ...baseConfig, siteType: 'ssr-site' as const, modules: ['auth'] as ('auth' | 'blog' | 'office-users')[] };
 			await modules['ssr-site'].generate(config, testDir);
 
 			const page = await readFile(join(testDir, 'src', 'routes', '+page.svelte'), 'utf-8');
@@ -231,7 +231,7 @@ describe('Generator Modules', () => {
 		});
 
 		it('shows Modules Added section with auth module', async () => {
-			const config = { ...baseConfig, siteType: 'ssr-site' as const, modules: ['auth'] };
+			const config = { ...baseConfig, siteType: 'ssr-site' as const, modules: ['auth'] as ('auth' | 'blog' | 'office-users')[] };
 			await modules['ssr-site'].generate(config, testDir);
 
 			const page = await readFile(join(testDir, 'src', 'routes', '+page.svelte'), 'utf-8');
@@ -241,7 +241,7 @@ describe('Generator Modules', () => {
 		});
 
 		it('shows Modules Added section with blog module', async () => {
-			const config = { ...baseConfig, siteType: 'ssr-site' as const, modules: ['blog'] };
+			const config = { ...baseConfig, siteType: 'ssr-site' as const, modules: ['blog'] as ('auth' | 'blog' | 'office-users')[] };
 			await modules['ssr-site'].generate(config, testDir);
 
 			const page = await readFile(join(testDir, 'src', 'routes', '+page.svelte'), 'utf-8');
@@ -251,7 +251,7 @@ describe('Generator Modules', () => {
 		});
 
 		it('shows Modules Added section with office-users module', async () => {
-			const config = { ...baseConfig, siteType: 'ssr-site' as const, modules: ['office-users'] };
+			const config = { ...baseConfig, siteType: 'ssr-site' as const, modules: ['office-users'] as ('auth' | 'blog' | 'office-users')[] };
 			await modules['ssr-site'].generate(config, testDir);
 
 			const page = await readFile(join(testDir, 'src', 'routes', '+page.svelte'), 'utf-8');
@@ -261,7 +261,7 @@ describe('Generator Modules', () => {
 		});
 
 		it('shows multiple modules in Modules Added section', async () => {
-			const config = { ...baseConfig, siteType: 'ssr-site' as const, modules: ['auth', 'blog', 'office-users'] };
+			const config = { ...baseConfig, siteType: 'ssr-site' as const, modules: ['auth', 'blog', 'office-users'] as ('auth' | 'blog' | 'office-users')[] };
 			await modules['ssr-site'].generate(config, testDir);
 
 			const page = await readFile(join(testDir, 'src', 'routes', '+page.svelte'), 'utf-8');
