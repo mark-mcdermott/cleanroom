@@ -1,26 +1,40 @@
 <script lang="ts">
+	import { Alert, Button, Card, DropdownMenu, Label, Sheet, Table } from '$lib/components/ui';
 	import {
-		Alert,
-		Button,
-		Card,
-		Checkbox,
-		DropdownMenu,
-		Input,
-		Label,
-		RadioGroup,
-		Select,
-		Sheet,
-		Switch,
-		Table,
-		Textarea
-	} from '$lib/components/ui';
+		Input as FormInput,
+		Email as FormEmail,
+		Select as FormSelect,
+		Textarea as FormTextarea,
+		Button as FormButton,
+		Checkbox as FormCheckbox,
+		RadioGroup as FormRadioGroup,
+		Switch as FormSwitch
+	} from '$lib/components/forms';
+	import type { SelectOption, RadioOption } from '$lib/components/forms';
 	import { AlertCircle, ChevronDown, Menu } from 'lucide-svelte';
 
-	let checkboxChecked = $state(false);
-	let switchChecked = $state(false);
-	let radioValue = $state('option1');
-	let selectValue = $state('');
 	let sheetOpen = $state(false);
+
+	// Form component state
+	let formInputValue = $state('');
+	let formEmailValue = $state('');
+	let formSelectValue = $state('');
+	let formTextareaValue = $state('');
+	let formCheckboxChecked = $state(false);
+	let formRadioValue = $state('option1');
+	let formSwitchChecked = $state(false);
+
+	const formSelectOptions: SelectOption[] = [
+		{ value: 'option1', label: 'Option 1' },
+		{ value: 'option2', label: 'Option 2' },
+		{ value: 'option3', label: 'Option 3' }
+	];
+
+	const formRadioOptions: RadioOption[] = [
+		{ value: 'option1', label: 'Option 1' },
+		{ value: 'option2', label: 'Option 2' },
+		{ value: 'option3', label: 'Option 3' }
+	];
 </script>
 
 <svelte:head>
@@ -86,92 +100,6 @@
 				<Button.Root>Action</Button.Root>
 			</Card.Footer>
 		</Card.Root>
-	</section>
-
-	<!-- Checkbox -->
-	<section class="mb-12">
-		<h2>Checkbox</h2>
-		<div class="flex items-center gap-2">
-			<Checkbox.Root id="terms" bind:checked={checkboxChecked} />
-			<Label.Root for="terms">Accept terms and conditions</Label.Root>
-		</div>
-		<p class="text-sm text-zinc-500 mt-2">Checked: {checkboxChecked}</p>
-	</section>
-
-	<!-- Input -->
-	<section class="mb-12">
-		<h2>Input</h2>
-		<div class="space-y-4 max-w-sm">
-			<div>
-				<Label.Root for="email">Email</Label.Root>
-				<Input.Root id="email" type="email" placeholder="Enter your email" />
-			</div>
-			<div>
-				<Label.Root for="disabled">Disabled</Label.Root>
-				<Input.Root id="disabled" disabled placeholder="Disabled input" />
-			</div>
-		</div>
-	</section>
-
-	<!-- Textarea -->
-	<section class="mb-12">
-		<h2>Textarea</h2>
-		<div class="max-w-sm">
-			<Label.Root for="message">Message</Label.Root>
-			<Textarea.Root id="message" placeholder="Type your message here..." />
-		</div>
-	</section>
-
-	<!-- Radio Group -->
-	<section class="mb-12">
-		<h2>Radio Group</h2>
-		<RadioGroup.Root bind:value={radioValue} class="space-y-2">
-			<div class="flex items-center gap-2">
-				<RadioGroup.Item value="option1" id="option1" />
-				<Label.Root for="option1">Option 1</Label.Root>
-			</div>
-			<div class="flex items-center gap-2">
-				<RadioGroup.Item value="option2" id="option2" />
-				<Label.Root for="option2">Option 2</Label.Root>
-			</div>
-			<div class="flex items-center gap-2">
-				<RadioGroup.Item value="option3" id="option3" />
-				<Label.Root for="option3">Option 3</Label.Root>
-			</div>
-		</RadioGroup.Root>
-		<p class="text-sm text-zinc-500 mt-2">Selected: {radioValue}</p>
-	</section>
-
-	<!-- Select -->
-	<section class="mb-12">
-		<h2>Select</h2>
-		<div class="max-w-sm">
-			<Select.Root bind:value={selectValue}>
-				<Select.Trigger>
-					<Select.Value placeholder="Select a fruit" />
-				</Select.Trigger>
-				<Select.Content>
-					<Select.Group>
-						<Select.Label>Fruits</Select.Label>
-						<Select.Item value="apple">Apple</Select.Item>
-						<Select.Item value="banana">Banana</Select.Item>
-						<Select.Item value="orange">Orange</Select.Item>
-						<Select.Item value="grape">Grape</Select.Item>
-					</Select.Group>
-				</Select.Content>
-			</Select.Root>
-			<p class="text-sm text-zinc-500 mt-2">Selected: {selectValue || 'none'}</p>
-		</div>
-	</section>
-
-	<!-- Switch -->
-	<section class="mb-12">
-		<h2>Switch</h2>
-		<div class="flex items-center gap-2">
-			<Switch.Root id="airplane" bind:checked={switchChecked} />
-			<Label.Root for="airplane">Airplane Mode</Label.Root>
-		</div>
-		<p class="text-sm text-zinc-500 mt-2">Enabled: {switchChecked}</p>
 	</section>
 
 	<!-- Dropdown Menu -->
@@ -245,5 +173,171 @@
 				</Table.Row>
 			</Table.Body>
 		</Table.Root>
+	</section>
+
+	<!-- Divider -->
+	<div class="border-t border-zinc-200 my-12"></div>
+
+	<h1 class="mb-2">Form Components</h1>
+	<p class="text-zinc-600 text-lg mb-12">
+		Styled form components with labels, validation errors, and Superforms integration.
+	</p>
+
+	<!-- Form Input -->
+	<section class="mb-12">
+		<h2>Form Input</h2>
+		<p class="text-zinc-600 mb-4">Text input with label and error support.</p>
+		<div class="max-w-sm space-y-4">
+			<FormInput
+				name="demo-input"
+				label="Name"
+				placeholder="Enter your name"
+				bind:value={formInputValue}
+			/>
+			<FormInput
+				name="demo-input-error"
+				label="With Error"
+				placeholder="Enter value"
+				value=""
+				error={['This field is required']}
+			/>
+			<FormInput
+				name="demo-input-required"
+				label="Required Field"
+				placeholder="Required"
+				required
+				bind:value={formInputValue}
+			/>
+		</div>
+	</section>
+
+	<!-- Form Email -->
+	<section class="mb-12">
+		<h2>Form Email</h2>
+		<p class="text-zinc-600 mb-4">Email input with default placeholder.</p>
+		<div class="max-w-sm">
+			<FormEmail name="demo-email" label="Email Address" bind:value={formEmailValue} />
+		</div>
+	</section>
+
+	<!-- Form Select -->
+	<section class="mb-12">
+		<h2>Form Select</h2>
+		<p class="text-zinc-600 mb-4">Dropdown select with options array.</p>
+		<div class="max-w-sm">
+			<FormSelect
+				name="demo-select"
+				label="Choose an option"
+				options={formSelectOptions}
+				placeholder="Select..."
+				bind:value={formSelectValue}
+			/>
+		</div>
+	</section>
+
+	<!-- Form Textarea -->
+	<section class="mb-12">
+		<h2>Form Textarea</h2>
+		<p class="text-zinc-600 mb-4">Multi-line text input.</p>
+		<div class="max-w-sm">
+			<FormTextarea
+				name="demo-textarea"
+				label="Message"
+				placeholder="Type your message..."
+				bind:value={formTextareaValue}
+			/>
+		</div>
+	</section>
+
+	<!-- Form Button -->
+	<section class="mb-12">
+		<h2>Form Button</h2>
+		<p class="text-zinc-600 mb-4">Submit button with variants.</p>
+		<div class="space-y-4 max-w-sm">
+			<FormButton type="button">Primary (Full Width)</FormButton>
+			<FormButton type="button" variant="secondary">Secondary</FormButton>
+			<div class="flex gap-4">
+				<FormButton type="button" fullWidth={false}>Not Full Width</FormButton>
+				<FormButton type="button" variant="secondary" fullWidth={false}>Secondary</FormButton>
+			</div>
+		</div>
+	</section>
+
+	<!-- Form Checkbox -->
+	<section class="mb-12">
+		<h2>Form Checkbox</h2>
+		<p class="text-zinc-600 mb-4">Checkbox with label and error support.</p>
+		<div class="max-w-sm space-y-4">
+			<FormCheckbox
+				name="demo-checkbox"
+				label="Accept terms and conditions"
+				bind:checked={formCheckboxChecked}
+			/>
+			<FormCheckbox
+				name="demo-checkbox-required"
+				label="Required checkbox"
+				required
+				bind:checked={formCheckboxChecked}
+			/>
+			<FormCheckbox
+				name="demo-checkbox-error"
+				label="With error"
+				checked={false}
+				error={['You must accept the terms']}
+			/>
+			<FormCheckbox
+				name="demo-checkbox-disabled"
+				label="Disabled checkbox"
+				disabled
+				checked={true}
+			/>
+			<p class="text-sm text-zinc-500">Checked: {formCheckboxChecked}</p>
+		</div>
+	</section>
+
+	<!-- Form Radio Group -->
+	<section class="mb-12">
+		<h2>Form Radio Group</h2>
+		<p class="text-zinc-600 mb-4">Radio button group with options array.</p>
+		<div class="max-w-sm space-y-6">
+			<FormRadioGroup
+				name="demo-radio"
+				label="Choose an option"
+				options={formRadioOptions}
+				bind:value={formRadioValue}
+			/>
+			<FormRadioGroup
+				name="demo-radio-required"
+				label="Required selection"
+				options={formRadioOptions}
+				required
+				bind:value={formRadioValue}
+			/>
+			<FormRadioGroup
+				name="demo-radio-error"
+				label="With error"
+				options={formRadioOptions}
+				value=""
+				error={['Please select an option']}
+			/>
+			<p class="text-sm text-zinc-500">Selected: {formRadioValue}</p>
+		</div>
+	</section>
+
+	<!-- Form Switch -->
+	<section class="mb-12">
+		<h2>Form Switch</h2>
+		<p class="text-zinc-600 mb-4">Toggle switch with label support.</p>
+		<div class="max-w-sm space-y-4">
+			<FormSwitch name="demo-switch" label="Enable notifications" bind:checked={formSwitchChecked} />
+			<FormSwitch name="demo-switch-disabled" label="Disabled switch" disabled checked={true} />
+			<FormSwitch
+				name="demo-switch-error"
+				label="With error"
+				checked={false}
+				error={['This setting is required']}
+			/>
+			<p class="text-sm text-zinc-500">Enabled: {formSwitchChecked}</p>
+		</div>
 	</section>
 </div>

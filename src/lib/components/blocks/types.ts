@@ -22,6 +22,7 @@ export interface NavLink {
 	label?: string;
 	href?: string;
 	icon?: IconComponent;
+	iconSize?: 'sm' | 'md' | 'lg'; // sm: 16px, md: 20px (default), lg: 24px
 	requiresAuth?: boolean; // only show when logged in
 	requiresAdmin?: boolean; // only show for admins
 	hideWhenAuth?: boolean; // hide when logged in (e.g., login/signup links)

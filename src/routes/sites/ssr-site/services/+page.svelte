@@ -66,8 +66,8 @@
 </script>
 
 <svelte:head>
-	<title>Services - Static Site</title>
-	<meta name="description" content="Web development services from Static Site" />
+	<title>Services - SSR Site</title>
+	<meta name="description" content="Web development services from SSR Site" />
 </svelte:head>
 
 <div class="max-w-4xl mx-auto px-6 py-16">

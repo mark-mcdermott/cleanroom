@@ -204,6 +204,11 @@ async function main() {
 				value: 'static-site',
 				label: 'Simple static site',
 				hint: 'Prerendered, SPA-like navigation, multiple pages'
+			},
+			{
+				value: 'ssr-site',
+				label: 'SSR site (auth ready)',
+				hint: 'Server-rendered, ideal for auth, dynamic content'
 			}
 		]
 	});
@@ -368,7 +373,8 @@ async function main() {
 		'demo-page': 'Simple demo page',
 		'landing-simple': 'Simple landing page',
 		'landing-sections': 'Landing page with scroll sections',
-		'static-site': 'Simple static site'
+		'static-site': 'Simple static site',
+		'ssr-site': 'SSR site (auth ready)'
 	};
 
 	p.note(

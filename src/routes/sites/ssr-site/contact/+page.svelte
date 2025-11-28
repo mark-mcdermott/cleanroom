@@ -21,7 +21,7 @@
 		{
 			icon: '📧',
 			title: 'Email',
-			description: 'hello@staticsite.example'
+			description: 'hello@ssrsite.example'
 		},
 		{
 			icon: '📍',
@@ -47,14 +47,14 @@
 		{
 			question: "What's your process?",
 			answer:
-				'Check out our <a href="/sites/static-site/services" class="underline hover:text-zinc-900">Services page</a> to learn more.'
+				'Check out our <a href="/sites/ssr-site/services" class="underline hover:text-zinc-900">Services page</a> to learn more.'
 		}
 	];
 </script>
 
 <svelte:head>
-	<title>Contact - Static Site</title>
-	<meta name="description" content="Get in touch with the Static Site team" />
+	<title>Contact - SSR Site</title>
+	<meta name="description" content="Get in touch with the SSR Site team" />
 </svelte:head>
 
 <div class="max-w-4xl mx-auto px-6 py-16">

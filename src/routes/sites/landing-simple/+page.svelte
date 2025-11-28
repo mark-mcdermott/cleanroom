@@ -1,5 +1,16 @@
 <script lang="ts">
 	import { Nav, BackLink, FloatingHero, Footer } from '$lib/components/blocks';
+	import type { NavLink } from '$lib/components/blocks';
+	import { Github } from 'lucide-svelte';
+
+	const navLinks: NavLink[] = [
+		{
+			icon: Github,
+			iconSize: 'lg',
+			href: 'https://github.com/mark-mcdermott/cleanroom/tree/main/src/routes/sites/landing-simple',
+			testId: 'nav-github'
+		}
+	];
 </script>
 
 <svelte:head>
@@ -8,7 +19,7 @@
 </svelte:head>
 
 <div class="min-h-dvh flex flex-col">
-	<Nav siteName="Landing Simple" logo="🦫" />
+	<Nav siteName="Landing Simple" logo="🦫" links={navLinks} />
 	<BackLink href="/" label="Back to cleanroom" />
 
 	<main class="flex-1">

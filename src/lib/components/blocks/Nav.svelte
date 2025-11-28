@@ -86,6 +86,19 @@
 		// Exact match
 		return currentPath === href;
 	}
+
+	// Get icon size class based on iconSize prop
+	function getIconSizeClass(size?: 'sm' | 'md' | 'lg'): string {
+		switch (size) {
+			case 'sm':
+				return 'h-4 w-4';
+			case 'lg':
+				return 'h-6 w-6';
+			case 'md':
+			default:
+				return 'h-5 w-5';
+		}
+	}
 </script>
 
 <nav data-testid="nav" class="w-full {maxWidth ? '' : 'flex items-center justify-between px-8'} py-6">
@@ -183,7 +196,7 @@
 				>
 					{#if link.icon}
 						{@const Icon = link.icon}
-								<Icon class="h-4 w-4" />
+								<Icon class={getIconSizeClass(link.iconSize)} />
 					{/if}
 					{#if link.label}{link.label}{/if}
 				</a>
@@ -335,7 +348,7 @@
 						>
 							{#if link.icon}
 								{@const Icon = link.icon}
-								<Icon class="h-4 w-4" />
+								<Icon class={getIconSizeClass(link.iconSize)} />
 							{/if}
 							{#if link.label}{link.label}{/if}
 						</a>

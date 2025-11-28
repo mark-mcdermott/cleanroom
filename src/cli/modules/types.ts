@@ -4,7 +4,7 @@ export interface ProjectConfig {
 		type: 'file' | 'emoji';
 		value: string;
 	};
-	siteType: 'demo-page' | 'landing-simple' | 'landing-sections' | 'static-site';
+	siteType: 'demo-page' | 'landing-simple' | 'landing-sections' | 'static-site' | 'ssr-site';
 	github: {
 		repoUrl: string;
 	};

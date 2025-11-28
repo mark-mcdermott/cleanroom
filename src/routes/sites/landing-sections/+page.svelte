@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { Nav, BackLink, FloatingHero, Footer, StripedSections } from '$lib/components/blocks';
 	import type { NavLink, Section } from '$lib/components/blocks';
+	import { Github } from 'lucide-svelte';
 
 	const sections: Section[] = [
 		{
@@ -37,7 +38,15 @@
 		}
 	];
 
-	const jumpLinks: NavLink[] = sections.map((s) => ({ label: s.title, href: `#${s.id}` }));
+	const jumpLinks: NavLink[] = [
+		...sections.map((s) => ({ label: s.title, href: `#${s.id}` })),
+		{
+			icon: Github,
+			iconSize: 'lg' as const,
+			href: 'https://github.com/mark-mcdermott/cleanroom/tree/main/src/routes/sites/landing-sections',
+			testId: 'nav-github'
+		}
+	];
 </script>
 
 <style>
