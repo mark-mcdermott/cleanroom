@@ -33,7 +33,7 @@
 					Landing Simple
 				</h1>
 				<p class="text-zinc-600 text-lg mt-6 max-w-md mx-auto px-4">
-					A simple landing page with footer but no navigation menu.
+					A simple landing page with responsive breakpoints and footer, but no navigation menu.
 				</p>
 			</div>
 		</div>
