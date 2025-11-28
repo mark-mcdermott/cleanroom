@@ -137,9 +137,83 @@ describe('Generator Modules', () => {
 		});
 	});
 
+	describe('ssr-site module', () => {
+		it('generates all required pages', async () => {
+			const config = { ...baseConfig, siteType: 'ssr-site' as const };
+			await modules['ssr-site'].generate(config, testDir);
+
+			// Check main routes exist
+			await expect(access(join(testDir, 'src', 'routes', '+page.svelte'))).resolves.toBeUndefined();
+			await expect(access(join(testDir, 'src', 'routes', 'about', '+page.svelte'))).resolves.toBeUndefined();
+			await expect(access(join(testDir, 'src', 'routes', 'services', '+page.svelte'))).resolves.toBeUndefined();
+			await expect(access(join(testDir, 'src', 'routes', 'contact', '+page.svelte'))).resolves.toBeUndefined();
+		});
+
+		it('includes header with 4-item navigation', async () => {
+			const config = { ...baseConfig, siteType: 'ssr-site' as const };
+			await modules['ssr-site'].generate(config, testDir);
+
+			const layout = await readFile(join(testDir, 'src', 'routes', '+layout.svelte'), 'utf-8');
+			expect(layout).toContain('header');
+			expect(layout).toContain('mobileMenuOpen');
+			expect(layout).toContain('/about');
+			expect(layout).toContain('/services');
+			expect(layout).toContain('/contact');
+		});
+
+		it('homepage has hero, features, and CTA sections', async () => {
+			const config = { ...baseConfig, siteType: 'ssr-site' as const };
+			await modules['ssr-site'].generate(config, testDir);
+
+			const page = await readFile(join(testDir, 'src', 'routes', '+page.svelte'), 'utf-8');
+			// Hero section
+			expect(page).toContain('Test App');
+			expect(page).toContain('server-side rendered');
+			// Features section
+			expect(page).toContain('Why SSR?');
+			expect(page).toContain('Auth Ready');
+			expect(page).toContain('Dynamic Content');
+			expect(page).toContain('Secure by Default');
+			// CTA section
+			expect(page).toContain('Ready to Build?');
+			expect(page).toContain('/services');
+		});
+
+		it('services page has service cards', async () => {
+			const config = { ...baseConfig, siteType: 'ssr-site' as const };
+			await modules['ssr-site'].generate(config, testDir);
+
+			const services = await readFile(join(testDir, 'src', 'routes', 'services', '+page.svelte'), 'utf-8');
+			expect(services).toContain('Services');
+			expect(services).toContain('Web Development');
+			expect(services).toContain('Mobile Apps');
+			expect(services).toContain('Cloud Solutions');
+			expect(services).toContain('Consulting');
+		});
+
+		it('contact page has form', async () => {
+			const config = { ...baseConfig, siteType: 'ssr-site' as const };
+			await modules['ssr-site'].generate(config, testDir);
+
+			const contact = await readFile(join(testDir, 'src', 'routes', 'contact', '+page.svelte'), 'utf-8');
+			expect(contact).toContain('<form');
+			expect(contact).toContain('name');
+			expect(contact).toContain('email');
+			expect(contact).toContain('message');
+		});
+
+		it('does NOT include prerender layout (SSR mode)', async () => {
+			const config = { ...baseConfig, siteType: 'ssr-site' as const };
+			await modules['ssr-site'].generate(config, testDir);
+
+			// SSR sites should NOT have +layout.ts with prerender = true
+			await expect(access(join(testDir, 'src', 'routes', '+layout.ts'))).rejects.toThrow();
+		});
+	});
+
 	describe('all modules', () => {
 		it('all registered modules exist and have generate function', () => {
-			const moduleNames = ['demo-page', 'landing-simple', 'landing-sections', 'static-site'];
+			const moduleNames = ['demo-page', 'landing-simple', 'landing-sections', 'static-site', 'ssr-site'];
 
 			for (const name of moduleNames) {
 				expect(modules[name]).toBeDefined();
@@ -149,7 +223,7 @@ describe('Generator Modules', () => {
 		});
 
 		it('all modules create valid package.json with required scripts', async () => {
-			const moduleNames = ['demo-page', 'landing-simple', 'landing-sections', 'static-site'] as const;
+			const moduleNames = ['demo-page', 'landing-simple', 'landing-sections', 'static-site', 'ssr-site'] as const;
 
 			for (const name of moduleNames) {
 				const moduleTestDir = join(testDir, name);
@@ -170,7 +244,7 @@ describe('Generator Modules', () => {
 		});
 
 		it('all modules include Tailwind CSS import', async () => {
-			const moduleNames = ['demo-page', 'landing-simple', 'landing-sections', 'static-site'] as const;
+			const moduleNames = ['demo-page', 'landing-simple', 'landing-sections', 'static-site', 'ssr-site'] as const;
 
 			for (const name of moduleNames) {
 				const moduleTestDir = join(testDir, name);

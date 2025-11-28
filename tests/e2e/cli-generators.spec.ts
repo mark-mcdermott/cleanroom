@@ -137,7 +137,8 @@ test.describe('CLI Generator Integration Tests', () => {
 		'demo-page': 5180,
 		'landing-simple': 5181,
 		'landing-sections': 5182,
-		'static-site': 5183
+		'static-site': 5183,
+		'ssr-site': 5184
 	};
 
 	test('demo-page: generates, installs, runs dev server, homepage returns 200', async ({
@@ -241,6 +242,48 @@ test.describe('CLI Generator Integration Tests', () => {
 
 			const contactResponse = await page.goto(`http://localhost:${ctx.port}/contact`);
 			expect(contactResponse?.status()).toBe(200);
+		} finally {
+			await cleanup(ctx);
+		}
+	});
+
+	test('ssr-site: generates, installs, runs dev server, all pages return 200', async ({
+		page
+	}) => {
+		test.setTimeout(TIMEOUT);
+
+		const ctx = await setupGeneratedSite('ssr-site', ports['ssr-site']);
+
+		try {
+			await installDependencies(ctx.testDir);
+			ctx.devProcess = await startDevServer(ctx.testDir, ctx.port);
+
+			// Test homepage
+			const response = await page.goto(`http://localhost:${ctx.port}/`);
+			expect(response?.status()).toBe(200);
+
+			// Verify homepage content - should have hero, features, CTA
+			await expect(page.locator('body')).toBeVisible();
+			const content = await page.content();
+			expect(content).toContain('Test App');
+			expect(content).toContain('Why SSR?');
+			expect(content).toContain('Ready to Build?');
+
+			// Test all 4 pages
+			const aboutResponse = await page.goto(`http://localhost:${ctx.port}/about`);
+			expect(aboutResponse?.status()).toBe(200);
+
+			const servicesResponse = await page.goto(`http://localhost:${ctx.port}/services`);
+			expect(servicesResponse?.status()).toBe(200);
+			// Verify services page has service cards
+			const servicesContent = await page.content();
+			expect(servicesContent).toContain('Web Development');
+			expect(servicesContent).toContain('Mobile Apps');
+
+			const contactResponse = await page.goto(`http://localhost:${ctx.port}/contact`);
+			expect(contactResponse?.status()).toBe(200);
+			// Verify contact form exists
+			await expect(page.locator('form')).toBeVisible();
 		} finally {
 			await cleanup(ctx);
 		}
