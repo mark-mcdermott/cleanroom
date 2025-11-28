@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import { ArrowLeft, Menu, X } from 'lucide-svelte';
-	import { fly, fade } from 'svelte/transition';
+	import { fade } from 'svelte/transition';
 
 	let { children } = $props();
 	let mobileMenuOpen = $state(false);
@@ -24,6 +24,19 @@
 <style>
 	:global(html) {
 		scroll-behavior: smooth;
+	}
+
+	.page-transition {
+		animation: fadeIn 200ms ease-out;
+	}
+
+	@keyframes fadeIn {
+		from {
+			opacity: 0;
+		}
+		to {
+			opacity: 1;
+		}
 	}
 </style>
 
@@ -96,10 +109,7 @@
 	<!-- Page content with transition -->
 	<main class="flex-1">
 		{#key $page.url.pathname}
-			<div
-				in:fly={{ x: 20, duration: 300, delay: 150 }}
-				out:fade={{ duration: 150 }}
-			>
+			<div class="page-transition">
 				{@render children()}
 			</div>
 		{/key}
