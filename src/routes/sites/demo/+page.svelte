@@ -3,8 +3,8 @@
 </script>
 
 <svelte:head>
-	<title>Demo Site - Cleanroom</title>
-	<meta name="description" content="Demo page example from Cleanroom" />
+	<title>Demo Site - cleanroom</title>
+	<meta name="description" content="Demo page example from cleanroom" />
 </svelte:head>
 
 <div class="min-h-dvh flex flex-col">
@@ -19,7 +19,7 @@
 			class="inline-flex items-center gap-1 text-sm text-zinc-500 hover:text-zinc-700 mt-2"
 		>
 			<ArrowLeft class="w-4 h-4" />
-			Back to Cleanroom
+			Back to cleanroom
 		</a>
 	</div>
 

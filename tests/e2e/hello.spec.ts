@@ -1,14 +1,14 @@
 import { expect, test } from '@playwright/test';
 
 test.describe('Home Page', () => {
-	test('home page displays Cleanroom heading', async ({ page }) => {
+	test('home page displays cleanroom heading', async ({ page }) => {
 		await page.goto('/');
-		await expect(page.locator('h1')).toHaveText('Cleanroom');
+		await expect(page.locator('h1')).toHaveText('cleanroom');
 	});
 
 	test('home page has correct title', async ({ page }) => {
 		await page.goto('/');
-		await expect(page).toHaveTitle(/Cleanroom/);
+		await expect(page).toHaveTitle(/cleanroom/);
 	});
 
 	test('page is accessible and loads successfully', async ({ page }) => {

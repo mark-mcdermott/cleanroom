@@ -116,7 +116,7 @@ async function getGitHubUsername(): Promise<string | null> {
 async function main() {
 	console.clear();
 
-	p.intro('Welcome to Cleanroom');
+	p.intro('Welcome to cleanroom');
 
 	// Setup dependencies first
 	const depsReady = await setupDependencies();
@@ -256,7 +256,7 @@ async function main() {
 	spinner.start('Initializing git...');
 	await execAsync('git init', { cwd: outputDir });
 	await execAsync('git add -A', { cwd: outputDir });
-	await execAsync('git commit -m "Initial commit from Cleanroom"', { cwd: outputDir });
+	await execAsync('git commit -m "Initial commit from cleanroom"', { cwd: outputDir });
 	await execAsync('git branch -M main', { cwd: outputDir });
 	spinner.stop('Git initialized');
 

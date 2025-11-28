@@ -17,8 +17,8 @@
 			class="mx-auto max-w-6xl px-6 sm:px-10 py-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-zinc-600"
 		>
 			<div class="flex items-center gap-2">
-				<img src="/logo.png" alt="Cleanroom" class="w-5 h-5" />
-				<span>&copy; {new Date().getFullYear()} Cleanroom</span>
+				<img src="/logo.png" alt="cleanroom" class="w-5 h-5" />
+				<span>&copy; {new Date().getFullYear()} cleanroom</span>
 			</div>
 			<div class="flex items-center gap-4">
 				{#if data.dbConnected}

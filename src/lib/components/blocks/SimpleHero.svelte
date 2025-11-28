@@ -8,7 +8,7 @@
 	}
 
 	let {
-		projectName = 'Cleanroom',
+		projectName = 'cleanroom',
 		logoEmoji = '✨',
 		logoSrc,
 		tagline = 'Less Boilerplate, More Boil'

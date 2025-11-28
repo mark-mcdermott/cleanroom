@@ -24,8 +24,8 @@
 </script>
 
 <svelte:head>
-	<title>Components - Cleanroom</title>
-	<meta name="description" content="Cleanroom UI Components" />
+	<title>Components - cleanroom</title>
+	<meta name="description" content="cleanroom UI Components" />
 </svelte:head>
 
 <div class="max-w-4xl mx-auto px-6 py-12">

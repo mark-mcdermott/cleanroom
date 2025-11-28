@@ -5,16 +5,16 @@
 </script>
 
 <svelte:head>
-	<title>Cleanroom</title>
-	<meta name="description" content="Cleanroom - SvelteKit Scaffolding Generator" />
+	<title>cleanroom</title>
+	<meta name="description" content="cleanroom - SvelteKit Scaffolding Generator" />
 </svelte:head>
 
 <div class="flex justify-center items-center min-h-[70vh] px-6">
 	<div class="card w-full max-w-md text-center space-y-6">
 		<div class="flex justify-center mb-4">
-			<img src="/logo.png" alt="Cleanroom" class="w-16 h-16" />
+			<img src="/logo.png" alt="cleanroom" class="w-16 h-16" />
 		</div>
-		<h1>Cleanroom</h1>
+		<h1>cleanroom</h1>
 		<h2
 			class="flex items-center justify-center gap-1 text-zinc-700 font-medium tracking-hero text-base !mt-2"
 		>

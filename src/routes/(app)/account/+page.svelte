@@ -6,7 +6,7 @@
 </script>
 
 <svelte:head>
-	<title>Settings - Cleanroom</title>
+	<title>Settings - cleanroom</title>
 	<meta name="description" content="Account Settings" />
 </svelte:head>
 

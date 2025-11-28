@@ -13,7 +13,7 @@
 	}
 
 	let {
-		projectName = 'Cleanroom',
+		projectName = 'cleanroom',
 		logoEmoji = '✨',
 		logoSrc,
 		links = [

@@ -1,6 +1,6 @@
 <svelte:head>
-	<title>Static Site - Cleanroom</title>
-	<meta name="description" content="A multi-page static site example from Cleanroom" />
+	<title>Static Site - cleanroom</title>
+	<meta name="description" content="A multi-page static site example from cleanroom" />
 </svelte:head>
 
 <div class="max-w-4xl mx-auto px-6 py-16">

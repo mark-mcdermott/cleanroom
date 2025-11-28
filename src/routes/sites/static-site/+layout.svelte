@@ -54,7 +54,7 @@
 					class="inline-flex items-center gap-1 text-xs text-zinc-500 hover:text-zinc-700 mt-1"
 				>
 					<ArrowLeft class="w-3 h-3" />
-					Back to Cleanroom
+					Back to cleanroom
 				</a>
 			</div>
 

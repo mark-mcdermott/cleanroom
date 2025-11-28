@@ -3,8 +3,8 @@
 </script>
 
 <svelte:head>
-	<title>Blocks - Cleanroom</title>
-	<meta name="description" content="Cleanroom Block Components" />
+	<title>Blocks - cleanroom</title>
+	<meta name="description" content="cleanroom Block Components" />
 </svelte:head>
 
 <div class="max-w-4xl mx-auto px-6 py-12">

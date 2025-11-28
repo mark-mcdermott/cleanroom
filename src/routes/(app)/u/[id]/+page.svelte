@@ -9,7 +9,7 @@
 </script>
 
 <svelte:head>
-	<title>Profile - Cleanroom</title>
+	<title>Profile - cleanroom</title>
 	<meta name="description" content="User Profile" />
 </svelte:head>
 
