@@ -16,6 +16,7 @@ describe('File Templates', () => {
 		projectName: 'Test App',
 		logo: { type: 'emoji', value: '🚀' },
 		siteType: 'demo-page',
+		modules: [],
 		github: { repoUrl: 'https://github.com/test/test-app' },
 		cloudflare: { configured: false },
 		domain: { hasDomain: false, configured: false }

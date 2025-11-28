@@ -4,6 +4,7 @@ import { join } from 'node:path';
 import { exec } from 'node:child_process';
 import { promisify } from 'node:util';
 import { modules, type ProjectConfig } from './modules';
+import { featureModules } from './modules/features';
 
 const execAsync = promisify(exec);
 
@@ -218,6 +219,83 @@ async function main() {
 		process.exit(0);
 	}
 
+	// For SSR sites, set up database and modules
+	let databaseConfig: ProjectConfig['database'];
+	let selectedModules: ('auth' | 'blog' | 'office-users')[] = [];
+
+	if (siteType === 'ssr-site') {
+		// Neon database setup
+		p.log.step('SSR sites need a database. Let\'s set up Neon (free PostgreSQL).');
+
+		p.note(
+			[
+				'1. Go to https://neon.tech and sign up (free tier available)',
+				'2. Create a new project',
+				'3. Copy the connection string from the dashboard',
+				'   (looks like: postgresql://user:pass@ep-xxx.region.aws.neon.tech/dbname?sslmode=require)'
+			].join('\n'),
+			'Neon Database Setup'
+		);
+
+		const hasNeonAccount = await p.confirm({
+			message: 'Do you have your Neon connection string ready?',
+			initialValue: false
+		});
+
+		if (p.isCancel(hasNeonAccount)) {
+			p.cancel('Setup cancelled');
+			process.exit(0);
+		}
+
+		if (hasNeonAccount) {
+			const connectionString = await p.text({
+				message: 'Paste your Neon connection string',
+				placeholder: 'postgresql://user:pass@ep-xxx.region.aws.neon.tech/dbname?sslmode=require',
+				validate(value) {
+					if (!value) return 'Connection string is required';
+					if (!value.startsWith('postgresql://')) return 'Must be a PostgreSQL connection string';
+				}
+			});
+
+			if (p.isCancel(connectionString)) {
+				p.cancel('Setup cancelled');
+				process.exit(0);
+			}
+
+			databaseConfig = {
+				provider: 'neon',
+				connectionString
+			};
+			p.log.success('Database configured!');
+		} else {
+			p.log.warn('You can add the database connection string later in your .env file');
+		}
+
+		// Module selection
+		const modules = await p.multiselect({
+			message: 'Which modules would you like to add?',
+			options: [
+				{ value: 'auth', label: 'Auth', hint: 'Lucia v3 authentication with login/signup' },
+				{ value: 'blog', label: 'Blog', hint: 'Blog with posts and tags' },
+				{ value: 'office-users', label: 'The Office Users', hint: 'Seed users from The Office (requires auth)' }
+			],
+			required: false
+		});
+
+		if (p.isCancel(modules)) {
+			p.cancel('Setup cancelled');
+			process.exit(0);
+		}
+
+		selectedModules = (modules as string[]).filter((m): m is 'auth' | 'blog' | 'office-users' =>
+			m === 'auth' || m === 'blog' || m === 'office-users'
+		);
+
+		if (selectedModules.length > 0) {
+			p.log.success(`Selected modules: ${selectedModules.join(', ')}`);
+		}
+	}
+
 	// Deployment section
 	p.log.step(`OK, let's 🚢 this.`);
 
@@ -229,6 +307,8 @@ async function main() {
 		projectName,
 		logo,
 		siteType: siteType as ProjectConfig['siteType'],
+		database: databaseConfig,
+		modules: selectedModules,
 		github: {
 			repoUrl: '' // Will be set after repo creation
 		},
@@ -256,6 +336,51 @@ async function main() {
 	}
 
 	spinner.stop('Project generated!');
+
+	// Apply feature modules
+	if (config.modules.length > 0) {
+		spinner.start('Applying modules...');
+		for (const moduleName of config.modules) {
+			const featureModule = featureModules[moduleName];
+			if (featureModule) {
+				spinner.message(`Applying ${moduleName} module...`);
+				await featureModule.apply(config, outputDir);
+			}
+		}
+		spinner.stop('Modules applied!');
+	}
+
+	// Install dependencies
+	spinner.start('Installing dependencies...');
+	await execAsync('pnpm install', { cwd: outputDir });
+	spinner.stop('Dependencies installed!');
+
+	// If database is configured, set up tables and seed data
+	if (config.database && config.modules.length > 0) {
+		spinner.start('Setting up database...');
+		try {
+			await execAsync('pnpm db:push', { cwd: outputDir });
+			spinner.stop('Database tables created!');
+
+			// Run seed scripts for selected modules
+			if (config.modules.includes('office-users')) {
+				spinner.start('Seeding The Office users...');
+				await execAsync('pnpm db:seed-office', { cwd: outputDir });
+				spinner.stop('The Office users seeded!');
+				p.log.success('Login as: michael.scott@dundermifflin.com / dundermifflin');
+			}
+
+			if (config.modules.includes('blog')) {
+				spinner.start('Seeding blog posts...');
+				await execAsync('pnpm db:seed-blog', { cwd: outputDir });
+				spinner.stop('Blog posts seeded!');
+			}
+		} catch (error) {
+			spinner.stop('Database setup encountered an error');
+			p.log.warn(`Database setup: ${error instanceof Error ? error.message : 'Unknown error'}`);
+			p.log.info('You can run database commands manually later: pnpm db:push && pnpm db:seed-office');
+		}
+	}
 
 	// Initialize git
 	spinner.start('Initializing git...');
@@ -377,18 +502,28 @@ async function main() {
 		'ssr-site': 'SSR site (auth ready)'
 	};
 
-	p.note(
-		[
-			`Project: ${config.projectName}`,
-			`Logo: ${logoDisplay}`,
-			`Site Type: ${siteTypeLabels[config.siteType] || config.siteType}`,
-			``,
-			`GitHub: ${config.github.repoUrl}`,
-			`Cloudflare Pages: https://${slug}.pages.dev`,
-			`Custom Domain: ${config.domain.hasDomain ? 'Yes' : 'No'}`
-		].join('\n'),
-		'Project Configuration'
+	const summaryLines = [
+		`Project: ${config.projectName}`,
+		`Logo: ${logoDisplay}`,
+		`Site Type: ${siteTypeLabels[config.siteType] || config.siteType}`
+	];
+
+	if (config.database) {
+		summaryLines.push(`Database: Neon PostgreSQL`);
+	}
+
+	if (config.modules.length > 0) {
+		summaryLines.push(`Modules: ${config.modules.join(', ')}`);
+	}
+
+	summaryLines.push(
+		``,
+		`GitHub: ${config.github.repoUrl}`,
+		`Cloudflare Pages: https://${slug}.pages.dev`,
+		`Custom Domain: ${config.domain.hasDomain ? 'Yes' : 'No'}`
 	);
+
+	p.note(summaryLines.join('\n'), 'Project Configuration');
 
 	p.outro(`Project created in ./generated/${slug}`);
 

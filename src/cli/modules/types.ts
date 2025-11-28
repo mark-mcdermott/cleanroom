@@ -5,6 +5,11 @@ export interface ProjectConfig {
 		value: string;
 	};
 	siteType: 'demo-page' | 'landing-simple' | 'landing-sections' | 'static-site' | 'ssr-site';
+	database?: {
+		provider: 'neon';
+		connectionString: string;
+	};
+	modules: ('auth' | 'blog' | 'office-users')[];
 	github: {
 		repoUrl: string;
 	};
@@ -15,6 +20,11 @@ export interface ProjectConfig {
 		hasDomain: boolean;
 		configured: boolean;
 	};
+}
+
+export interface FeatureModule {
+	name: string;
+	apply: (config: ProjectConfig, outputDir: string) => Promise<void>;
 }
 
 export interface GeneratorModule {

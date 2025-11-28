@@ -15,6 +15,15 @@ export const defaultNavLinks: NavLink[] = [
 			{ label: 'ssr site', href: '/sites/ssr-site', testId: 'nav-sites-ssr-site' }
 		]
 	},
+	{
+		label: 'modules',
+		testId: 'nav-modules',
+		children: [
+			{ label: 'auth', href: '/modules/auth', testId: 'nav-modules-auth' },
+			{ label: 'blog', href: '/modules/blog', testId: 'nav-modules-blog' },
+			{ label: 'the office', href: '/modules/office-users', testId: 'nav-modules-office' }
+		]
+	},
 	{ label: 'login', href: '/login', testId: 'nav-login', hideWhenAuth: true },
 	{ label: 'signup', href: '/signup', testId: 'nav-signup', hideWhenAuth: true },
 	{ label: 'admin', href: '/admin', testId: 'nav-admin', requiresAuth: true, requiresAdmin: true },
