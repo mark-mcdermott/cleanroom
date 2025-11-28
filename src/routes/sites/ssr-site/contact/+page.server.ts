@@ -3,6 +3,8 @@ import { zod4 } from 'sveltekit-superforms/adapters';
 import type { Actions, PageServerLoad } from './$types';
 import { contactSchema } from './schema';
 
+export const prerender = false;
+
 export const load: PageServerLoad = async () => {
 	const form = await superValidate(zod4(contactSchema));
 	return { form };
