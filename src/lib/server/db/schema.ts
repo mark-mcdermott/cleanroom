@@ -324,3 +324,46 @@ export type DemoNote = typeof demoNotes.$inferSelect;
 export type NewDemoNote = typeof demoNotes.$inferInsert;
 export type DemoPhoto = typeof demoPhotos.$inferSelect;
 export type NewDemoPhoto = typeof demoPhotos.$inferInsert;
+
+// ============================================================================
+// LEADERBOARD TABLES (Demo - uses demo auth)
+// ============================================================================
+
+// Game scores for leaderboard
+export const demoScores = pgTable('demo_scores', {
+	id: text('id').primaryKey(),
+	userId: text('user_id')
+		.notNull()
+		.references(() => demoUsers.id, { onDelete: 'cascade' }),
+	score: text('score').notNull(), // Stored as text, parsed as number
+	createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow()
+});
+
+// Leaderboard types
+export type DemoScore = typeof demoScores.$inferSelect;
+export type NewDemoScore = typeof demoScores.$inferInsert;
+
+// ============================================================================
+// RESUME TABLES (Demo - uses demo auth)
+// ============================================================================
+
+// Resumes - stored resume documents
+export const demoResumes = pgTable('demo_resumes', {
+	id: text('id').primaryKey(),
+	userId: text('user_id')
+		.notNull()
+		.references(() => demoUsers.id, { onDelete: 'cascade' }),
+	title: text('title').notNull().default('My Resume'),
+	// Structured resume data as JSON
+	data: text('data').notNull(), // JSON: { personal, experience[], education[], skills[], projects[] }
+	// LaTeX source - auto-generated or manually edited
+	latexSource: text('latex_source'),
+	// Whether user has customized the LaTeX directly
+	latexCustomized: boolean('latex_customized').notNull().default(false),
+	createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+	updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow()
+});
+
+// Resume types
+export type DemoResume = typeof demoResumes.$inferSelect;
+export type NewDemoResume = typeof demoResumes.$inferInsert;
