@@ -110,11 +110,20 @@
 
 	body {
 		@apply bg-background text-foreground;
-		/* subtle grid background */
+		/* subtle grid background - light mode */
 		background:
 			linear-gradient(to bottom, rgba(0, 0, 0, 0.04) 1px, transparent 1px),
 			linear-gradient(to right, rgba(0, 0, 0, 0.04) 1px, transparent 1px),
 			hsl(0 0% 100%);
+		background-size: 48px 48px;
+	}
+
+	.dark body {
+		/* subtle grid background - dark mode */
+		background:
+			linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+			linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+			hsl(240 10% 3.9%);
 		background-size: 48px 48px;
 	}
 
@@ -145,37 +154,37 @@
 /* Components */
 @layer components {
 	.card {
-		@apply bg-white border border-zinc-200 rounded-2xl shadow-sm p-8 sm:p-12;
+		@apply bg-background border border-border rounded-2xl shadow-sm p-8 sm:p-12;
 	}
 
 	/* Buttons */
 	.btn {
-		@apply inline-flex items-center justify-center px-4 py-2 text-sm font-medium rounded-md transition border border-zinc-300 hover:border-zinc-500 no-underline;
+		@apply inline-flex items-center justify-center px-4 py-2 text-sm font-medium rounded-md transition border border-zinc-300 dark:border-zinc-600 hover:border-zinc-500 dark:hover:border-zinc-400 no-underline;
 	}
 
 	.btn-dark {
-		@apply bg-zinc-900 text-white hover:bg-zinc-700 hover:border-zinc-700;
+		@apply bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 hover:bg-zinc-700 dark:hover:bg-zinc-300 hover:border-zinc-700 dark:hover:border-zinc-300;
 	}
 
 	.btn-light {
-		@apply bg-transparent text-zinc-800 hover:border-zinc-600 hover:text-zinc-900;
+		@apply bg-transparent text-zinc-800 dark:text-zinc-200 hover:border-zinc-600 dark:hover:border-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100;
 	}
 
 	/* Form controls */
 	.form-input,
 	.form-textarea,
 	.form-select {
-		@apply bg-white border border-zinc-200 rounded-lg px-3 py-2 text-sm shadow-sm;
+		@apply bg-background border border-input rounded-lg px-3 py-2 text-sm shadow-sm;
 	}
 
 	.form-input:focus,
 	.form-textarea:focus,
 	.form-select:focus {
-		@apply outline-none ring-2 ring-zinc-400;
+		@apply outline-none ring-2 ring-ring;
 	}
 
 	.form-hint {
-		@apply text-xs text-zinc-500;
+		@apply text-xs text-muted-foreground;
 	}
 
 	/* Alerts */
@@ -184,11 +193,11 @@
 	}
 
 	.alert-success {
-		@apply border-emerald-200 bg-emerald-50 text-emerald-800;
+		@apply border-emerald-200 dark:border-emerald-800 bg-emerald-50 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-200;
 	}
 
 	.alert-error {
-		@apply border-red-200 bg-red-50 text-red-700;
+		@apply border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-950 text-red-700 dark:text-red-200;
 	}
 }
 

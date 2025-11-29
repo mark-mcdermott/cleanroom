@@ -1,7 +1,8 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
 	import { page } from '$app/stores';
-	import { Button, Sheet, DropdownMenu } from '$lib/components/ui';
+	import { Button, Sheet, DropdownMenu, ThemeToggle } from '$lib/components/ui';
+	import type { ToggleMode } from '$lib/components/ui/theme-toggle/ThemeToggle.svelte';
 	import { Menu, ChevronDown } from 'lucide-svelte';
 	import type { Snippet } from 'svelte';
 	import type { NavLink, DropdownLink, AvatarConfig } from './types';
@@ -16,6 +17,9 @@
 		avatar?: AvatarConfig;
 		// Optional max-width for the nav content (e.g., 'max-w-6xl', 'max-w-4xl')
 		maxWidth?: string;
+		// Theme toggle settings
+		showThemeToggle?: boolean;
+		themeToggleMode?: ToggleMode;
 	}
 
 	let {
@@ -26,7 +30,9 @@
 		isAdmin = false,
 		links = [],
 		avatar,
-		maxWidth
+		maxWidth,
+		showThemeToggle = false,
+		themeToggleMode = 'light-dark-system'
 	}: Props = $props();
 
 	// Detect if logo is an image path or text/emoji
@@ -208,7 +214,7 @@
 			<DropdownMenu.Root>
 				<DropdownMenu.Trigger
 					data-testid="nav-avatar"
-					class="w-8 h-8 rounded-full bg-zinc-300 flex items-center justify-center text-zinc-600 text-xs cursor-pointer hover:bg-zinc-400 transition-colors focus:outline-none focus:ring-2 focus:ring-zinc-500"
+					class="w-8 h-8 rounded-full bg-zinc-300 dark:bg-zinc-600 flex items-center justify-center text-zinc-600 dark:text-zinc-200 text-xs cursor-pointer hover:bg-zinc-400 dark:hover:bg-zinc-500 transition-colors focus:outline-none focus:ring-2 focus:ring-zinc-500"
 					aria-label="User menu"
 				>
 					{avatarLetter}
@@ -254,6 +260,11 @@
 					{/each}
 				</DropdownMenu.Content>
 			</DropdownMenu.Root>
+		{/if}
+
+		<!-- Theme Toggle -->
+		{#if showThemeToggle}
+			<ThemeToggle.Root mode={themeToggleMode} />
 		{/if}
 	</div>
 
@@ -357,12 +368,12 @@
 
 				<!-- Avatar Menu in mobile drawer -->
 				{#if showAvatar}
-					<div class="pt-4 border-t">
+					<div class="pt-4 border-t dark:border-zinc-700">
 						<div class="flex items-center gap-3 mb-3">
-							<div class="w-8 h-8 rounded-full bg-zinc-300 flex items-center justify-center text-zinc-600 text-xs">
+							<div class="w-8 h-8 rounded-full bg-zinc-300 dark:bg-zinc-600 flex items-center justify-center text-zinc-600 dark:text-zinc-200 text-xs">
 								{avatarLetter}
 							</div>
-							<span class="text-sm text-zinc-600">{userEmail}</span>
+							<span class="text-sm text-zinc-600 dark:text-zinc-400">{userEmail}</span>
 						</div>
 						<div class="flex flex-col gap-2">
 							{#each avatarLinks as link}
@@ -372,7 +383,7 @@
 											type="submit"
 											data-testid={link.testId}
 											id={link.id}
-											class="text-sm text-zinc-600 hover:text-zinc-900 transition-colors cursor-pointer flex items-center gap-2 w-full {link.class ?? ''}"
+											class="text-sm text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors cursor-pointer flex items-center gap-2 w-full {link.class ?? ''}"
 											{...buildDataAttrs(link.data)}
 										>
 											{#if link.icon}
@@ -387,7 +398,7 @@
 										href={link.href ?? '#'}
 										data-testid={link.testId}
 										id={link.id}
-										class="text-sm text-zinc-600 hover:text-zinc-900 transition-colors cursor-pointer flex items-center gap-2 {link.class ?? ''}"
+										class="text-sm text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors cursor-pointer flex items-center gap-2 {link.class ?? ''}"
 										onclick={() => (mobileMenuOpen = false)}
 										{...buildDataAttrs(link.data)}
 									>
@@ -400,6 +411,14 @@
 								{/if}
 							{/each}
 						</div>
+					</div>
+				{/if}
+
+				<!-- Theme Toggle in mobile drawer -->
+				{#if showThemeToggle}
+					<div class="pt-4 border-t dark:border-zinc-700 flex items-center justify-between">
+						<span class="text-sm text-zinc-600 dark:text-zinc-400">Theme</span>
+						<ThemeToggle.Root mode={themeToggleMode} />
 					</div>
 				{/if}
 			</div>

@@ -1,16 +1,19 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import { Nav, BackLink, Footer } from '$lib/components/blocks';
-	import type { NavLink } from '$lib/components/blocks';
-	import { Github } from 'lucide-svelte';
+	import type { NavLink, AvatarConfig } from '$lib/components/blocks';
+	import { Sonner } from '$lib/components/ui';
+	import { Github, LogOut } from 'lucide-svelte';
 
-	let { children } = $props();
+	let { children, data } = $props();
 
 	const navLinks: NavLink[] = [
 		{ href: '/modules/auth', label: 'Home' },
 		{ href: '/modules/auth/about', label: 'About' },
 		{ href: '/modules/auth/services', label: 'Services' },
 		{ href: '/modules/auth/contact', label: 'Contact' },
+		{ href: '/modules/auth/private', label: 'Private', requiresAuth: true, testId: 'nav-private' },
+		{ href: '/modules/auth/admin/users', label: 'Users', requiresAuth: true, requiresAdmin: true, testId: 'nav-users' },
 		{ href: '/modules/auth/login', label: 'Log In', hideWhenAuth: true, testId: 'nav-login' },
 		{ href: '/modules/auth/signup', label: 'Sign Up', hideWhenAuth: true, testId: 'nav-signup' },
 		{
@@ -20,6 +23,18 @@
 			testId: 'nav-github'
 		}
 	];
+
+	const avatarConfig: AvatarConfig = {
+		show: true,
+		links: [
+			{
+				label: 'Log Out',
+				icon: LogOut,
+				action: '/modules/auth/logout',
+				testId: 'nav-logout'
+			}
+		]
+	};
 </script>
 
 <style>
@@ -41,8 +56,17 @@
 	}
 </style>
 
+<Sonner.Toaster richColors />
 <div class="min-h-dvh flex flex-col bg-white">
-	<Nav siteName="auth-app" logo="🔐" links={navLinks} maxWidth="max-w-6xl" />
+	<Nav
+		siteName="auth-app"
+		logo="🔐"
+		links={navLinks}
+		maxWidth="max-w-6xl"
+		user={data.user}
+		isAdmin={data.user?.admin}
+		avatar={avatarConfig}
+	/>
 	<BackLink href="/" label="Back to cleanroom" maxWidth="max-w-6xl" />
 
 	<!-- Page content with transition -->

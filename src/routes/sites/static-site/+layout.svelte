@@ -39,8 +39,8 @@
 	}
 </style>
 
-<div class="min-h-dvh flex flex-col bg-white">
-	<Nav siteName="Static Site" logo="🦫" links={navLinks} maxWidth="max-w-6xl" />
+<div class="min-h-dvh flex flex-col bg-background">
+	<Nav siteName="Static Site" logo="🦫" links={navLinks} maxWidth="max-w-6xl" showThemeToggle />
 	<BackLink href="/" label="Back to cleanroom" maxWidth="max-w-6xl" />
 
 	<!-- Page content with transition -->
@@ -54,7 +54,7 @@
 
 	<Footer siteName="Static Site" logo="🦫" maxWidth="max-w-6xl">
 		{#each navLinks as link}
-			<a href={link.href} class="hover:text-zinc-700 transition-colors">
+			<a href={link.href} class="hover:text-zinc-700 dark:hover:text-zinc-300 transition-colors">
 				{link.label}
 			</a>
 		{/each}

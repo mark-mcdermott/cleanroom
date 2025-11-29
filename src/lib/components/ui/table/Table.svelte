@@ -10,8 +10,8 @@
 	let { class: className, children, ...restProps }: Props = $props();
 </script>
 
-<div data-slot="table-container" class="relative w-full overflow-x-auto">
-	<table data-slot="table" class={cn('w-full caption-bottom text-sm', className)} {...restProps}>
+<div data-slot="table-container" class="relative w-full overflow-x-auto border border-zinc-200 rounded-lg overflow-hidden">
+	<table data-slot="table" class={cn('w-full text-sm', className)} {...restProps}>
 		{@render children?.()}
 	</table>
 </div>

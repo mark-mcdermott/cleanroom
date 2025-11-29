@@ -1,7 +1,7 @@
 import { Lucia } from 'lucia';
 import { DrizzlePostgreSQLAdapter } from '@lucia-auth/adapter-drizzle';
 import { dev } from '$app/environment';
-import { sessions, users, type Database } from '$lib/server/db';
+import { sessions, users, demoSessions, demoUsers, type Database } from '$lib/server/db';
 
 export function createLucia(db: Database) {
 	const adapter = new DrizzlePostgreSQLAdapter(db, sessions, users);
@@ -14,7 +14,26 @@ export function createLucia(db: Database) {
 		},
 		getUserAttributes: (attributes) => ({
 			email: attributes.email,
-			name: attributes.name
+			name: attributes.name,
+			admin: attributes.admin
+		})
+	});
+}
+
+export function createDemoLucia(db: Database) {
+	const adapter = new DrizzlePostgreSQLAdapter(db, demoSessions, demoUsers);
+
+	return new Lucia(adapter, {
+		sessionCookie: {
+			name: 'demo_auth_session',
+			attributes: {
+				secure: !dev
+			}
+		},
+		getUserAttributes: (attributes) => ({
+			email: attributes.email,
+			name: attributes.name,
+			admin: attributes.admin
 		})
 	});
 }
@@ -29,4 +48,5 @@ declare module 'lucia' {
 interface DatabaseUserAttributes {
 	email: string;
 	name: string | null;
+	admin: boolean;
 }

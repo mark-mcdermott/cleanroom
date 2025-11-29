@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Alert, Button, Card, DropdownMenu, Label, Sheet, Table } from '$lib/components/ui';
+	import { Alert, Button, Card, DropdownMenu, Label, PostCard, Prose, Sheet, Table } from '$lib/components/ui';
 	import {
 		Input as FormInput,
 		Email as FormEmail,
@@ -173,6 +173,46 @@
 				</Table.Row>
 			</Table.Body>
 		</Table.Root>
+	</section>
+
+	<!-- Post Card -->
+	<section class="mb-12">
+		<h2>Post Card</h2>
+		<p class="text-zinc-600 mb-4">Composable blog post card for listing pages.</p>
+		<div class="space-y-6 max-w-xl">
+			<PostCard.Root href="#post-1">
+				<PostCard.Image src="https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=600&h=300&fit=crop" alt="Blog post" />
+				<PostCard.Title>Getting Started with SvelteKit</PostCard.Title>
+				<PostCard.Excerpt>Learn how to build modern web applications with SvelteKit, the official framework for building Svelte apps.</PostCard.Excerpt>
+				<PostCard.Date date={new Date()} />
+			</PostCard.Root>
+
+			<PostCard.Root href="#post-2">
+				<PostCard.Title>Post Without Cover Image</PostCard.Title>
+				<PostCard.Excerpt>This example shows a post card without a cover image. The component handles missing images gracefully.</PostCard.Excerpt>
+				<PostCard.Date date={new Date(Date.now() - 86400000)} />
+			</PostCard.Root>
+		</div>
+	</section>
+
+	<!-- Prose -->
+	<section class="mb-12">
+		<h2>Prose</h2>
+		<p class="text-zinc-600 mb-4">Typography styling for HTML content like blog posts and articles.</p>
+		<div class="border border-zinc-200 rounded-lg p-6 bg-white">
+			<Prose.Root>
+				<h2>This is a Heading</h2>
+				<p>This is a paragraph with some <strong>bold text</strong> and <em>italic text</em>. The prose component provides consistent typography styling for rendered HTML content.</p>
+				<h3>A Subheading</h3>
+				<ul>
+					<li>First item in a list</li>
+					<li>Second item with more details</li>
+					<li>Third item to complete the list</li>
+				</ul>
+				<blockquote>This is a blockquote. It's styled with a left border and italicized text.</blockquote>
+				<p>Here's some inline <code>code</code> in a paragraph.</p>
+			</Prose.Root>
+		</div>
 	</section>
 
 	<!-- Divider -->

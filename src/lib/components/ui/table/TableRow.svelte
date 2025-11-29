@@ -13,7 +13,7 @@
 <tr
 	data-slot="table-row"
 	class={cn(
-		'hover:bg-muted/50 data-[state=selected]:bg-muted border-b transition-colors',
+		'transition-colors hover:bg-zinc-100 data-[state=selected]:bg-zinc-100',
 		className
 	)}
 	{...restProps}

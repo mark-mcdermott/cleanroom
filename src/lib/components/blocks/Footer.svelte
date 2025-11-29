@@ -36,14 +36,14 @@
 	);
 </script>
 
-<footer class="border-t">
+<footer class="bg-background border-t border-border">
 	{#if centered}
-		<div class="py-6 text-center text-sm text-zinc-600">
+		<div class="py-6 text-center text-sm text-zinc-600 dark:text-zinc-400">
 			<span>&copy; {year} {siteName}</span>
 		</div>
 	{:else}
 		<div
-			class="mx-auto {maxWidth} px-6 sm:px-10 py-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-zinc-600"
+			class="mx-auto {maxWidth} px-6 sm:px-10 py-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-zinc-600 dark:text-zinc-400"
 		>
 			<div class="flex items-center gap-2">
 				{#if logoIcon}

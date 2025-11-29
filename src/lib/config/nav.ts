@@ -21,12 +21,15 @@ export const defaultNavLinks: NavLink[] = [
 		children: [
 			{ label: 'auth', href: '/modules/auth', testId: 'nav-modules-auth' },
 			{ label: 'blog', href: '/modules/blog', testId: 'nav-modules-blog' },
+			{ label: 'store', href: '/modules/store', testId: 'nav-modules-store' },
+			{ label: 'tracker', href: '/modules/tracker', testId: 'nav-modules-tracker' },
 			{ label: 'the office', href: '/modules/office-users', testId: 'nav-modules-office' }
 		]
 	},
 	{ label: 'login', href: '/login', testId: 'nav-login', hideWhenAuth: true },
 	{ label: 'signup', href: '/signup', testId: 'nav-signup', hideWhenAuth: true },
-	{ label: 'admin', href: '/admin', testId: 'nav-admin', requiresAuth: true, requiresAdmin: true },
+	{ label: 'users', href: '/admin/users', testId: 'nav-users', requiresAuth: true, requiresAdmin: true },
+	{ label: 'posts', href: '/admin/posts', testId: 'nav-posts', requiresAuth: true, requiresAdmin: true },
 	{ icon: Github, iconSize: 'lg', href: 'https://github.com/mark-mcdermott/cleanroom', testId: 'nav-github' }
 ];
 
