@@ -23,6 +23,7 @@ export const defaultNavLinks: NavLink[] = [
 			{ label: 'blog', href: '/modules/blog', testId: 'nav-modules-blog' },
 			{ label: 'dark toggle', href: '/modules/dark-toggle', testId: 'nav-modules-dark-toggle' },
 			{ label: 'leaderboard', href: '/modules/leaderboard', testId: 'nav-modules-leaderboard' },
+			{ label: 'lobby', href: '/modules/lobby', testId: 'nav-modules-lobby' },
 			{ label: 'office users', href: '/modules/office-users', testId: 'nav-modules-office' },
 			{ label: 'resume', href: '/modules/resume', testId: 'nav-modules-resume' },
 			{ label: 'store', href: '/modules/store', testId: 'nav-modules-store' },

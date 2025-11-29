@@ -9,7 +9,7 @@ export interface ProjectConfig {
 		provider: 'neon';
 		connectionString: string;
 	};
-	modules: ('auth' | 'blog' | 'dark-toggle' | 'leaderboard' | 'office-users' | 'resume' | 'store' | 'tracker' | 'widgets')[];
+	modules: ('auth' | 'blog' | 'dark-toggle' | 'leaderboard' | 'lobby' | 'office-users' | 'resume' | 'store' | 'tracker' | 'widgets')[];
 	darkToggle?: {
 		mode: 'light-dark' | 'light-dark-system';
 	};

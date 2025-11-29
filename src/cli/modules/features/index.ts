@@ -3,6 +3,7 @@ import { authModule } from './auth';
 import { blogModule } from './blog';
 import { darkToggleModule } from './dark-toggle';
 import { leaderboardModule } from './leaderboard';
+import { lobbyModule } from './lobby';
 import { officeUsersModule } from './office-users';
 import { resumeModule } from './resume';
 import { storeModule } from './store';
@@ -14,6 +15,7 @@ export const featureModules: Record<string, FeatureModule> = {
 	blog: blogModule,
 	'dark-toggle': darkToggleModule,
 	leaderboard: leaderboardModule,
+	lobby: lobbyModule,
 	'office-users': officeUsersModule,
 	resume: resumeModule,
 	store: storeModule,
