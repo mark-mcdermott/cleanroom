@@ -46,7 +46,7 @@
 	{#if links && links.length > 0}
 		<div class="flex gap-6">
 			{#each links as link}
-				<a href={link.href} class="text-sm text-zinc-700 hover:text-zinc-900 transition-colors">
+				<a href={link.href} class="text-sm text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors">
 					{link.label}
 				</a>
 			{/each}

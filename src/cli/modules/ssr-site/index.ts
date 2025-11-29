@@ -112,7 +112,7 @@ function getHomePageSvelte(config: ProjectConfig): string {
 			${logoDisplay}
 			${config.projectName}
 		</h1>
-		<p class="text-zinc-600 text-lg mt-4 max-w-2xl mx-auto">
+		<p class="text-zinc-600 dark:text-zinc-400 text-lg mt-4 max-w-2xl mx-auto">
 			A multi-page server-side rendered site with responsive navigation and smooth page transitions. Unlike static sites, pages are rendered on each request—ideal for authenticated content, user dashboards, or dynamic data.
 		</p>${heroButtons}
 	</div>
@@ -124,17 +124,17 @@ ${modulesSection}
 			<div class="text-center">
 				<div class="text-3xl mb-3">🔐</div>
 				<h3 class="font-medium mb-1">Auth Ready</h3>
-				<p class="text-sm text-zinc-600">Server-side rendering enables secure session handling, making it the perfect base for authentication.</p>
+				<p class="text-sm text-zinc-600 dark:text-zinc-400">Server-side rendering enables secure session handling, making it the perfect base for authentication.</p>
 			</div>
 			<div class="text-center">
 				<div class="text-3xl mb-3">⚡</div>
 				<h3 class="font-medium mb-1">Dynamic Content</h3>
-				<p class="text-sm text-zinc-600">Fetch fresh data on every request. Perfect for dashboards, user profiles, and real-time content.</p>
+				<p class="text-sm text-zinc-600 dark:text-zinc-400">Fetch fresh data on every request. Perfect for dashboards, user profiles, and real-time content.</p>
 			</div>
 			<div class="text-center">
 				<div class="text-3xl mb-3">🛡️</div>
 				<h3 class="font-medium mb-1">Secure by Default</h3>
-				<p class="text-sm text-zinc-600">Server-side code stays on the server. API keys and sensitive logic never reach the client.</p>
+				<p class="text-sm text-zinc-600 dark:text-zinc-400">Server-side code stays on the server. API keys and sensitive logic never reach the client.</p>
 			</div>
 		</div>
 	</div>
@@ -143,7 +143,7 @@ ${modulesSection}
 	<div class="py-8 mt-4">
 		<div class="card text-center py-8">
 			<h2 class="text-2xl font-semibold tracking-tight mb-2">Ready to Build?</h2>
-			<p class="text-zinc-600 mb-6">This template is designed to be extended with authentication, database connections, and protected routes.</p>
+			<p class="text-zinc-600 dark:text-zinc-400 mb-6">This template is designed to be extended with authentication, database connections, and protected routes.</p>
 			<a href="/services" class="btn btn-dark">View Our Services</a>
 		</div>
 	</div>
@@ -159,7 +159,7 @@ function getAboutPageSvelte(config: ProjectConfig): string {
 
 <div class="max-w-4xl mx-auto px-6 py-16">
 	<h1 class="text-4xl font-semibold tracking-tight">About</h1>
-	<p class="text-zinc-600 text-lg mt-4">
+	<p class="text-zinc-600 dark:text-zinc-400 text-lg mt-4">
 		Tell your story here. What makes ${config.projectName} special?
 	</p>
 </div>
@@ -174,7 +174,7 @@ function getServicesPageSvelte(config: ProjectConfig): string {
 
 <div class="max-w-4xl mx-auto px-6 py-16">
 	<h1 class="text-4xl font-semibold tracking-tight">Services</h1>
-	<p class="text-zinc-600 text-lg mt-4">
+	<p class="text-zinc-600 dark:text-zinc-400 text-lg mt-4">
 		What we offer to help you succeed.
 	</p>
 
@@ -182,22 +182,22 @@ function getServicesPageSvelte(config: ProjectConfig): string {
 		<div class="card">
 			<div class="text-2xl mb-2">🚀</div>
 			<h3 class="font-semibold mb-2">Web Development</h3>
-			<p class="text-sm text-zinc-600">Custom web applications built with modern technologies and best practices.</p>
+			<p class="text-sm text-zinc-600 dark:text-zinc-400">Custom web applications built with modern technologies and best practices.</p>
 		</div>
 		<div class="card">
 			<div class="text-2xl mb-2">📱</div>
 			<h3 class="font-semibold mb-2">Mobile Apps</h3>
-			<p class="text-sm text-zinc-600">Native and cross-platform mobile applications for iOS and Android.</p>
+			<p class="text-sm text-zinc-600 dark:text-zinc-400">Native and cross-platform mobile applications for iOS and Android.</p>
 		</div>
 		<div class="card">
 			<div class="text-2xl mb-2">☁️</div>
 			<h3 class="font-semibold mb-2">Cloud Solutions</h3>
-			<p class="text-sm text-zinc-600">Scalable cloud infrastructure and deployment strategies.</p>
+			<p class="text-sm text-zinc-600 dark:text-zinc-400">Scalable cloud infrastructure and deployment strategies.</p>
 		</div>
 		<div class="card">
 			<div class="text-2xl mb-2">🔧</div>
 			<h3 class="font-semibold mb-2">Consulting</h3>
-			<p class="text-sm text-zinc-600">Expert guidance on architecture, technology choices, and best practices.</p>
+			<p class="text-sm text-zinc-600 dark:text-zinc-400">Expert guidance on architecture, technology choices, and best practices.</p>
 		</div>
 	</div>
 </div>
@@ -212,22 +212,22 @@ function getContactPageSvelte(config: ProjectConfig): string {
 
 <div class="max-w-4xl mx-auto px-6 py-16">
 	<h1 class="text-4xl font-semibold tracking-tight">Contact</h1>
-	<p class="text-zinc-600 text-lg mt-4">
+	<p class="text-zinc-600 dark:text-zinc-400 text-lg mt-4">
 		Get in touch with us.
 	</p>
 
 	<div class="mt-8 card max-w-md">
 		<form class="space-y-4">
 			<div>
-				<label for="name" class="block text-sm font-medium text-zinc-700 mb-1">Name</label>
+				<label for="name" class="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1">Name</label>
 				<input type="text" id="name" name="name" class="form-input w-full" placeholder="Your name" />
 			</div>
 			<div>
-				<label for="email" class="block text-sm font-medium text-zinc-700 mb-1">Email</label>
+				<label for="email" class="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1">Email</label>
 				<input type="email" id="email" name="email" class="form-input w-full" placeholder="you@example.com" />
 			</div>
 			<div>
-				<label for="message" class="block text-sm font-medium text-zinc-700 mb-1">Message</label>
+				<label for="message" class="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1">Message</label>
 				<textarea id="message" name="message" rows="4" class="form-input w-full" placeholder="Your message"></textarea>
 			</div>
 			<button type="submit" class="btn btn-dark w-full">Send Message</button>

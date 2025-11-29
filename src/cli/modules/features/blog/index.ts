@@ -298,11 +298,11 @@ function getMarkdownBlogPostSvelte(config: ProjectConfig): string {
 
 <article class="max-w-3xl mx-auto px-6 py-16">
 	<header class="mb-8">
-		<a href="/blog" class="text-sm text-zinc-500 hover:text-zinc-700 mb-4 inline-block">
+		<a href="/blog" class="text-sm text-zinc-500 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-300 mb-4 inline-block">
 			&larr; Back to blog
 		</a>
 		<h1 class="text-4xl font-semibold tracking-tight mt-2">{data.post.title}</h1>
-		<time class="text-zinc-500 mt-2 block">
+		<time class="text-zinc-500 dark:text-zinc-400 mt-2 block">
 			{formatDate(data.post.publishedAt)}
 		</time>
 	</header>
@@ -460,7 +460,7 @@ function getBlogListingSvelte(config: ProjectConfig): string {
 	<h1 class="text-4xl font-semibold tracking-tight mb-8">Blog</h1>
 
 	{#if data.posts.length === 0}
-		<p class="text-zinc-600">No posts yet. Check back soon!</p>
+		<p class="text-zinc-600 dark:text-zinc-400">No posts yet. Check back soon!</p>
 	{:else}
 		<div class="space-y-8">
 			{#each data.posts as post}
@@ -473,13 +473,13 @@ function getBlogListingSvelte(config: ProjectConfig): string {
 								class="w-full h-48 object-cover rounded-lg mb-4"
 							/>
 						{/if}
-						<h2 class="text-2xl font-semibold group-hover:text-zinc-600 transition-colors">
+						<h2 class="text-2xl font-semibold group-hover:text-zinc-600 dark:group-hover:text-zinc-400 transition-colors">
 							{post.title}
 						</h2>
 						{#if post.excerpt}
-							<p class="text-zinc-600 mt-2">{post.excerpt}</p>
+							<p class="text-zinc-600 dark:text-zinc-400 mt-2">{post.excerpt}</p>
 						{/if}
-						<time class="text-sm text-zinc-500 mt-2 block">
+						<time class="text-sm text-zinc-500 dark:text-zinc-400 mt-2 block">
 							{formatDate(post.publishedAt)}
 						</time>
 					</a>
@@ -515,11 +515,11 @@ function getDbBlogPostSvelte(config: ProjectConfig): string {
 
 <article class="max-w-3xl mx-auto px-6 py-16">
 	<header class="mb-8">
-		<a href="/blog" class="text-sm text-zinc-500 hover:text-zinc-700 mb-4 inline-block">
+		<a href="/blog" class="text-sm text-zinc-500 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-300 mb-4 inline-block">
 			&larr; Back to blog
 		</a>
 		<h1 class="text-4xl font-semibold tracking-tight mt-2">{data.post.title}</h1>
-		<time class="text-zinc-500 mt-2 block">
+		<time class="text-zinc-500 dark:text-zinc-400 mt-2 block">
 			{formatDate(data.post.publishedAt || data.post.createdAt)}
 		</time>
 	</header>

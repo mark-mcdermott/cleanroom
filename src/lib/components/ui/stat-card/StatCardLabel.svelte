@@ -13,7 +13,7 @@
 
 <span
 	data-slot="stat-card-label"
-	class={cn('text-sm text-zinc-500 font-medium', className)}
+	class={cn('text-sm text-zinc-500 dark:text-zinc-400 font-medium', className)}
 	{...restProps}
 >
 	{#if children}

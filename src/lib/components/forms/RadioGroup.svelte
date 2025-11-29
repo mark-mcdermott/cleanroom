@@ -27,7 +27,7 @@
 
 <div>
 	{#if label}
-		<p class="block text-sm font-medium text-zinc-700 mb-3">
+		<p class="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-3">
 			{label}{#if required}<span class="text-red-500 ml-1">*</span>{/if}
 		</p>
 	{/if}
@@ -45,7 +45,7 @@
 						? 'border-red-500'
 						: ''}"
 				/>
-				<span class="text-sm text-zinc-700">{option.label}</span>
+				<span class="text-sm text-zinc-700 dark:text-zinc-300">{option.label}</span>
 			</label>
 		{/each}
 	</div>

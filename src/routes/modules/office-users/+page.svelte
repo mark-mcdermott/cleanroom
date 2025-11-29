@@ -52,7 +52,7 @@
 			<Users class="w-10 h-10 text-blue-600" />
 			<h1 class="text-3xl font-semibold tracking-tight">Office Users</h1>
 		</div>
-		<p class="text-zinc-600">
+		<p class="text-zinc-600 dark:text-zinc-400">
 			Seed your database with characters from The Office for testing.
 		</p>
 	</div>
@@ -60,12 +60,12 @@
 	{#if data.users.length === 0}
 		<div class="bg-white border border-zinc-200 rounded-lg p-8 text-center">
 			<Users class="w-16 h-16 mx-auto text-zinc-300 mb-4" />
-			<p class="text-zinc-600 mb-4">No users in the database yet.</p>
-			<p class="text-sm text-zinc-500 mb-6">
+			<p class="text-zinc-600 dark:text-zinc-400 mb-4">No users in the database yet.</p>
+			<p class="text-sm text-zinc-500 dark:text-zinc-400 mb-6">
 				When you scaffold a project with this module, run:
 			</p>
 			<code class="bg-zinc-100 px-4 py-2 rounded font-mono text-sm">pnpm db:seed-office</code>
-			<p class="text-sm text-zinc-500 mt-6">
+			<p class="text-sm text-zinc-500 dark:text-zinc-400 mt-6">
 				This will seed 20 characters from The Office with the password: <strong>dundermifflin</strong>
 			</p>
 		</div>
@@ -89,14 +89,14 @@
 						</div>
 						<div class="min-w-0 flex-1">
 							<h3 class="font-medium truncate">{user.name || 'Unknown'}</h3>
-							<p class="text-xs text-zinc-500 truncate">{user.email}</p>
+							<p class="text-xs text-zinc-500 dark:text-zinc-400 truncate">{user.email}</p>
 						</div>
 					</div>
 				</div>
 			{/each}
 		</div>
 
-		<p class="text-center text-sm text-zinc-500 mt-8">
+		<p class="text-center text-sm text-zinc-500 dark:text-zinc-400 mt-8">
 			{data.users.length} users from Dunder Mifflin Scranton
 		</p>
 	{/if}

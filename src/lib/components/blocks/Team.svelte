@@ -30,8 +30,8 @@
 			<div class="text-center">
 				<div class="text-6xl mb-4">{member.icon}</div>
 				<h3 class="font-semibold mb-1">{member.name}</h3>
-				<p class="text-sm text-zinc-500 mb-3">{member.role}</p>
-				<p class="text-zinc-600 text-sm">{member.bio}</p>
+				<p class="text-sm text-zinc-500 dark:text-zinc-400 mb-3">{member.role}</p>
+				<p class="text-zinc-600 dark:text-zinc-400 text-sm">{member.bio}</p>
 			</div>
 		{/each}
 	</div>

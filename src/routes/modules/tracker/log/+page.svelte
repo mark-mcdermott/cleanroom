@@ -50,18 +50,18 @@
 <div class="max-w-xl mx-auto px-6 py-8">
 	<a
 		href="/modules/tracker"
-		class="inline-flex items-center gap-2 text-sm text-zinc-500 hover:text-zinc-700 mb-8"
+		class="inline-flex items-center gap-2 text-sm text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300 mb-8"
 	>
 		<ArrowLeft class="w-4 h-4" />
 		Back to dashboard
 	</a>
 
 	<h1 class="text-3xl font-semibold tracking-tight mb-2">Log Entry</h1>
-	<p class="text-zinc-500 mb-8">Record your progress for any metric</p>
+	<p class="text-zinc-500 dark:text-zinc-400 mb-8">Record your progress for any metric</p>
 
 	{#if data.metrics.length === 0}
 		<div class="border border-zinc-200 rounded-lg p-8 text-center bg-white">
-			<p class="text-zinc-600 mb-4">
+			<p class="text-zinc-600 dark:text-zinc-400 mb-4">
 				No metrics set up yet. Create metrics in the admin panel first.
 			</p>
 			<Button.Root variant="outline" onclick={() => goto('/modules/tracker/admin')} class="cursor-pointer">
@@ -132,7 +132,7 @@
 					</Select.Content>
 				</Select.Root>
 				{#if selectedMetric() && selectedMetric()?.description}
-					<p class="text-sm text-zinc-500 mt-1.5">{selectedMetric()?.description}</p>
+					<p class="text-sm text-zinc-500 dark:text-zinc-400 mt-1.5">{selectedMetric()?.description}</p>
 				{/if}
 			</div>
 
@@ -192,7 +192,7 @@
 					value={new Date().toISOString().slice(0, 16)}
 					class="mt-1.5"
 				/>
-				<p class="text-sm text-zinc-500 mt-1">Leave as-is for current time</p>
+				<p class="text-sm text-zinc-500 dark:text-zinc-400 mt-1">Leave as-is for current time</p>
 			</div>
 
 			<!-- Notes -->

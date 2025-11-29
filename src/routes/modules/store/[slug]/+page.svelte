@@ -35,7 +35,7 @@
 <div class="max-w-5xl mx-auto px-6 py-16">
 	<a
 		href="/modules/store"
-		class="inline-flex items-center gap-2 text-sm text-zinc-500 hover:text-zinc-700 mb-8"
+		class="inline-flex items-center gap-2 text-sm text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300 mb-8"
 	>
 		<ArrowLeft class="w-4 h-4" />
 		Back to shop
@@ -73,7 +73,7 @@
 		<!-- Product Details -->
 		<div>
 			{#if data.categoryName}
-				<p class="text-sm text-zinc-500 mb-2">{data.categoryName}</p>
+				<p class="text-sm text-zinc-500 dark:text-zinc-400 mb-2">{data.categoryName}</p>
 			{/if}
 
 			<h1 class="text-3xl font-semibold tracking-tight mb-4">{data.product.name}</h1>
@@ -94,7 +94,7 @@
 
 			{#if data.product.description}
 				<div class="prose prose-zinc mb-8">
-					<p class="text-zinc-600 leading-relaxed">{data.product.description}</p>
+					<p class="text-zinc-600 dark:text-zinc-400 leading-relaxed">{data.product.description}</p>
 				</div>
 			{/if}
 
@@ -141,7 +141,7 @@
 								<Plus class="w-4 h-4" />
 							</button>
 						</div>
-						<span class="text-sm text-zinc-500">
+						<span class="text-sm text-zinc-500 dark:text-zinc-400">
 							{data.product.inventory} available
 						</span>
 					</div>

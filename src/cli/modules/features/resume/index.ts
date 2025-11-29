@@ -84,7 +84,7 @@ function getResumeListPageSvelte(): string {
 				<FileText class="w-8 h-8 text-blue-600" />
 				My Resumes
 			</h1>
-			<p class="text-zinc-600 mt-2">Create and manage your professional resumes</p>
+			<p class="text-zinc-600 dark:text-zinc-400 mt-2">Create and manage your professional resumes</p>
 		</div>
 		{#if data.user}
 			<Button.Root onclick={() => goto('/resume/new')} class="cursor-pointer">
@@ -97,7 +97,7 @@ function getResumeListPageSvelte(): string {
 	{#if !data.user}
 		<div class="bg-white border border-zinc-200 rounded-lg p-12 text-center">
 			<FileText class="w-16 h-16 mx-auto text-zinc-300 mb-4" />
-			<p class="text-zinc-600 mb-4">Please log in to create and manage your resumes</p>
+			<p class="text-zinc-600 dark:text-zinc-400 mb-4">Please log in to create and manage your resumes</p>
 			<Button.Root onclick={() => goto('/login')} class="cursor-pointer">
 				Log In
 			</Button.Root>
@@ -105,7 +105,7 @@ function getResumeListPageSvelte(): string {
 	{:else if data.resumes.length === 0}
 		<div class="bg-white border border-zinc-200 rounded-lg p-12 text-center">
 			<FileText class="w-16 h-16 mx-auto text-zinc-300 mb-4" />
-			<p class="text-zinc-600 mb-4">You haven't created any resumes yet</p>
+			<p class="text-zinc-600 dark:text-zinc-400 mb-4">You haven't created any resumes yet</p>
 			<Button.Root onclick={() => goto('/resume/new')} class="cursor-pointer">
 				<Plus class="w-4 h-4 mr-2" />
 				Create Your First Resume
@@ -123,7 +123,7 @@ function getResumeListPageSvelte(): string {
 								</div>
 								<div>
 									<h2 class="font-semibold text-lg">{resume.title}</h2>
-									<p class="text-sm text-zinc-500">
+									<p class="text-sm text-zinc-500 dark:text-zinc-400">
 										Last updated {formatDate(resume.updatedAt)}
 									</p>
 								</div>

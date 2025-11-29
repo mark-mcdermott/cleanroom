@@ -22,7 +22,7 @@
 		'flex items-center gap-1 text-sm mt-2',
 		isPositive && 'text-emerald-600',
 		isNegative && 'text-red-600',
-		isNeutral && 'text-zinc-500',
+		isNeutral && 'text-zinc-500 dark:text-zinc-400',
 		className
 	)}
 	{...restProps}

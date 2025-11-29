@@ -141,7 +141,7 @@
 					<DropdownMenu.Trigger
 						data-testid={link.testId}
 						id={link.id}
-						class="text-sm text-zinc-700 hover:text-zinc-900 transition-colors cursor-pointer flex items-center gap-1 {link.class ?? ''}"
+						class="text-sm text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors cursor-pointer flex items-center gap-1 {link.class ?? ''}"
 						{...buildDataAttrs(link.data)}
 					>
 						{#if link.icon}
@@ -198,7 +198,7 @@
 					href={link.href ?? '#'}
 					data-testid={link.testId}
 					id={link.id}
-					class="text-sm text-zinc-700 hover:text-zinc-900 transition-colors cursor-pointer flex items-center gap-1 {isActive(link.href) ? 'font-semibold' : ''} {link.class ?? ''}"
+					class="text-sm text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors cursor-pointer flex items-center gap-1 {isActive(link.href) ? 'font-semibold' : ''} {link.class ?? ''}"
 					{...buildDataAttrs(link.data)}
 				>
 					{#if link.icon}
@@ -300,7 +300,7 @@
 						<!-- Expandable section for dropdowns -->
 						<div>
 							<button
-								class="text-sm text-zinc-700 hover:text-zinc-900 transition-colors cursor-pointer flex items-center gap-1 w-full {link.class ?? ''}"
+								class="text-sm text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors cursor-pointer flex items-center gap-1 w-full {link.class ?? ''}"
 								data-testid={link.testId}
 								id={link.id}
 								onclick={() => toggleDropdown(getDropdownKey(link))}
@@ -322,7 +322,7 @@
 													type="submit"
 													data-testid={child.testId}
 													id={child.id}
-													class="text-sm text-zinc-600 hover:text-zinc-900 transition-colors cursor-pointer flex items-center gap-2 {child.class ?? ''}"
+													class="text-sm text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors cursor-pointer flex items-center gap-2 {child.class ?? ''}"
 													{...buildDataAttrs(child.data)}
 												>
 													{#if child.icon}
@@ -337,7 +337,7 @@
 												href={child.href ?? '#'}
 												data-testid={child.testId}
 												id={child.id}
-												class="text-sm text-zinc-600 hover:text-zinc-900 transition-colors cursor-pointer flex items-center gap-2 {child.class ?? ''}"
+												class="text-sm text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors cursor-pointer flex items-center gap-2 {child.class ?? ''}"
 												onclick={() => (mobileMenuOpen = false)}
 												{...buildDataAttrs(child.data)}
 											>
@@ -358,7 +358,7 @@
 							href={link.href ?? '#'}
 							data-testid={link.testId}
 							id={link.id}
-							class="text-sm text-zinc-700 hover:text-zinc-900 transition-colors cursor-pointer flex items-center gap-1 {isActive(link.href) ? 'font-semibold' : ''} {link.class ?? ''}"
+							class="text-sm text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors cursor-pointer flex items-center gap-1 {isActive(link.href) ? 'font-semibold' : ''} {link.class ?? ''}"
 							onclick={() => (mobileMenuOpen = false)}
 							{...buildDataAttrs(link.data)}
 						>

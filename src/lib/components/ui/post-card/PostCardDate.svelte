@@ -24,7 +24,7 @@
 
 <time
 	data-slot="post-card-date"
-	class={cn('text-sm text-zinc-500 mt-3 block', className)}
+	class={cn('text-sm text-zinc-500 dark:text-zinc-400 mt-3 block', className)}
 	{...restProps}
 >
 	{formatDate(date)}

@@ -32,7 +32,7 @@
 				: ''}"
 		/>
 		{#if label}
-			<span class="text-sm font-medium text-zinc-700">
+			<span class="text-sm font-medium text-zinc-700 dark:text-zinc-300">
 				{label}{#if required}<span class="text-red-500 ml-1">*</span>{/if}
 			</span>
 		{/if}

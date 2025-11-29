@@ -18,7 +18,7 @@
 	<DropdownMenu.Trigger>
 		<button
 			data-testid="nav-avatar"
-			class="w-8 h-8 rounded-full bg-zinc-300 flex items-center justify-center text-zinc-600 text-xs cursor-pointer hover:bg-zinc-400 transition-colors focus:outline-none focus:ring-2 focus:ring-zinc-500"
+			class="w-8 h-8 rounded-full bg-zinc-300 dark:bg-zinc-600 flex items-center justify-center text-zinc-600 dark:text-zinc-200 text-xs cursor-pointer hover:bg-zinc-400 dark:hover:bg-zinc-500 transition-colors focus:outline-none focus:ring-2 focus:ring-zinc-500"
 			aria-label="User menu"
 		>
 			{avatarLetter}

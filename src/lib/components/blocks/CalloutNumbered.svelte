@@ -28,7 +28,7 @@
 			<div class="text-center">
 				<div class="w-10 h-10 bg-zinc-900 text-white rounded-full flex items-center justify-center mx-auto mb-3 font-semibold">{i + 1}</div>
 				<h3 class="font-semibold mb-1">{item.title}</h3>
-				<p class="text-zinc-600 text-sm">{item.description}</p>
+				<p class="text-zinc-600 dark:text-zinc-400 text-sm">{item.description}</p>
 			</div>
 		{/each}
 	</div>

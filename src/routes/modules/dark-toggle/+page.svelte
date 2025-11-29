@@ -11,7 +11,7 @@
 <div class="max-w-2xl mx-auto px-6 py-16">
 	<div class="text-center mb-12">
 		<h1 class="text-3xl font-semibold tracking-tight">Dark Toggle</h1>
-		<p class="text-zinc-600 mt-2">
+		<p class="text-zinc-600 dark:text-zinc-400 mt-2">
 			A theme toggle component with light, dark, and system preference modes.
 		</p>
 	</div>
@@ -28,14 +28,14 @@
 				<div class="w-16 h-16 bg-zinc-100 dark:bg-zinc-800 rounded-xl flex items-center justify-center mb-2">
 					<ThemeToggle.Root mode="light-dark-system" class="!p-4" />
 				</div>
-				<p class="text-sm text-zinc-500">3-way toggle</p>
+				<p class="text-sm text-zinc-500 dark:text-zinc-400">3-way toggle</p>
 			</div>
 
 			<div class="text-center">
 				<div class="w-16 h-16 bg-zinc-100 dark:bg-zinc-800 rounded-xl flex items-center justify-center mb-2">
 					<ThemeToggle.Root mode="light-dark" class="!p-4" />
 				</div>
-				<p class="text-sm text-zinc-500">2-way toggle</p>
+				<p class="text-sm text-zinc-500 dark:text-zinc-400">2-way toggle</p>
 			</div>
 		</div>
 	</div>
@@ -45,17 +45,17 @@
 		<div class="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg p-4 text-center">
 			<Sun class="w-8 h-8 mx-auto text-amber-500 mb-2" />
 			<p class="font-medium">Light</p>
-			<p class="text-sm text-zinc-500">Bright theme</p>
+			<p class="text-sm text-zinc-500 dark:text-zinc-400">Bright theme</p>
 		</div>
 		<div class="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg p-4 text-center">
 			<Moon class="w-8 h-8 mx-auto text-blue-500 mb-2" />
 			<p class="font-medium">Dark</p>
-			<p class="text-sm text-zinc-500">Dark theme</p>
+			<p class="text-sm text-zinc-500 dark:text-zinc-400">Dark theme</p>
 		</div>
 		<div class="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg p-4 text-center">
-			<Monitor class="w-8 h-8 mx-auto text-zinc-500 mb-2" />
+			<Monitor class="w-8 h-8 mx-auto text-zinc-500 dark:text-zinc-400 mb-2" />
 			<p class="font-medium">System</p>
-			<p class="text-sm text-zinc-500">OS preference</p>
+			<p class="text-sm text-zinc-500 dark:text-zinc-400">OS preference</p>
 		</div>
 	</div>
 

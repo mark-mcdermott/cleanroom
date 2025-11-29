@@ -95,7 +95,7 @@
 			<FileText class="w-8 h-8 text-blue-600" />
 			Create New Resume
 		</h1>
-		<p class="text-zinc-600 mt-2">Fill in your details to generate a professional resume</p>
+		<p class="text-zinc-600 dark:text-zinc-400 mt-2">Fill in your details to generate a professional resume</p>
 	</div>
 
 	<form method="POST" use:enhance class="space-y-8">
@@ -180,7 +180,7 @@
 				{#each resumeData.experience as exp, expIndex}
 					<div class="border border-zinc-200 rounded-lg p-4 space-y-4">
 						<div class="flex justify-between items-start">
-							<h4 class="font-medium text-zinc-700">Experience {expIndex + 1}</h4>
+							<h4 class="font-medium text-zinc-700 dark:text-zinc-300">Experience {expIndex + 1}</h4>
 							<Button.Root type="button" variant="ghost" size="sm" onclick={() => removeExperience(expIndex)} class="text-red-600 cursor-pointer">
 								<Trash2 class="w-4 h-4" />
 							</Button.Root>
@@ -233,7 +233,7 @@
 					</div>
 				{/each}
 				{#if resumeData.experience.length === 0}
-					<p class="text-zinc-500 text-center py-4">No experience added yet</p>
+					<p class="text-zinc-500 dark:text-zinc-400 text-center py-4">No experience added yet</p>
 				{/if}
 			</Card.Content>
 		</Card.Root>
@@ -254,7 +254,7 @@
 				{#each resumeData.education as edu, eduIndex}
 					<div class="border border-zinc-200 rounded-lg p-4 space-y-4">
 						<div class="flex justify-between items-start">
-							<h4 class="font-medium text-zinc-700">Education {eduIndex + 1}</h4>
+							<h4 class="font-medium text-zinc-700 dark:text-zinc-300">Education {eduIndex + 1}</h4>
 							<Button.Root type="button" variant="ghost" size="sm" onclick={() => removeEducation(eduIndex)} class="text-red-600 cursor-pointer">
 								<Trash2 class="w-4 h-4" />
 							</Button.Root>
@@ -296,7 +296,7 @@
 					</div>
 				{/each}
 				{#if resumeData.education.length === 0}
-					<p class="text-zinc-500 text-center py-4">No education added yet</p>
+					<p class="text-zinc-500 dark:text-zinc-400 text-center py-4">No education added yet</p>
 				{/if}
 			</Card.Content>
 		</Card.Root>
@@ -347,7 +347,7 @@
 					</div>
 				{/each}
 				{#if resumeData.skills.length === 0}
-					<p class="text-zinc-500 text-center py-4">No skills added yet</p>
+					<p class="text-zinc-500 dark:text-zinc-400 text-center py-4">No skills added yet</p>
 				{/if}
 			</Card.Content>
 		</Card.Root>
@@ -368,7 +368,7 @@
 				{#each resumeData.projects as project, projIndex}
 					<div class="border border-zinc-200 rounded-lg p-4 space-y-4">
 						<div class="flex justify-between items-start">
-							<h4 class="font-medium text-zinc-700">Project {projIndex + 1}</h4>
+							<h4 class="font-medium text-zinc-700 dark:text-zinc-300">Project {projIndex + 1}</h4>
 							<Button.Root type="button" variant="ghost" size="sm" onclick={() => removeProject(projIndex)} class="text-red-600 cursor-pointer">
 								<Trash2 class="w-4 h-4" />
 							</Button.Root>
@@ -390,7 +390,7 @@
 					</div>
 				{/each}
 				{#if resumeData.projects.length === 0}
-					<p class="text-zinc-500 text-center py-4">No projects added yet</p>
+					<p class="text-zinc-500 dark:text-zinc-400 text-center py-4">No projects added yet</p>
 				{/if}
 			</Card.Content>
 		</Card.Root>

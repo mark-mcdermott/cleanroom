@@ -52,7 +52,7 @@
 				</span>
 			{:else if logo}
 				{#if isLogoImage}
-					<img src={logo} alt="" class="w-12 h-12 sm:w-14 sm:h-14" />
+					<img src={logo} alt="" class="w-12 h-12 sm:w-14 sm:h-14 translate-y-1" />
 				{:else}
 					<span class="text-5xl sm:text-6xl">{logo}</span>
 				{/if}
@@ -61,7 +61,7 @@
 		</h1>
 		{#if tagline}
 			<h2
-				class="flex items-center justify-center gap-1 text-zinc-700 font-medium tracking-hero text-base !mt-2"
+				class="flex items-center justify-center gap-1 text-zinc-700 dark:text-zinc-300 font-medium tracking-hero text-base !mt-2"
 			>
 				{tagline}
 				{#if showFlame}
@@ -70,7 +70,7 @@
 			</h2>
 		{/if}
 		{#if description}
-			<p class="text-zinc-600 text-lg mt-3">
+			<p class="text-zinc-600 dark:text-zinc-400 text-lg mt-3">
 				{description}
 			</p>
 		{/if}

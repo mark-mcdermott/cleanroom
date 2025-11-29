@@ -21,7 +21,7 @@
 	{...restProps}
 >
 	<div class="flex items-center justify-between text-sm mb-1.5">
-		<span class="text-zinc-500">
+		<span class="text-zinc-500 dark:text-zinc-400">
 			{isComplete ? 'Goal reached!' : `${percentage}% of goal`}
 		</span>
 		<span class="font-medium" style="color: {color}">

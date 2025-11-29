@@ -31,7 +31,7 @@
 <div class="max-w-2xl mx-auto px-6 py-16">
 	<a
 		href="/modules/store/admin"
-		class="inline-flex items-center gap-2 text-sm text-zinc-500 hover:text-zinc-700 mb-8"
+		class="inline-flex items-center gap-2 text-sm text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300 mb-8"
 	>
 		<ArrowLeft class="w-4 h-4" />
 		Back to products
@@ -99,7 +99,7 @@
 					required
 					class="mt-1.5"
 				/>
-				<p class="text-xs text-zinc-500 mt-1">URL-friendly identifier</p>
+				<p class="text-xs text-zinc-500 dark:text-zinc-400 mt-1">URL-friendly identifier</p>
 			</div>
 
 			<div>
@@ -152,7 +152,7 @@
 							class="pl-7"
 						/>
 					</div>
-					<p class="text-xs text-zinc-500 mt-1">Original price if on sale</p>
+					<p class="text-xs text-zinc-500 dark:text-zinc-400 mt-1">Original price if on sale</p>
 				</div>
 			</div>
 		</div>
@@ -204,7 +204,7 @@
 					placeholder="https://example.com/image.jpg"
 					class="mt-1.5"
 				/>
-				<p class="text-xs text-zinc-500 mt-1">Enter a URL for the product image</p>
+				<p class="text-xs text-zinc-500 dark:text-zinc-400 mt-1">Enter a URL for the product image</p>
 			</div>
 
 			{#if data.product.image}

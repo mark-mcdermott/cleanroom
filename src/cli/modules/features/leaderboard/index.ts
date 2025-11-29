@@ -80,7 +80,7 @@ function getGamePageSvelte(): string {
 <div class="max-w-2xl mx-auto px-6 py-16">
 	<div class="text-center mb-8">
 		<h1 class="text-3xl font-semibold tracking-tight">Click Game</h1>
-		<p class="text-zinc-600 mt-2">Click as fast as you can in 10 seconds!</p>
+		<p class="text-zinc-600 dark:text-zinc-400 mt-2">Click as fast as you can in 10 seconds!</p>
 		{#if !data.user}
 			<p class="text-amber-600 mt-2 text-sm">Log in to save your scores</p>
 		{/if}
@@ -89,15 +89,15 @@ function getGamePageSvelte(): string {
 	<div class="bg-white border-2 border-zinc-200 rounded-xl p-8 mb-8">
 		<div class="flex justify-between items-center mb-6">
 			<div class="text-center">
-				<p class="text-sm text-zinc-500">Score</p>
+				<p class="text-sm text-zinc-500 dark:text-zinc-400">Score</p>
 				<p class="text-3xl font-bold text-blue-600">{score}</p>
 			</div>
 			<div class="text-center">
-				<p class="text-sm text-zinc-500">Time Left</p>
-				<p class="text-3xl font-bold {timeLeft <= 3 ? 'text-red-600' : 'text-zinc-900'}">{timeLeft}s</p>
+				<p class="text-sm text-zinc-500 dark:text-zinc-400">Time Left</p>
+				<p class="text-3xl font-bold {timeLeft <= 3 ? 'text-red-600' : 'text-zinc-900 dark:text-zinc-100'}">{timeLeft}s</p>
 			</div>
 			<div class="text-center">
-				<p class="text-sm text-zinc-500">Clicks</p>
+				<p class="text-sm text-zinc-500 dark:text-zinc-400">Clicks</p>
 				<p class="text-3xl font-bold text-green-600">{clickCount}</p>
 			</div>
 		</div>
@@ -115,7 +115,7 @@ function getGamePageSvelte(): string {
 			{#if gameState === 'idle'}
 				<div class="text-center">
 					<Play class="w-16 h-16 mx-auto text-zinc-400 mb-4" />
-					<p class="text-zinc-600 font-medium">Click Start to Play</p>
+					<p class="text-zinc-600 dark:text-zinc-400 font-medium">Click Start to Play</p>
 				</div>
 			{:else if gameState === 'playing'}
 				<div class="text-center text-white">
@@ -290,7 +290,7 @@ function getScoresPageSvelte(): string {
 
 <div class="max-w-2xl mx-auto px-6 py-16">
 	<div class="flex items-center gap-4 mb-8">
-		<a href="/leaderboard" class="text-zinc-500 hover:text-zinc-700">
+		<a href="/leaderboard" class="text-zinc-500 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-300">
 			<ArrowLeft class="w-5 h-5" />
 		</a>
 		<div>
@@ -298,25 +298,25 @@ function getScoresPageSvelte(): string {
 				<Trophy class="w-8 h-8 text-amber-500" />
 				Leaderboard
 			</h1>
-			<p class="text-zinc-600 mt-1">Top 50 scores</p>
+			<p class="text-zinc-600 dark:text-zinc-400 mt-1">Top 50 scores</p>
 		</div>
 	</div>
 
 	{#if data.scores.length === 0}
 		<div class="border border-zinc-200 rounded-lg p-8 text-center bg-white">
 			<Trophy class="w-16 h-16 mx-auto text-zinc-300 mb-4" />
-			<p class="text-zinc-600 mb-2">No scores yet!</p>
-			<p class="text-sm text-zinc-500">Be the first to play and set a high score.</p>
+			<p class="text-zinc-600 dark:text-zinc-400 mb-2">No scores yet!</p>
+			<p class="text-sm text-zinc-500 dark:text-zinc-400">Be the first to play and set a high score.</p>
 		</div>
 	{:else}
 		<div class="bg-white border border-zinc-200 rounded-lg overflow-hidden">
 			<table class="w-full">
 				<thead class="bg-zinc-50 border-b border-zinc-200">
 					<tr>
-						<th class="px-4 py-3 text-left text-sm font-semibold text-zinc-700">Rank</th>
-						<th class="px-4 py-3 text-left text-sm font-semibold text-zinc-700">Player</th>
-						<th class="px-4 py-3 text-right text-sm font-semibold text-zinc-700">Score</th>
-						<th class="px-4 py-3 text-right text-sm font-semibold text-zinc-700">Date</th>
+						<th class="px-4 py-3 text-left text-sm font-semibold text-zinc-700 dark:text-zinc-300">Rank</th>
+						<th class="px-4 py-3 text-left text-sm font-semibold text-zinc-700 dark:text-zinc-300">Player</th>
+						<th class="px-4 py-3 text-right text-sm font-semibold text-zinc-700 dark:text-zinc-300">Score</th>
+						<th class="px-4 py-3 text-right text-sm font-semibold text-zinc-700 dark:text-zinc-300">Date</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -330,17 +330,17 @@ function getScoresPageSvelte(): string {
 								{:else if i === 2}
 									<span class="text-2xl">🥉</span>
 								{:else}
-									<span class="text-zinc-500 font-medium">{i + 1}</span>
+									<span class="text-zinc-500 dark:text-zinc-400 font-medium">{i + 1}</span>
 								{/if}
 							</td>
 							<td class="px-4 py-3">
 								<p class="font-medium">{score.userName || 'Anonymous'}</p>
-								<p class="text-sm text-zinc-500">{score.userEmail}</p>
+								<p class="text-sm text-zinc-500 dark:text-zinc-400">{score.userEmail}</p>
 							</td>
 							<td class="px-4 py-3 text-right">
 								<span class="font-bold text-lg text-blue-600">{score.score}</span>
 							</td>
-							<td class="px-4 py-3 text-right text-sm text-zinc-500">
+							<td class="px-4 py-3 text-right text-sm text-zinc-500 dark:text-zinc-400">
 								{formatDate(score.createdAt)}
 							</td>
 						</tr>

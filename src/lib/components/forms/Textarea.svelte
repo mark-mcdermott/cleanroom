@@ -24,7 +24,7 @@
 
 <div>
 	{#if label}
-		<label for={name} class="block text-sm font-medium text-zinc-700 mb-2">
+		<label for={name} class="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">
 			{label}{#if required}<span class="text-red-500 ml-1">*</span>{/if}
 		</label>
 	{/if}

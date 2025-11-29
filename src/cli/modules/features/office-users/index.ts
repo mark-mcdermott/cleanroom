@@ -113,10 +113,10 @@ function getUsersListingSvelte(config: ProjectConfig): string {
 
 <div class="max-w-4xl mx-auto px-6 py-16">
 	<h1 class="text-4xl font-semibold tracking-tight mb-2">The Team</h1>
-	<p class="text-zinc-600 mb-8">Meet the people of Dunder Mifflin Scranton</p>
+	<p class="text-zinc-600 dark:text-zinc-400 mb-8">Meet the people of Dunder Mifflin Scranton</p>
 
 	{#if data.users.length === 0}
-		<p class="text-zinc-600">No team members yet. Run <code class="bg-zinc-100 px-2 py-1 rounded">pnpm db:seed-office</code> to add The Office characters.</p>
+		<p class="text-zinc-600 dark:text-zinc-400">No team members yet. Run <code class="bg-zinc-100 px-2 py-1 rounded">pnpm db:seed-office</code> to add The Office characters.</p>
 	{:else}
 		<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
 			{#each data.users as user}
@@ -125,7 +125,7 @@ function getUsersListingSvelte(config: ProjectConfig): string {
 						{user.name?.charAt(0) || '?'}
 					</div>
 					<h3 class="font-medium">{user.name || 'Unknown'}</h3>
-					<p class="text-sm text-zinc-500">{user.email}</p>
+					<p class="text-sm text-zinc-500 dark:text-zinc-400">{user.email}</p>
 				</div>
 			{/each}
 		</div>

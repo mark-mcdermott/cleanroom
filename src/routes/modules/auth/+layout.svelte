@@ -79,7 +79,7 @@
 
 	<Footer siteName="auth-app" logo="🔐" maxWidth="max-w-6xl">
 		{#each navLinks.filter(l => l.label) as link}
-			<a href={link.href} class="hover:text-zinc-700 transition-colors">
+			<a href={link.href} class="hover:text-zinc-700 dark:hover:text-zinc-300 transition-colors">
 				{link.label}
 			</a>
 		{/each}

@@ -14,7 +14,7 @@
 <h2
 	data-slot="post-card-title"
 	class={cn(
-		'text-2xl font-semibold group-hover:text-zinc-600 transition-colors',
+		'text-2xl font-semibold group-hover:text-zinc-600 dark:group-hover:text-zinc-400 transition-colors',
 		className
 	)}
 	{...restProps}

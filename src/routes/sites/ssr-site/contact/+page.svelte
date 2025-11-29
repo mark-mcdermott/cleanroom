@@ -59,7 +59,7 @@
 
 <div class="max-w-4xl mx-auto px-6 py-16">
 	<h1 class="text-4xl font-semibold tracking-tight mb-4">Contact Us</h1>
-	<p class="text-zinc-600 text-lg mb-12">
+	<p class="text-zinc-600 dark:text-zinc-400 text-lg mb-12">
 		Have a project in mind? We'd love to hear from you. Drop us a message and we'll get back to you
 		within 24 hours.
 	</p>
@@ -109,7 +109,7 @@
 
 				<Button type="submit">Send Message</Button>
 			</form>
-			<p class="text-xs text-zinc-500 mt-4">
+			<p class="text-xs text-zinc-500 dark:text-zinc-400 mt-4">
 				This is a demo form. In a real site, this would submit to your backend or email service.
 			</p>
 		</div>

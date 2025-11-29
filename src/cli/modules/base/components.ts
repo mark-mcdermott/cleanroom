@@ -11,7 +11,7 @@ export function getDesktopOnlyNav(config: ProjectConfig, links?: { href: string;
 		? links
 				.map(
 					(link) =>
-						`<a href="${link.href}" class="text-sm text-zinc-700 hover:text-zinc-900 transition-colors">${link.label}</a>`
+						`<a href="${link.href}" class="text-sm text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors">${link.label}</a>`
 				)
 				.join('\n\t\t\t\t')
 		: '';
@@ -38,14 +38,14 @@ export function getNav(
 	const desktopLinks = links
 		.map(
 			(link) =>
-				`<a href="${link.href}" class="text-sm text-zinc-700 hover:text-zinc-900 transition-colors">${link.label}</a>`
+				`<a href="${link.href}" class="text-sm text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors">${link.label}</a>`
 		)
 		.join('\n\t\t\t\t');
 
 	const mobileLinks = links
 		.map(
 			(link) =>
-				`<a href="${link.href}" class="block py-2 text-zinc-700 hover:text-zinc-900" onclick={() => mobileMenuOpen = false}>${link.label}</a>`
+				`<a href="${link.href}" class="block py-2 text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-zinc-100" onclick={() => mobileMenuOpen = false}>${link.label}</a>`
 		)
 		.join('\n\t\t\t\t\t');
 
@@ -147,7 +147,7 @@ export function getSection(id: string, title: string, content: string): string {
 		.split('\n\n')
 		.map((p) => p.trim())
 		.filter((p) => p.length > 0)
-		.map((p) => `<p class="text-zinc-600 text-lg mb-4 last:mb-0">${p}</p>`)
+		.map((p) => `<p class="text-zinc-600 dark:text-zinc-400 text-lg mb-4 last:mb-0">${p}</p>`)
 		.join('\n\t\t\t');
 
 	return `<section id="${id}" class="py-24 px-8 scroll-mt-20">
@@ -163,7 +163,7 @@ export function getSection(id: string, title: string, content: string): string {
 // Footer
 export function getFooter(config: ProjectConfig): string {
 	return `<footer class="border-t">
-	<div class="mx-auto max-w-6xl px-6 sm:px-10 py-8 text-sm text-zinc-600">
+	<div class="mx-auto max-w-6xl px-6 sm:px-10 py-8 text-sm text-zinc-600 dark:text-zinc-400">
 		© {new Date().getFullYear()} ${config.projectName}
 	</div>
 </footer>`;
@@ -187,7 +187,7 @@ export function getHeader(config: ProjectConfig, links: { href: string; label: s
 	const mobileLinks = links
 		.map(
 			(link) =>
-				`<a href="${link.href}" class="block py-2 hover:text-zinc-900" onclick={() => mobileMenuOpen = false}>${link.label}</a>`
+				`<a href="${link.href}" class="block py-2 hover:text-zinc-900 dark:hover:text-zinc-100" onclick={() => mobileMenuOpen = false}>${link.label}</a>`
 		)
 		.join('\n\t\t\t\t\t');
 

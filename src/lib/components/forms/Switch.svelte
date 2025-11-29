@@ -37,7 +37,7 @@
 			></span>
 		</button>
 		{#if label}
-			<span class="text-sm font-medium text-zinc-700">{label}</span>
+			<span class="text-sm font-medium text-zinc-700 dark:text-zinc-300">{label}</span>
 		{/if}
 	</label>
 	{#if error}

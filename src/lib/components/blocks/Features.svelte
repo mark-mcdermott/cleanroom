@@ -29,7 +29,7 @@
 			<div class="text-center p-6">
 				<div class="text-4xl mb-4">{feature.icon}</div>
 				<h3 class="font-semibold mb-2">{feature.title}</h3>
-				<p class="text-zinc-600 text-sm">{feature.description}</p>
+				<p class="text-zinc-600 dark:text-zinc-400 text-sm">{feature.description}</p>
 			</div>
 		{/each}
 	</div>
