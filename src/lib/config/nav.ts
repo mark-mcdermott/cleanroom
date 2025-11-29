@@ -21,9 +21,13 @@ export const defaultNavLinks: NavLink[] = [
 		children: [
 			{ label: 'auth', href: '/modules/auth', testId: 'nav-modules-auth' },
 			{ label: 'blog', href: '/modules/blog', testId: 'nav-modules-blog' },
+			{ label: 'dark toggle', href: '/modules/dark-toggle', testId: 'nav-modules-dark-toggle' },
+			{ label: 'leaderboard', href: '/modules/leaderboard', testId: 'nav-modules-leaderboard' },
+			{ label: 'office users', href: '/modules/office-users', testId: 'nav-modules-office' },
+			{ label: 'resume', href: '/modules/resume', testId: 'nav-modules-resume' },
 			{ label: 'store', href: '/modules/store', testId: 'nav-modules-store' },
 			{ label: 'tracker', href: '/modules/tracker', testId: 'nav-modules-tracker' },
-			{ label: 'the office', href: '/modules/office-users', testId: 'nav-modules-office' }
+			{ label: 'widgets', href: '/modules/widgets', testId: 'nav-modules-widgets' }
 		]
 	},
 	{ label: 'login', href: '/login', testId: 'nav-login', hideWhenAuth: true },

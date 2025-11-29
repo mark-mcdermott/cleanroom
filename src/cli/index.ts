@@ -182,7 +182,8 @@ async function main() {
 
 	// For SSR sites, set up database and modules
 	let databaseConfig: ProjectConfig['database'];
-	let selectedModules: ('auth' | 'blog' | 'office-users')[] = [];
+	let selectedModules: ProjectConfig['modules'] = [];
+	let darkToggleConfig: ProjectConfig['darkToggle'];
 
 	if (siteType === 'ssr-site') {
 		// Neon database setup
@@ -238,7 +239,11 @@ async function main() {
 			options: [
 				{ value: 'auth', label: 'Auth', hint: 'Lucia v3 authentication with login/signup' },
 				{ value: 'blog', label: 'Blog', hint: 'Blog with posts and tags' },
-				{ value: 'office-users', label: 'The Office Users', hint: 'Seed users from The Office (requires auth)' }
+				{ value: 'dark-toggle', label: 'Dark Toggle', hint: 'Dark/light mode toggle in nav' },
+				{ value: 'leaderboard', label: 'Leaderboard', hint: 'Click game with high score tracking' },
+				{ value: 'office-users', label: 'Office Users', hint: 'Seed users from The Office (requires auth)' },
+				{ value: 'resume', label: 'Resume', hint: 'Resume builder with PDF export' },
+				{ value: 'tracker', label: 'Tracker', hint: 'Activity/habit tracking dashboard' }
 			],
 			required: false
 		});
@@ -248,9 +253,29 @@ async function main() {
 			process.exit(0);
 		}
 
-		selectedModules = (modules as string[]).filter((m): m is 'auth' | 'blog' | 'office-users' =>
-			m === 'auth' || m === 'blog' || m === 'office-users'
+		selectedModules = (modules as string[]).filter((m): m is ProjectConfig['modules'][number] =>
+			['auth', 'blog', 'dark-toggle', 'leaderboard', 'office-users', 'resume', 'store', 'tracker', 'widgets'].includes(m)
 		);
+
+		// If dark-toggle was selected, ask about mode
+		if (selectedModules.includes('dark-toggle')) {
+			const themeMode = await p.select({
+				message: 'Which theme toggle mode would you like?',
+				options: [
+					{ value: 'light-dark-system', label: 'Light / Dark / System', hint: 'Three-way toggle with system preference option' },
+					{ value: 'light-dark', label: 'Light / Dark only', hint: 'Simple two-way toggle' }
+				]
+			});
+
+			if (p.isCancel(themeMode)) {
+				p.cancel('Setup cancelled');
+				process.exit(0);
+			}
+
+			darkToggleConfig = {
+				mode: themeMode as 'light-dark' | 'light-dark-system'
+			};
+		}
 
 		if (selectedModules.length > 0) {
 			p.log.success(`Selected modules: ${selectedModules.join(', ')}`);
@@ -270,6 +295,7 @@ async function main() {
 		siteType: siteType as ProjectConfig['siteType'],
 		database: databaseConfig,
 		modules: selectedModules,
+		darkToggle: darkToggleConfig,
 		github: {
 			repoUrl: '' // Will be set after repo creation
 		},

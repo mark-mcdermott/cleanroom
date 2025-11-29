@@ -265,9 +265,107 @@ describe('Feature Modules', () => {
 		});
 	});
 
+	describe('dark-toggle module', () => {
+		it('creates ThemeToggle component files', async () => {
+			const config = { ...baseConfig, modules: ['dark-toggle'] as ProjectConfig['modules'] };
+			await generateBaseSite(config);
+			await featureModules['dark-toggle'].apply(config, testDir);
+
+			await expect(access(join(testDir, 'src', 'lib', 'components', 'ui', 'theme-toggle', 'ThemeToggle.svelte'))).resolves.toBeUndefined();
+			await expect(access(join(testDir, 'src', 'lib', 'components', 'ui', 'theme-toggle', 'index.ts'))).resolves.toBeUndefined();
+		});
+
+		it('ThemeToggle component has proper structure', async () => {
+			const config = { ...baseConfig, modules: ['dark-toggle'] as ProjectConfig['modules'] };
+			await generateBaseSite(config);
+			await featureModules['dark-toggle'].apply(config, testDir);
+
+			const component = await readFile(join(testDir, 'src', 'lib', 'components', 'ui', 'theme-toggle', 'ThemeToggle.svelte'), 'utf-8');
+			expect(component).toContain('ThemeMode');
+			expect(component).toContain('ToggleMode');
+			expect(component).toContain('cycleTheme');
+			expect(component).toContain('localStorage');
+			expect(component).toContain('Sun');
+			expect(component).toContain('Moon');
+			expect(component).toContain('Monitor');
+		});
+
+		it('updates UI components index to export ThemeToggle', async () => {
+			const config = { ...baseConfig, modules: ['dark-toggle'] as ProjectConfig['modules'] };
+			await generateBaseSite(config);
+			await featureModules['dark-toggle'].apply(config, testDir);
+
+			const uiIndex = await readFile(join(testDir, 'src', 'lib', 'components', 'ui', 'index.ts'), 'utf-8');
+			expect(uiIndex).toContain('theme-toggle');
+		});
+
+		it('adds dark mode CSS to app.css', async () => {
+			const config = { ...baseConfig, modules: ['dark-toggle'] as ProjectConfig['modules'] };
+			await generateBaseSite(config);
+			await featureModules['dark-toggle'].apply(config, testDir);
+
+			const appCss = await readFile(join(testDir, 'src', 'app.css'), 'utf-8');
+			expect(appCss).toContain('.dark {');
+			expect(appCss).toContain('@theme {');
+			expect(appCss).toContain('--color-background');
+		});
+
+		it('adds lucide-svelte dependency to package.json', async () => {
+			const config = { ...baseConfig, modules: ['dark-toggle'] as ProjectConfig['modules'] };
+			await generateBaseSite(config);
+			await featureModules['dark-toggle'].apply(config, testDir);
+
+			const packageJson = await readFile(join(testDir, 'package.json'), 'utf-8');
+			const pkg = JSON.parse(packageJson);
+			expect(pkg.dependencies['lucide-svelte']).toBeDefined();
+		});
+
+		it('supports light-dark-system mode (default)', async () => {
+			const config: ProjectConfig = {
+				...baseConfig,
+				modules: ['dark-toggle'],
+				darkToggle: { mode: 'light-dark-system' }
+			};
+			await generateBaseSite(config);
+			await featureModules['dark-toggle'].apply(config, testDir);
+
+			const component = await readFile(join(testDir, 'src', 'lib', 'components', 'ui', 'theme-toggle', 'ThemeToggle.svelte'), 'utf-8');
+			// Should handle system mode
+			expect(component).toContain("mode === 'light-dark-system'");
+			expect(component).toContain('getSystemTheme');
+		});
+
+		it('supports light-dark mode (two-way toggle)', async () => {
+			const config: ProjectConfig = {
+				...baseConfig,
+				modules: ['dark-toggle'],
+				darkToggle: { mode: 'light-dark' }
+			};
+			await generateBaseSite(config);
+			await featureModules['dark-toggle'].apply(config, testDir);
+
+			const component = await readFile(join(testDir, 'src', 'lib', 'components', 'ui', 'theme-toggle', 'ThemeToggle.svelte'), 'utf-8');
+			// Should support simple two-way toggle
+			expect(component).toContain("mode === 'light-dark'");
+		});
+
+		it('dark mode CSS uses Tailwind v4 @theme directive', async () => {
+			const config = { ...baseConfig, modules: ['dark-toggle'] as ProjectConfig['modules'] };
+			await generateBaseSite(config);
+			await featureModules['dark-toggle'].apply(config, testDir);
+
+			const appCss = await readFile(join(testDir, 'src', 'app.css'), 'utf-8');
+			// Tailwind v4 uses @theme for CSS variables
+			expect(appCss).toContain('@theme {');
+			expect(appCss).toContain('--radius');
+			expect(appCss).toContain('--color-primary');
+			expect(appCss).toContain('--color-muted');
+		});
+	});
+
 	describe('all feature modules', () => {
 		it('all registered modules exist and have apply function', () => {
-			const moduleNames = ['auth', 'blog', 'office-users'];
+			const moduleNames = ['auth', 'blog', 'office-users', 'dark-toggle'];
 
 			for (const name of moduleNames) {
 				expect(featureModules[name]).toBeDefined();

@@ -9,7 +9,10 @@ export interface ProjectConfig {
 		provider: 'neon';
 		connectionString: string;
 	};
-	modules: ('auth' | 'blog' | 'office-users' | 'widgets')[];
+	modules: ('auth' | 'blog' | 'dark-toggle' | 'leaderboard' | 'office-users' | 'resume' | 'store' | 'tracker' | 'widgets')[];
+	darkToggle?: {
+		mode: 'light-dark' | 'light-dark-system';
+	};
 	github: {
 		repoUrl: string;
 	};
