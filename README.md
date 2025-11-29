@@ -17,11 +17,23 @@ The CLI will guide you through:
    - Simple landing page (responsive)
    - Landing page with scroll sections (section nav & mobile menu)
    - Simple static site (multiple pages with nav)
+   - SSR site (auth ready) - Server-rendered, ideal for auth and dynamic content
 
-   All site types are **prerendered** at build time for fast static hosting, with **SPA-like client-side navigation** (no page reloads after initial load). No SSR runtime required.
-4. **GitHub** - Automatically creates a repo and pushes code
-5. **Cloudflare Pages** - Guides you through deployment setup
-6. **Custom domain** - Optional Namecheap domain configuration
+   Static site types are **prerendered** at build time for fast static hosting, with **SPA-like client-side navigation** (no page reloads after initial load).
+4. **Modules** (SSR sites only) - Add optional features:
+   - **Auth** - Lucia v3 authentication with login/signup
+   - **Blog** - Blog with posts and tags
+   - **Dark Toggle** - Dark/light mode toggle in nav
+   - **Leaderboard** - Click game with high score tracking
+   - **Lobby** - Video room with Daily.co for meditation/hangouts
+   - **Office Users** - Seed users from The Office (requires auth)
+   - **Resume** - Resume builder with PDF export
+   - **Tracker** - Activity/habit tracking dashboard
+   - **Videos** - Travel videos with interactive globe explorer
+5. **Database** (SSR sites) - Neon PostgreSQL setup with connection string
+6. **GitHub** - Automatically creates a repo and pushes code
+7. **Cloudflare Pages** - Guides you through deployment setup
+8. **Custom domain** - Optional Namecheap domain configuration
 
 Your project will be generated in `./generated/<project-name>/`.
 

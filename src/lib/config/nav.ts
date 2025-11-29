@@ -28,6 +28,7 @@ export const defaultNavLinks: NavLink[] = [
 			{ label: 'resume', href: '/modules/resume', testId: 'nav-modules-resume' },
 			{ label: 'store', href: '/modules/store', testId: 'nav-modules-store' },
 			{ label: 'tracker', href: '/modules/tracker', testId: 'nav-modules-tracker' },
+			{ label: 'videos', href: '/modules/videos', testId: 'nav-modules-videos' },
 			{ label: 'widgets', href: '/modules/widgets', testId: 'nav-modules-widgets' }
 		]
 	},

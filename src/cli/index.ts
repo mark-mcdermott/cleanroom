@@ -244,7 +244,8 @@ async function main() {
 				{ value: 'lobby', label: 'Lobby', hint: 'Video room with Daily.co for meditation/hangouts' },
 				{ value: 'office-users', label: 'Office Users', hint: 'Seed users from The Office (requires auth)' },
 				{ value: 'resume', label: 'Resume', hint: 'Resume builder with PDF export' },
-				{ value: 'tracker', label: 'Tracker', hint: 'Activity/habit tracking dashboard' }
+				{ value: 'tracker', label: 'Tracker', hint: 'Activity/habit tracking dashboard' },
+				{ value: 'videos', label: 'Videos', hint: 'Travel videos with interactive globe explorer' }
 			],
 			required: false
 		});
@@ -255,7 +256,7 @@ async function main() {
 		}
 
 		selectedModules = (modules as string[]).filter((m): m is ProjectConfig['modules'][number] =>
-			['auth', 'blog', 'dark-toggle', 'leaderboard', 'lobby', 'office-users', 'resume', 'store', 'tracker', 'widgets'].includes(m)
+			['auth', 'blog', 'dark-toggle', 'leaderboard', 'lobby', 'office-users', 'resume', 'store', 'tracker', 'videos', 'widgets'].includes(m)
 		);
 
 		// If dark-toggle was selected, ask about mode

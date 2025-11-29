@@ -8,6 +8,7 @@ import { officeUsersModule } from './office-users';
 import { resumeModule } from './resume';
 import { storeModule } from './store';
 import { trackerModule } from './tracker';
+import { videosModule } from './videos';
 import { widgetsModule } from './widgets';
 
 export const featureModules: Record<string, FeatureModule> = {
@@ -20,5 +21,6 @@ export const featureModules: Record<string, FeatureModule> = {
 	resume: resumeModule,
 	store: storeModule,
 	tracker: trackerModule,
+	videos: videosModule,
 	widgets: widgetsModule
 };
