@@ -20,6 +20,7 @@ export const load: PageServerLoad = async ({ params, locals, platform }) => {
 			id: users.id,
 			email: users.email,
 			name: users.name,
+			avatarUrl: users.avatarUrl,
 			admin: users.admin
 		})
 		.from(users)
@@ -40,7 +41,7 @@ export const load: PageServerLoad = async ({ params, locals, platform }) => {
 };
 
 export const actions: Actions = {
-	default: async ({ params, request, locals, platform }) => {
+	updateUser: async ({ params, request, locals, platform }) => {
 		if (!locals.user?.admin) {
 			return fail(403, { error: 'Not authorized' });
 		}
@@ -83,6 +84,106 @@ export const actions: Actions = {
 				return fail(400, { error: 'Email already in use' });
 			}
 			return fail(500, { error: 'Failed to update user' });
+		}
+	},
+
+	uploadAvatar: async ({ params, request, locals, platform }) => {
+		if (!locals.user?.admin) {
+			return fail(403, { error: 'Not authorized' });
+		}
+
+		const databaseUrl = platform?.env?.DATABASE_URL;
+		const avatarsBucket = platform?.env?.AVATARS;
+
+		if (!databaseUrl) {
+			return fail(500, { error: 'Database not configured' });
+		}
+
+		if (!avatarsBucket) {
+			return fail(500, { error: 'R2 storage not configured' });
+		}
+
+		const formData = await request.formData();
+		const file = formData.get('avatar') as File | null;
+
+		if (!file || file.size === 0) {
+			return fail(400, { error: 'No file uploaded' });
+		}
+
+		// Validate file type
+		const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+		if (!allowedTypes.includes(file.type)) {
+			return fail(400, { error: 'Invalid file type. Please upload JPEG, PNG, GIF, or WebP.' });
+		}
+
+		// Validate file size (max 5MB)
+		const maxSize = 5 * 1024 * 1024;
+		if (file.size > maxSize) {
+			return fail(400, { error: 'File too large. Maximum size is 5MB.' });
+		}
+
+		try {
+			// Upload to R2
+			const key = `avatars/${params.id}`;
+			const arrayBuffer = await file.arrayBuffer();
+
+			await avatarsBucket.put(key, arrayBuffer, {
+				httpMetadata: {
+					contentType: file.type
+				}
+			});
+
+			// Update database with avatar URL
+			const db = createDb(databaseUrl);
+			const avatarUrl = `/api/avatar/${params.id}`;
+
+			await db
+				.update(users)
+				.set({
+					avatarUrl,
+					updatedAt: new Date()
+				})
+				.where(eq(users.id, params.id));
+
+			return { success: true, avatarUrl };
+		} catch (e) {
+			console.error('Avatar upload error:', e);
+			return fail(500, { error: 'Failed to upload avatar' });
+		}
+	},
+
+	removeAvatar: async ({ params, locals, platform }) => {
+		if (!locals.user?.admin) {
+			return fail(403, { error: 'Not authorized' });
+		}
+
+		const databaseUrl = platform?.env?.DATABASE_URL;
+		const avatarsBucket = platform?.env?.AVATARS;
+
+		if (!databaseUrl) {
+			return fail(500, { error: 'Database not configured' });
+		}
+
+		try {
+			// Delete from R2 if bucket is available
+			if (avatarsBucket) {
+				await avatarsBucket.delete(`avatars/${params.id}`);
+			}
+
+			// Update database
+			const db = createDb(databaseUrl);
+			await db
+				.update(users)
+				.set({
+					avatarUrl: null,
+					updatedAt: new Date()
+				})
+				.where(eq(users.id, params.id));
+
+			return { success: true };
+		} catch (e) {
+			console.error('Avatar removal error:', e);
+			return fail(500, { error: 'Failed to remove avatar' });
 		}
 	}
 };

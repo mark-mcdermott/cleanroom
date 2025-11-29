@@ -1,11 +1,21 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
-	import { goto } from '$app/navigation';
+	import { goto, invalidateAll } from '$app/navigation';
 	import { Button, Input, Label, Checkbox } from '$lib/components/ui';
-	import { ArrowLeft } from 'lucide-svelte';
+	import { ArrowLeft, Upload, Trash2, User } from 'lucide-svelte';
 	import { toast } from 'svelte-sonner';
 
 	let { data, form } = $props();
+
+	let uploading = $state(false);
+	let avatarUrl = $state(data.targetUser.avatarUrl);
+	let avatarCacheBuster = $state(0);
+	let fileInput: HTMLInputElement;
+
+	// Update avatarUrl when data changes
+	$effect(() => {
+		avatarUrl = data.targetUser.avatarUrl;
+	});
 </script>
 
 <svelte:head>
@@ -22,7 +32,7 @@
 		Back to User
 	</a>
 
-	<div class="border border-zinc-200 rounded-lg p-6">
+	<div class="bg-white border border-zinc-200 rounded-lg p-6">
 		<h1 class="text-2xl font-semibold tracking-tight mb-6">Edit User</h1>
 
 		{#if form?.error}
@@ -31,8 +41,99 @@
 			</div>
 		{/if}
 
+		<!-- Avatar Section -->
+		<div class="mb-8 pb-6 border-b border-zinc-200">
+			<Label.Root class="mb-3 block">Avatar</Label.Root>
+			<div class="flex items-center gap-6">
+				<!-- Avatar Preview -->
+				<div class="relative">
+					{#if avatarUrl}
+						<img
+							src="{avatarUrl}?v={avatarCacheBuster}"
+							alt="User avatar"
+							class="w-20 h-20 rounded-full object-cover border-2 border-zinc-200"
+						/>
+					{:else}
+						<div class="w-20 h-20 rounded-full bg-zinc-100 border-2 border-zinc-200 flex items-center justify-center">
+							<User class="w-8 h-8 text-zinc-400" />
+						</div>
+					{/if}
+				</div>
+
+				<!-- Upload/Remove Actions -->
+				<div class="flex flex-col gap-2">
+					<form
+						method="POST"
+						action="?/uploadAvatar"
+						enctype="multipart/form-data"
+						use:enhance={() => {
+							uploading = true;
+							return async ({ result, update }) => {
+								uploading = false;
+								if (result.type === 'success') {
+									toast.success('Avatar uploaded successfully');
+									avatarCacheBuster++;
+									await invalidateAll();
+								} else if (result.type === 'failure') {
+									toast.error((result.data as { error?: string })?.error || 'Failed to upload avatar');
+								}
+								await update();
+							};
+						}}
+					>
+						<input
+							bind:this={fileInput}
+							type="file"
+							name="avatar"
+							accept="image/jpeg,image/png,image/gif,image/webp"
+							class="hidden"
+							onchange={(e) => e.currentTarget.form?.requestSubmit()}
+						/>
+						<Button.Root
+							type="button"
+							variant="outline"
+							size="sm"
+							disabled={uploading}
+							onclick={() => fileInput.click()}
+						>
+							<Upload class="w-4 h-4 mr-2" />
+							{uploading ? 'Uploading...' : 'Upload Photo'}
+						</Button.Root>
+					</form>
+
+					{#if avatarUrl}
+						<form
+							method="POST"
+							action="?/removeAvatar"
+							use:enhance={() => {
+								return async ({ result, update }) => {
+									if (result.type === 'success') {
+										toast.success('Avatar removed');
+										avatarUrl = null;
+										await invalidateAll();
+									} else if (result.type === 'failure') {
+										toast.error((result.data as { error?: string })?.error || 'Failed to remove avatar');
+									}
+									await update();
+								};
+							}}
+						>
+							<Button.Root type="submit" variant="ghost" size="sm" class="text-red-600 hover:text-red-700 hover:bg-red-50">
+								<Trash2 class="w-4 h-4 mr-2" />
+								Remove
+							</Button.Root>
+						</form>
+					{/if}
+
+					<p class="text-xs text-zinc-500">JPEG, PNG, GIF, or WebP. Max 5MB.</p>
+				</div>
+			</div>
+		</div>
+
+		<!-- User Details Form -->
 		<form
 			method="POST"
+			action="?/updateUser"
 			use:enhance={() => {
 				return async ({ result }) => {
 					if (result.type === 'redirect') {

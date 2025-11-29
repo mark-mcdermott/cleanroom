@@ -31,8 +31,12 @@
 
 	<div class="bg-white border border-zinc-200 rounded-lg p-6">
 		<div class="flex items-start gap-4 mb-6">
-			<div class="w-16 h-16 bg-zinc-100 rounded-full flex items-center justify-center text-2xl font-medium">
-				{data.targetUser.name?.charAt(0).toUpperCase() || data.targetUser.email.charAt(0).toUpperCase()}
+			<div class="w-16 h-16 bg-zinc-100 rounded-full flex items-center justify-center text-2xl font-medium overflow-hidden">
+				{#if data.targetUser.avatarUrl}
+					<img src={data.targetUser.avatarUrl} alt="User avatar" class="w-full h-full object-cover" />
+				{:else}
+					{data.targetUser.name?.charAt(0).toUpperCase() || data.targetUser.email.charAt(0).toUpperCase()}
+				{/if}
 			</div>
 			<div class="flex-1">
 				<h1 class="text-2xl font-semibold tracking-tight">

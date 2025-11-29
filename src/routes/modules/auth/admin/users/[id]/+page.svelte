@@ -16,8 +16,8 @@
 </script>
 
 <svelte:head>
-	<title>{data.targetUser.name || data.targetUser.email} - Users Admin</title>
-	<meta name="description" content="View user details" />
+	<title>{data.targetUser.name || data.targetUser.email} - The Office</title>
+	<meta name="description" content="View employee details" />
 </svelte:head>
 
 <div class="max-w-2xl mx-auto px-6 py-16">
@@ -26,7 +26,7 @@
 		class="inline-flex items-center gap-2 text-sm text-zinc-600 hover:text-zinc-900 mb-6"
 	>
 		<ArrowLeft class="w-4 h-4" />
-		Back to Users
+		Back to The Office
 	</a>
 
 	<div class="bg-white border border-zinc-200 rounded-lg p-6">
@@ -41,11 +41,11 @@
 				<p class="text-zinc-600">{data.targetUser.email}</p>
 				{#if data.targetUser.admin}
 					<span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-amber-100 text-amber-800 mt-2">
-						Admin
+						Regional Manager
 					</span>
 				{:else}
 					<span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-zinc-100 text-zinc-700 mt-2">
-						User
+						Staff
 					</span>
 				{/if}
 			</div>
@@ -53,11 +53,11 @@
 
 		<div class="space-y-3 text-sm border-t border-zinc-200 pt-6">
 			<div class="flex justify-between">
-				<span class="text-zinc-500">User ID</span>
+				<span class="text-zinc-500">Employee ID</span>
 				<span class="font-mono text-zinc-700">{data.targetUser.id}</span>
 			</div>
 			<div class="flex justify-between">
-				<span class="text-zinc-500">Created</span>
+				<span class="text-zinc-500">Hired</span>
 				<span class="text-zinc-700">
 					{data.targetUser.createdAt ? new Date(data.targetUser.createdAt).toLocaleString() : 'N/A'}
 				</span>

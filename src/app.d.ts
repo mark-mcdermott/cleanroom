@@ -14,6 +14,8 @@ declare global {
 		interface Platform {
 			env: {
 				DATABASE_URL: string;
+				AVATARS: R2Bucket;
+				WIDGET_PHOTOS: R2Bucket;
 			};
 		}
 	}

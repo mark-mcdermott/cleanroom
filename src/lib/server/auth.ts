@@ -15,7 +15,8 @@ export function createLucia(db: Database) {
 		getUserAttributes: (attributes) => ({
 			email: attributes.email,
 			name: attributes.name,
-			admin: attributes.admin
+			admin: attributes.admin,
+			avatarUrl: attributes.avatarUrl
 		})
 	});
 }
@@ -33,7 +34,8 @@ export function createDemoLucia(db: Database) {
 		getUserAttributes: (attributes) => ({
 			email: attributes.email,
 			name: attributes.name,
-			admin: attributes.admin
+			admin: attributes.admin,
+			avatarUrl: attributes.avatarUrl
 		})
 	});
 }
@@ -49,4 +51,5 @@ interface DatabaseUserAttributes {
 	email: string;
 	name: string | null;
 	admin: boolean;
+	avatarUrl: string | null;
 }

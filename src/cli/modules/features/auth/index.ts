@@ -12,6 +12,7 @@ export const users = pgTable('users', {
 	email: text('email').notNull().unique(),
 	passwordHash: text('password_hash').notNull(),
 	name: text('name'),
+	avatarUrl: text('avatar_url'),
 	createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
 	updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow()
 });
@@ -66,7 +67,8 @@ export function createLucia(db: Database) {
 		},
 		getUserAttributes: (attributes) => ({
 			email: attributes.email,
-			name: attributes.name
+			name: attributes.name,
+			avatarUrl: attributes.avatarUrl
 		})
 	});
 }
@@ -81,6 +83,7 @@ declare module 'lucia' {
 interface DatabaseUserAttributes {
 	email: string;
 	name: string | null;
+	avatarUrl: string | null;
 }
 `;
 }

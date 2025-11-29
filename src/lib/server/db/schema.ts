@@ -6,6 +6,7 @@ export const users = pgTable('users', {
 	email: text('email').notNull().unique(),
 	passwordHash: text('password_hash').notNull(),
 	name: text('name'),
+	avatarUrl: text('avatar_url'),
 	admin: boolean('admin').notNull().default(false),
 	createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
 	updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow()
@@ -241,3 +242,85 @@ export type DemoTrackerEntry = typeof demoTrackerEntries.$inferSelect;
 export type NewDemoTrackerEntry = typeof demoTrackerEntries.$inferInsert;
 export type DemoTrackerGoal = typeof demoTrackerGoals.$inferSelect;
 export type NewDemoTrackerGoal = typeof demoTrackerGoals.$inferInsert;
+
+// ============================================================================
+// WIDGETS TABLES (Demo - uses demo auth)
+// ============================================================================
+
+// Widgets - User-owned items
+export const demoWidgets = pgTable('demo_widgets', {
+	id: text('id').primaryKey(),
+	userId: text('user_id')
+		.notNull()
+		.references(() => demoUsers.id, { onDelete: 'cascade' }),
+	name: text('name').notNull(),
+	description: text('description'),
+	customFields: text('custom_fields'), // JSON for CLI-defined fields
+	createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+	updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow()
+});
+
+// Thingys - Children of Widgets
+export const demoThingys = pgTable('demo_thingys', {
+	id: text('id').primaryKey(),
+	widgetId: text('widget_id')
+		.notNull()
+		.references(() => demoWidgets.id, { onDelete: 'cascade' }),
+	name: text('name').notNull(),
+	description: text('description'),
+	customFields: text('custom_fields'),
+	sortOrder: text('sort_order').notNull().default('0'),
+	createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+	updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow()
+});
+
+// Galleries - Curated collections for Widgets
+export const demoGalleries = pgTable('demo_galleries', {
+	id: text('id').primaryKey(),
+	widgetId: text('widget_id')
+		.notNull()
+		.references(() => demoWidgets.id, { onDelete: 'cascade' }),
+	name: text('name').notNull().default('Gallery'),
+	description: text('description'),
+	createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+	updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow()
+});
+
+// Notes - Attached to Widget, Thingy, or Gallery
+export const demoNotes = pgTable('demo_notes', {
+	id: text('id').primaryKey(),
+	widgetId: text('widget_id').references(() => demoWidgets.id, { onDelete: 'cascade' }),
+	thingyId: text('thingy_id').references(() => demoThingys.id, { onDelete: 'cascade' }),
+	galleryId: text('gallery_id').references(() => demoGalleries.id, { onDelete: 'cascade' }),
+	content: text('content').notNull(),
+	sortOrder: text('sort_order').notNull().default('0'),
+	createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+	updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow()
+});
+
+// Photos - Attached to Widget, Thingy, or Gallery
+export const demoPhotos = pgTable('demo_photos', {
+	id: text('id').primaryKey(),
+	widgetId: text('widget_id').references(() => demoWidgets.id, { onDelete: 'cascade' }),
+	thingyId: text('thingy_id').references(() => demoThingys.id, { onDelete: 'cascade' }),
+	galleryId: text('gallery_id').references(() => demoGalleries.id, { onDelete: 'cascade' }),
+	url: text('url').notNull(),
+	caption: text('caption'),
+	filename: text('filename'),
+	mimeType: text('mime_type'),
+	sortOrder: text('sort_order').notNull().default('0'),
+	createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+	updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow()
+});
+
+// Widget types
+export type DemoWidget = typeof demoWidgets.$inferSelect;
+export type NewDemoWidget = typeof demoWidgets.$inferInsert;
+export type DemoThingy = typeof demoThingys.$inferSelect;
+export type NewDemoThingy = typeof demoThingys.$inferInsert;
+export type DemoGallery = typeof demoGalleries.$inferSelect;
+export type NewDemoGallery = typeof demoGalleries.$inferInsert;
+export type DemoNote = typeof demoNotes.$inferSelect;
+export type NewDemoNote = typeof demoNotes.$inferInsert;
+export type DemoPhoto = typeof demoPhotos.$inferSelect;
+export type NewDemoPhoto = typeof demoPhotos.$inferInsert;

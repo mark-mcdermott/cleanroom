@@ -10,10 +10,9 @@
 	const navLinks: NavLink[] = [
 		{ href: '/modules/auth', label: 'Home' },
 		{ href: '/modules/auth/about', label: 'About' },
-		{ href: '/modules/auth/services', label: 'Services' },
+		{ href: '/modules/auth/admin/users', label: 'The Office', requiresAuth: true, requiresAdmin: true, testId: 'nav-the-office' },
 		{ href: '/modules/auth/contact', label: 'Contact' },
 		{ href: '/modules/auth/private', label: 'Private', requiresAuth: true, testId: 'nav-private' },
-		{ href: '/modules/auth/admin/users', label: 'Users', requiresAuth: true, requiresAdmin: true, testId: 'nav-users' },
 		{ href: '/modules/auth/login', label: 'Log In', hideWhenAuth: true, testId: 'nav-login' },
 		{ href: '/modules/auth/signup', label: 'Sign Up', hideWhenAuth: true, testId: 'nav-signup' },
 		{

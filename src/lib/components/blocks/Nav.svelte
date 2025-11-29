@@ -11,7 +11,7 @@
 		siteName?: string;
 		logo?: string;
 		logoIcon?: Snippet;
-		user?: { id: string; email: string; name?: string | null } | null;
+		user?: { id: string; email: string; name?: string | null; avatarUrl?: string | null } | null;
 		isAdmin?: boolean;
 		links?: NavLink[];
 		avatar?: AvatarConfig;
@@ -50,6 +50,7 @@
 	const isLoggedIn = $derived(!!user);
 	const userEmail = $derived(user?.email || '');
 	const avatarLetter = $derived(userEmail ? userEmail.charAt(0).toUpperCase() : 'U');
+	const userAvatarUrl = $derived(user?.avatarUrl);
 
 	// Compute avatar config
 	const showAvatar = $derived(avatar?.show !== false && isLoggedIn);
@@ -214,10 +215,14 @@
 			<DropdownMenu.Root>
 				<DropdownMenu.Trigger
 					data-testid="nav-avatar"
-					class="w-8 h-8 rounded-full bg-zinc-300 dark:bg-zinc-600 flex items-center justify-center text-zinc-600 dark:text-zinc-200 text-xs cursor-pointer hover:bg-zinc-400 dark:hover:bg-zinc-500 transition-colors focus:outline-none focus:ring-2 focus:ring-zinc-500"
+					class="w-8 h-8 rounded-full bg-zinc-300 dark:bg-zinc-600 flex items-center justify-center text-zinc-600 dark:text-zinc-200 text-xs cursor-pointer hover:bg-zinc-400 dark:hover:bg-zinc-500 transition-colors focus:outline-none focus:ring-2 focus:ring-zinc-500 overflow-hidden"
 					aria-label="User menu"
 				>
-					{avatarLetter}
+					{#if userAvatarUrl}
+						<img src={userAvatarUrl} alt="User avatar" class="w-full h-full object-cover" />
+					{:else}
+						{avatarLetter}
+					{/if}
 				</DropdownMenu.Trigger>
 				<DropdownMenu.Content data-testid="nav-user-menu" class="w-48">
 					{#each avatarLinks as link}
@@ -370,8 +375,12 @@
 				{#if showAvatar}
 					<div class="pt-4 border-t dark:border-zinc-700">
 						<div class="flex items-center gap-3 mb-3">
-							<div class="w-8 h-8 rounded-full bg-zinc-300 dark:bg-zinc-600 flex items-center justify-center text-zinc-600 dark:text-zinc-200 text-xs">
-								{avatarLetter}
+							<div class="w-8 h-8 rounded-full bg-zinc-300 dark:bg-zinc-600 flex items-center justify-center text-zinc-600 dark:text-zinc-200 text-xs overflow-hidden">
+								{#if userAvatarUrl}
+									<img src={userAvatarUrl} alt="User avatar" class="w-full h-full object-cover" />
+								{:else}
+									{avatarLetter}
+								{/if}
 							</div>
 							<span class="text-sm text-zinc-600 dark:text-zinc-400">{userEmail}</span>
 						</div>

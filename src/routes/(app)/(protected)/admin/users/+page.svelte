@@ -69,8 +69,12 @@
 					>
 						<Table.Cell>
 							<div class="flex items-center gap-3">
-								<div class="w-8 h-8 bg-zinc-100 rounded-full flex items-center justify-center text-sm font-medium">
-									{user.name?.charAt(0).toUpperCase() || user.email.charAt(0).toUpperCase()}
+								<div class="w-8 h-8 bg-zinc-100 rounded-full flex items-center justify-center text-sm font-medium overflow-hidden">
+									{#if user.avatarUrl}
+										<img src={user.avatarUrl} alt="User avatar" class="w-full h-full object-cover" />
+									{:else}
+										{user.name?.charAt(0).toUpperCase() || user.email.charAt(0).toUpperCase()}
+									{/if}
 								</div>
 								<span class="font-medium">{user.name || 'No name'}</span>
 							</div>

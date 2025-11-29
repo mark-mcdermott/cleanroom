@@ -9,8 +9,8 @@
 </script>
 
 <svelte:head>
-	<title>Edit {data.targetUser.name || data.targetUser.email} - Users Admin</title>
-	<meta name="description" content="Edit user details" />
+	<title>Edit {data.targetUser.name || data.targetUser.email} - The Office</title>
+	<meta name="description" content="Edit employee details" />
 </svelte:head>
 
 <div class="max-w-xl mx-auto px-6 py-16">
@@ -19,11 +19,11 @@
 		class="inline-flex items-center gap-2 text-sm text-zinc-600 hover:text-zinc-900 mb-6"
 	>
 		<ArrowLeft class="w-4 h-4" />
-		Back to User
+		Back to Employee
 	</a>
 
-	<div class="border border-zinc-200 rounded-lg p-6">
-		<h1 class="text-2xl font-semibold tracking-tight mb-6">Edit User</h1>
+	<div class="border border-zinc-200 rounded-lg p-6 bg-white">
+		<h1 class="text-2xl font-semibold tracking-tight mb-6">Edit Employee</h1>
 
 		{#if form?.error}
 			<div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-6">
@@ -76,7 +76,7 @@
 					disabled={data.targetUser.id === data.currentUser.id}
 				/>
 				<Label.Root for="admin" class="text-sm font-normal">
-					Admin privileges
+					Regional Manager privileges
 					{#if data.targetUser.id === data.currentUser.id}
 						<span class="text-zinc-500">(cannot change your own admin status)</span>
 					{/if}

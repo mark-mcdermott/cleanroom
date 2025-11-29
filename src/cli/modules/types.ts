@@ -9,7 +9,7 @@ export interface ProjectConfig {
 		provider: 'neon';
 		connectionString: string;
 	};
-	modules: ('auth' | 'blog' | 'office-users')[];
+	modules: ('auth' | 'blog' | 'office-users' | 'widgets')[];
 	github: {
 		repoUrl: string;
 	};

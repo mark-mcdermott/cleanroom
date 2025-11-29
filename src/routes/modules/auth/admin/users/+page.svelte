@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { enhance } from '$app/forms';
-	import { Table } from '$lib/components/ui';
-	import { Pencil, Trash2 } from 'lucide-svelte';
+	import { Table, Button } from '$lib/components/ui';
+	import { Pencil, Trash2, RotateCcw } from 'lucide-svelte';
 	import { toast } from 'svelte-sonner';
 
 	let { data } = $props();
@@ -31,23 +31,58 @@
 </script>
 
 <svelte:head>
-	<title>Users Admin - auth-app</title>
-	<meta name="description" content="Manage users" />
+	<title>The Office - Dunder Mifflin Employee Portal</title>
+	<meta name="description" content="Manage Dunder Mifflin employees" />
 </svelte:head>
 
 <div class="max-w-4xl mx-auto px-6 py-16">
-	<div class="mb-8">
-		<h1 class="text-3xl font-semibold tracking-tight">Users</h1>
-		<p class="text-zinc-600 mt-2">Manage all registered users ({data.users.length} total)</p>
+	<div class="flex items-center justify-between mb-8">
+		<div>
+			<h1 class="text-3xl font-semibold tracking-tight">The Office</h1>
+			<p class="text-zinc-600 mt-2">Dunder Mifflin Scranton Branch ({data.users.length} employees)</p>
+		</div>
+		<form method="POST" action="?/reset" use:enhance={() => {
+			return async ({ result }) => {
+				if (result.type === 'success') {
+					toast.success('Demo reset! Logged in as Michael Scott.');
+					window.location.reload();
+				} else if (result.type === 'failure') {
+					toast.error((result.data as { error?: string })?.error || 'Failed to reset demo');
+				}
+			};
+		}}>
+			<Button.Root type="submit" variant="outline" class="cursor-pointer">
+				<RotateCcw class="w-4 h-4 mr-2" />
+				Reset Demo
+			</Button.Root>
+		</form>
 	</div>
 
-	<Table.Root>
+	{#if data.users.length === 0}
+		<div class="border border-zinc-200 rounded-lg p-8 text-center bg-white">
+			<p class="text-zinc-600 mb-4">No employees found. Reset the demo to populate Dunder Mifflin staff.</p>
+			<form method="POST" action="?/reset" use:enhance={() => {
+				return async ({ result }) => {
+					if (result.type === 'success') {
+						toast.success('Demo reset! Logged in as Michael Scott.');
+						window.location.reload();
+					}
+				};
+			}}>
+				<Button.Root type="submit" variant="outline" class="cursor-pointer">
+					<RotateCcw class="w-4 h-4 mr-2" />
+					Reset Demo Data
+				</Button.Root>
+			</form>
+		</div>
+	{:else}
+		<Table.Root>
 		<Table.Header>
 			<Table.Row>
-				<Table.Head>User</Table.Head>
+				<Table.Head>Employee</Table.Head>
 				<Table.Head>Email</Table.Head>
-				<Table.Head>Role</Table.Head>
-				<Table.Head>Created</Table.Head>
+				<Table.Head>Position</Table.Head>
+				<Table.Head>Hired</Table.Head>
 				<Table.Head class="w-20"></Table.Head>
 			</Table.Row>
 		</Table.Header>
@@ -74,11 +109,11 @@
 					<Table.Cell>
 						{#if user.admin}
 							<span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-amber-100 text-amber-800">
-								Admin
+								Regional Manager
 							</span>
 						{:else}
 							<span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-zinc-100 text-zinc-700">
-								User
+								Staff
 							</span>
 						{/if}
 					</Table.Cell>
@@ -113,6 +148,7 @@
 			{/each}
 		</Table.Body>
 	</Table.Root>
+	{/if}
 </div>
 
 <form method="POST" action="?/delete" use:enhance={() => {
