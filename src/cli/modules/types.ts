@@ -1,5 +1,6 @@
 export interface ProjectConfig {
 	projectName: string;
+	prettyName?: string;
 	logo: {
 		type: 'file' | 'emoji';
 		value: string;

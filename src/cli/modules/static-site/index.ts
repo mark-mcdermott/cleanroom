@@ -46,44 +46,47 @@ function getLayoutSvelte(config: ProjectConfig): string {
 
 function getHomePageSvelte(config: ProjectConfig): string {
 	const logoExt = getFaviconExtension(config.logo.value);
+	const displayName = config.prettyName || config.projectName;
 	const logoDisplay =
 		config.logo.type === 'emoji'
 			? `<span class="text-5xl sm:text-6xl">${config.logo.value}</span>`
-			: `<img src="/logo.${logoExt}" alt="${config.projectName}" class="w-12 h-12 sm:w-16 sm:h-16" />`;
+			: `<img src="/logo.${logoExt}" alt="${displayName}" class="h-12 sm:h-16 w-auto object-contain" />`;
 
 	return `<svelte:head>
-	<title>${config.projectName}</title>
-	<meta name="description" content="${config.projectName} - Home" />
+	<title>${displayName}</title>
+	<meta name="description" content="${displayName} - Home" />
 </svelte:head>
 
 <div class="max-w-4xl mx-auto px-6 py-16 text-center">
 	<h1 class="text-4xl sm:text-5xl font-semibold tracking-tight flex items-center justify-center gap-3">
 		${logoDisplay}
-		Welcome to ${config.projectName}
+		Welcome to ${displayName}
 	</h1>
 </div>
 `;
 }
 
 function getAboutPageSvelte(config: ProjectConfig): string {
+	const displayName = config.prettyName || config.projectName;
 	return `<svelte:head>
-	<title>About - ${config.projectName}</title>
-	<meta name="description" content="About ${config.projectName}" />
+	<title>About - ${displayName}</title>
+	<meta name="description" content="About ${displayName}" />
 </svelte:head>
 
 <div class="max-w-4xl mx-auto px-6 py-16">
 	<h1 class="text-4xl font-semibold tracking-tight">About</h1>
 	<p class="text-muted-foreground text-lg mt-4">
-		Tell your story here. What makes ${config.projectName} special?
+		Tell your story here. What makes ${displayName} special?
 	</p>
 </div>
 `;
 }
 
 function getContactPageSvelte(config: ProjectConfig): string {
+	const displayName = config.prettyName || config.projectName;
 	return `<svelte:head>
-	<title>Contact - ${config.projectName}</title>
-	<meta name="description" content="Contact ${config.projectName}" />
+	<title>Contact - ${displayName}</title>
+	<meta name="description" content="Contact ${displayName}" />
 </svelte:head>
 
 <div class="max-w-4xl mx-auto px-6 py-16">

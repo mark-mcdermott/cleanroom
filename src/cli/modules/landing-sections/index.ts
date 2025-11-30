@@ -100,10 +100,11 @@ function getPageSvelte(config: ProjectConfig): string {
 		defaultSections.map((s) => s.title)
 	);
 	const sections = defaultSections.map((s) => getSection(s.id, s.title, s.content)).join('\n\n');
+	const displayName = config.prettyName || config.projectName;
 
 	return `<svelte:head>
-	<title>${config.projectName}</title>
-	<meta name="description" content="${config.projectName}" />
+	<title>${displayName}</title>
+	<meta name="description" content="${displayName}" />
 </svelte:head>
 
 ${hero}

@@ -83,10 +83,11 @@ ${items}
 
 function getHomePageSvelte(config: ProjectConfig): string {
 	const logoExt = getFaviconExtension(config.logo.value);
+	const displayName = config.prettyName || config.projectName;
 	const logoDisplay =
 		config.logo.type === 'emoji'
 			? `<span class="text-5xl sm:text-6xl">${config.logo.value}</span>`
-			: `<img src="/logo.${logoExt}" alt="${config.projectName}" class="w-12 h-12 sm:w-16 sm:h-16" />`;
+			: `<img src="/logo.${logoExt}" alt="${displayName}" class="h-12 sm:h-16 w-auto object-contain" />`;
 
 	const hasModules = config.modules.length > 0;
 
@@ -102,8 +103,8 @@ function getHomePageSvelte(config: ProjectConfig): string {
 	const modulesSection = getModulesListHtml(config.modules);
 
 	return `<svelte:head>
-	<title>${config.projectName}</title>
-	<meta name="description" content="${config.projectName} - Home" />
+	<title>${displayName}</title>
+	<meta name="description" content="${displayName} - Home" />
 </svelte:head>
 
 <div class="max-w-4xl mx-auto px-6 pb-16">
@@ -111,7 +112,7 @@ function getHomePageSvelte(config: ProjectConfig): string {
 	<div class="py-12 sm:py-16 text-center">
 		<h1 class="text-4xl sm:text-5xl font-semibold tracking-tight flex items-center justify-center gap-3">
 			${logoDisplay}
-			${config.projectName}
+			${displayName}
 		</h1>
 		<p class="text-muted-foreground text-lg mt-4 max-w-2xl mx-auto">
 			A multi-page server-side rendered site with responsive navigation and smooth page transitions. Unlike static sites, pages are rendered on each request—ideal for authenticated content, user dashboards, or dynamic data.
@@ -143,7 +144,7 @@ ${modulesSection}
 	<!-- CTA Section -->
 	<div class="py-8 mt-4">
 		<div class="card text-center py-8">
-			<h2 class="text-2xl font-semibold tracking-tight mb-2">Ready to Build?</h2>
+			<h2 class="text-2xl font-semibold tracking-tight mb-2 mt-0">Ready to Build?</h2>
 			<p class="text-muted-foreground mb-6">This template is designed to be extended with authentication, database connections, and protected routes.</p>
 			<a href="/services" class="btn btn-dark">View Our Services</a>
 		</div>
@@ -153,24 +154,26 @@ ${modulesSection}
 }
 
 function getAboutPageSvelte(config: ProjectConfig): string {
+	const displayName = config.prettyName || config.projectName;
 	return `<svelte:head>
-	<title>About - ${config.projectName}</title>
-	<meta name="description" content="About ${config.projectName}" />
+	<title>About - ${displayName}</title>
+	<meta name="description" content="About ${displayName}" />
 </svelte:head>
 
 <div class="max-w-4xl mx-auto px-6 py-16">
 	<h1 class="text-4xl font-semibold tracking-tight">About</h1>
 	<p class="text-muted-foreground text-lg mt-4">
-		Tell your story here. What makes ${config.projectName} special?
+		Tell your story here. What makes ${displayName} special?
 	</p>
 </div>
 `;
 }
 
 function getServicesPageSvelte(config: ProjectConfig): string {
+	const displayName = config.prettyName || config.projectName;
 	return `<svelte:head>
-	<title>Services - ${config.projectName}</title>
-	<meta name="description" content="Services offered by ${config.projectName}" />
+	<title>Services - ${displayName}</title>
+	<meta name="description" content="Services offered by ${displayName}" />
 </svelte:head>
 
 <div class="max-w-4xl mx-auto px-6 py-16">
@@ -206,9 +209,10 @@ function getServicesPageSvelte(config: ProjectConfig): string {
 }
 
 function getContactPageSvelte(config: ProjectConfig): string {
+	const displayName = config.prettyName || config.projectName;
 	return `<svelte:head>
-	<title>Contact - ${config.projectName}</title>
-	<meta name="description" content="Contact ${config.projectName}" />
+	<title>Contact - ${displayName}</title>
+	<meta name="description" content="Contact ${displayName}" />
 </svelte:head>
 
 <div class="max-w-4xl mx-auto px-6 py-16">

@@ -32,10 +32,11 @@ function getLayoutSvelte(): string {
 
 function getPageSvelte(config: ProjectConfig): string {
 	const hero = getSimpleHero(config);
+	const displayName = config.prettyName || config.projectName;
 
 	return `<svelte:head>
-	<title>${config.projectName}</title>
-	<meta name="description" content="${config.projectName}" />
+	<title>${displayName}</title>
+	<meta name="description" content="${displayName}" />
 </svelte:head>
 
 ${hero}

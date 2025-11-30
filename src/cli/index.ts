@@ -116,7 +116,7 @@ async function main() {
 	let projectName: string;
 	if (argProjectName) {
 		projectName = argProjectName;
-		p.log.info(`App name: ${projectName}`);
+		p.log.info(`App folder name: ${projectName}`);
 	} else {
 		const promptedName = await p.text({
 			message: 'What is your project name?',
@@ -131,7 +131,7 @@ async function main() {
 			process.exit(0);
 		}
 		projectName = promptedName;
-		p.log.info(`App name: ${projectName}`);
+		p.log.info(`App folder name: ${projectName}`);
 	}
 
 	// Slugify and confirm
@@ -164,6 +164,34 @@ async function main() {
 			process.exit(0);
 		}
 		slug = customSlug;
+	}
+
+	// Ask about pretty name for UI
+	const useFolderNameInUi = await p.confirm({
+		message: `Should the app be called "${slug}" in its UI?`,
+		initialValue: true
+	});
+
+	if (p.isCancel(useFolderNameInUi)) {
+		p.cancel('Setup cancelled');
+		process.exit(0);
+	}
+
+	let prettyName: string | undefined;
+	if (!useFolderNameInUi) {
+		const customPrettyName = await p.text({
+			message: 'What should the app be called in its UI?',
+			placeholder: projectName,
+			validate(value) {
+				if (!value) return 'App name is required';
+			}
+		});
+
+		if (p.isCancel(customPrettyName)) {
+			p.cancel('Setup cancelled');
+			process.exit(0);
+		}
+		prettyName = customPrettyName;
 	}
 
 	const hasLogoFile = await p.confirm({
@@ -403,6 +431,7 @@ async function main() {
 	// Build config object
 	const config: ProjectConfig = {
 		projectName,
+		prettyName,
 		logo,
 		siteType: siteType as ProjectConfig['siteType'],
 		database: databaseConfig,

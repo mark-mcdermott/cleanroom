@@ -7,12 +7,18 @@ function getLogoSrc(config: ProjectConfig): string {
 	return `/logo.${ext}`;
 }
 
+// Helper to get display name for UI (prettyName if set, otherwise projectName)
+function getDisplayName(config: ProjectConfig): string {
+	return config.prettyName || config.projectName;
+}
+
 // Desktop-only Nav - no mobile menu, hidden on small screens
 export function getDesktopOnlyNav(config: ProjectConfig, links?: { href: string; label: string }[]): string {
+	const displayName = getDisplayName(config);
 	const logoDisplay =
 		config.logo.type === 'emoji'
 			? config.logo.value
-			: `<img src="${getLogoSrc(config)}" alt="${config.projectName}" class="h-8 w-8" />`;
+			: `<img src="${getLogoSrc(config)}" alt="${displayName}" class="h-8 w-auto object-contain" />`;
 
 	const navLinks = links
 		? links
@@ -37,10 +43,11 @@ export function getNav(
 	config: ProjectConfig,
 	links: { href: string; label: string }[]
 ): string {
+	const displayName = getDisplayName(config);
 	const logoDisplay =
 		config.logo.type === 'emoji'
 			? config.logo.value
-			: `<img src="${getLogoSrc(config)}" alt="${config.projectName}" class="h-8 w-8" />`;
+			: `<img src="${getLogoSrc(config)}" alt="${displayName}" class="h-8 w-auto object-contain" />`;
 
 	const desktopLinks = links
 		.map(
@@ -91,7 +98,7 @@ export function getNav(
 		<!-- Drawer -->
 		<div class="absolute left-0 top-0 h-full w-64 bg-card shadow-xl">
 			<div class="flex items-center justify-between p-4 border-b">
-				<span class="font-semibold">${config.projectName}</span>
+				<span class="font-semibold">${displayName}</span>
 				<button onclick={() => mobileMenuOpen = false} aria-label="Close menu">
 					<svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -108,16 +115,17 @@ export function getNav(
 
 // Simple Hero
 export function getSimpleHero(config: ProjectConfig): string {
+	const displayName = getDisplayName(config);
 	const logoDisplay =
 		config.logo.type === 'emoji'
 			? `<span class="text-5xl sm:text-6xl">${config.logo.value}</span>`
-			: `<img src="${getLogoSrc(config)}" alt="${config.projectName}" class="w-12 h-12 sm:w-16 sm:h-16" />`;
+			: `<img src="${getLogoSrc(config)}" alt="${displayName}" class="h-12 sm:h-16 w-auto object-contain" />`;
 
 	return `<div class="w-full flex justify-center items-center text-center min-h-[60vh]">
 	<div class="my-32 sm:my-48">
 		<h1 class="text-4xl sm:text-5xl font-semibold tracking-tight flex items-center justify-center gap-3">
 			${logoDisplay}
-			${config.projectName}
+			${displayName}
 		</h1>
 	</div>
 </div>`;
@@ -125,10 +133,11 @@ export function getSimpleHero(config: ProjectConfig): string {
 
 // Hero with scroll sections
 export function getSectionHero(config: ProjectConfig, sections: string[]): string {
+	const displayName = getDisplayName(config);
 	const logoDisplay =
 		config.logo.type === 'emoji'
 			? `<span class="text-5xl sm:text-6xl">${config.logo.value}</span>`
-			: `<img src="${getLogoSrc(config)}" alt="${config.projectName}" class="w-12 h-12 sm:w-16 sm:h-16" />`;
+			: `<img src="${getLogoSrc(config)}" alt="${displayName}" class="h-12 sm:h-16 w-auto object-contain" />`;
 
 	const sectionLinks = sections
 		.map((section) => `<a href="#${section.toLowerCase()}" class="btn btn-light">${section}</a>`)
@@ -138,7 +147,7 @@ export function getSectionHero(config: ProjectConfig, sections: string[]): strin
 	<div class="my-16 sm:my-24">
 		<h1 class="text-4xl sm:text-5xl font-semibold tracking-tight flex items-center justify-center gap-3">
 			${logoDisplay}
-			${config.projectName}
+			${displayName}
 		</h1>
 		<div class="flex flex-wrap justify-center gap-4 mt-8">
 			${sectionLinks}
@@ -169,9 +178,10 @@ export function getSection(id: string, title: string, content: string): string {
 
 // Footer
 export function getFooter(config: ProjectConfig): string {
+	const displayName = getDisplayName(config);
 	return `<footer class="border-t">
 	<div class="mx-auto max-w-6xl px-6 sm:px-10 py-8 text-sm text-muted-foreground">
-		© {new Date().getFullYear()} ${config.projectName}
+		© {new Date().getFullYear()} ${displayName}
 	</div>
 </footer>`;
 }
@@ -179,10 +189,11 @@ export function getFooter(config: ProjectConfig): string {
 // Header with border (for multi-page sites)
 // Note: Requires `let mobileMenuOpen = $state(false);` in the parent component's script
 export function getHeader(config: ProjectConfig, links: { href: string; label: string }[]): string {
+	const displayName = getDisplayName(config);
 	const logoDisplay =
 		config.logo.type === 'emoji'
 			? config.logo.value
-			: `<img src="${getLogoSrc(config)}" alt="${config.projectName}" class="h-6 w-6" />`;
+			: `<img src="${getLogoSrc(config)}" alt="${displayName}" class="h-6 w-auto object-contain" />`;
 
 	const desktopLinks = links
 		.map(
@@ -202,7 +213,7 @@ export function getHeader(config: ProjectConfig, links: { href: string; label: s
 	<div class="mx-auto max-w-6xl px-6 sm:px-10 h-16 flex items-center justify-between">
 		<a href="/" class="font-semibold text-lg tracking-tight flex items-center gap-2">
 			${logoDisplay}
-			<span>${config.projectName}</span>
+			<span>${displayName}</span>
 		</a>
 
 		<!-- Desktop Nav -->
@@ -234,7 +245,7 @@ export function getHeader(config: ProjectConfig, links: { href: string; label: s
 
 		<div class="absolute left-0 top-0 h-full w-64 bg-card shadow-xl">
 			<div class="flex items-center justify-between p-4 border-b">
-				<span class="font-semibold">${config.projectName}</span>
+				<span class="font-semibold">${displayName}</span>
 				<button onclick={() => mobileMenuOpen = false} aria-label="Close menu">
 					<svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
