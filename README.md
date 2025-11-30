@@ -77,8 +77,11 @@ pnpm dev
 # Run the CLI locally (dev mode, no build needed)
 pnpm cli
 
-# Build the CLI
+# Build the CLI (required after CLI changes)
 pnpm cli:build
+
+# Note: `pnpm build` builds the SvelteKit app, `pnpm cli:build` builds the CLI.
+# If you change files in src/cli/, you must run `pnpm cli:build` to see changes.
 
 # Link CLI globally for testing
 pnpm link --global

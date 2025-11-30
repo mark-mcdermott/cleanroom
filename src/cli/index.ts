@@ -1,12 +1,26 @@
 import * as p from '@clack/prompts';
+import pc from 'picocolors';
 import { join } from 'node:path';
 import { exec } from 'node:child_process';
 import { promisify } from 'node:util';
 import { modules, type ProjectConfig } from './modules';
 import { featureModules } from './modules/features';
-import { commandExists, isGhLoggedIn, getOS, getGitHubUsername, slugify } from './helpers';
+import { commandExists, isGhLoggedIn, getOS, getGitHubUsername, slugify, isValidSlug, githubRepoExists, isGithubRepoBlank } from './helpers';
 
 const execAsync = promisify(exec);
+
+// Custom note function that preserves cyan color (p.note applies dim styling)
+function cyanNote(content: string, title: string): void {
+	const lines = content.split('\n');
+	const maxLen = Math.max(title.length + 2, ...lines.map(l => l.length));
+
+	console.log(pc.gray('│'));
+	console.log(pc.cyan(`◇  ${title} ${pc.gray('─'.repeat(Math.max(0, maxLen - title.length)))}`));
+	for (const line of lines) {
+		console.log(pc.cyan(`│  ${line}`));
+	}
+	console.log(pc.gray('│'));
+}
 
 // Setup CLI dependencies (gh and wrangler)
 async function setupDependencies(): Promise<boolean> {
@@ -51,7 +65,7 @@ async function setupDependencies(): Promise<boolean> {
 	const ghLoggedIn = await isGhLoggedIn();
 	if (!ghLoggedIn) {
 		p.log.warn('You need to log in to GitHub CLI');
-		p.note('Run: gh auth login', 'GitHub Login Required');
+		cyanNote('Run: gh auth login', 'GitHub Login Required');
 
 		const loginConfirm = await p.confirm({
 			message: 'Press Enter after logging in to continue',
@@ -92,7 +106,7 @@ async function main() {
 	let projectName: string;
 	if (argProjectName) {
 		projectName = argProjectName;
-		p.log.info(`Project name: ${projectName}`);
+		p.log.info(`App name: ${projectName}`);
 	} else {
 		const promptedName = await p.text({
 			message: 'What is your project name?',
@@ -107,6 +121,38 @@ async function main() {
 			process.exit(0);
 		}
 		projectName = promptedName;
+		p.log.info(`App name: ${projectName}`);
+	}
+
+	// Slugify and confirm
+	let slug = slugify(projectName);
+	p.log.info(`Slugified app name: ${slug}`);
+
+	const slugOk = await p.confirm({
+		message: 'Is this ok?',
+		initialValue: true
+	});
+
+	if (p.isCancel(slugOk)) {
+		p.cancel('Setup cancelled');
+		process.exit(0);
+	}
+
+	if (!slugOk) {
+		const customSlug = await p.text({
+			message: 'Enter your preferred slug',
+			placeholder: slug,
+			validate(value) {
+				if (!value) return 'Slug is required';
+				if (!isValidSlug(value)) return 'Slug must be lowercase with only letters, numbers, dots, and hyphens';
+			}
+		});
+
+		if (p.isCancel(customSlug)) {
+			p.cancel('Setup cancelled');
+			process.exit(0);
+		}
+		slug = customSlug;
 	}
 
 	const hasLogoFile = await p.confirm({
@@ -198,8 +244,7 @@ async function main() {
 		// Neon database setup
 		p.log.step('SSR sites need a database. Let\'s set up Neon (free PostgreSQL).');
 
-		p.note(
-			[
+		cyanNote([
 				'1. Go to https://neon.tech and sign up (free tier available)',
 				'2. Create a new project',
 				'3. Copy the connection string from the dashboard',
@@ -297,7 +342,6 @@ async function main() {
 	// Deployment section
 	p.log.step(`OK, let's 🚢 this.`);
 
-	const slug = slugify(projectName);
 	const outputDir = join(process.cwd(), slug);
 
 	// Build config object
@@ -389,24 +433,210 @@ async function main() {
 	await execAsync('git branch -M main', { cwd: outputDir });
 	spinner.stop('Git initialized');
 
-	// Create GitHub repo
-	spinner.start('Creating GitHub repository...');
-	try {
-		const ghUsername = await getGitHubUsername();
-		await execAsync(`gh repo create ${slug} --public --source=. --push`, { cwd: outputDir });
-		config.github.repoUrl = `https://github.com/${ghUsername}/${slug}`;
-		spinner.stop('GitHub repository created!');
-		p.log.success(`Repository: ${config.github.repoUrl}`);
-	} catch (error) {
-		spinner.stop('Failed to create GitHub repository');
-		p.log.error(
-			`GitHub error: ${error instanceof Error ? error.message : 'Unknown error'}. You may need to create the repo manually.`
-		);
+	// GitHub repo setup
+	const ghUsername = await getGitHubUsername();
+	if (!ghUsername) {
+		p.log.error('Could not detect GitHub username. Please ensure you are logged in with: gh auth login');
+		process.exit(1);
+	}
+
+	p.log.info(`We've detected your GitHub username is ${ghUsername}`);
+
+	let currentSlug = slug;
+	let repoUrl = `https://github.com/${ghUsername}/${currentSlug}`;
+	let shouldPush = false;
+	let forcePush = false;
+
+	// Check if repo exists
+	spinner.start(`Searching to see if ${repoUrl} exists...`);
+	let repoExists = await githubRepoExists(ghUsername, currentSlug);
+	spinner.stop(repoExists ? 'Repo found' : 'Repo not found');
+
+	if (!repoExists) {
+		// Repo doesn't exist - prompt user to create it
+		p.log.warn(`No GitHub repo ${repoUrl} detected.`);
+		p.log.info(`Please create a blank repo in your ${ghUsername} GitHub account called ${currentSlug}.`);
+
+		await p.confirm({
+			message: 'Press Enter when the blank repo is created',
+			initialValue: true
+		});
+
+		// Verify it was created
+		spinner.start('Verifying repo exists...');
+		repoExists = await githubRepoExists(ghUsername, currentSlug);
+		spinner.stop(repoExists ? 'Repo verified' : 'Repo not found');
+
+		if (!repoExists) {
+			p.log.error(`Could not find repo ${repoUrl}. Please create it and try again.`);
+			process.exit(1);
+		}
+		shouldPush = true;
+	}
+
+	if (repoExists) {
+		// Check if repo is blank
+		spinner.start('Checking if repo is blank...');
+		const isBlank = await isGithubRepoBlank(ghUsername, currentSlug);
+		spinner.stop(isBlank ? 'Repo is blank' : 'Repo has content');
+
+		if (isBlank) {
+			p.log.success(`We've detected that ${repoUrl} repo exists and is blank.`);
+			const pushOk = await p.confirm({
+				message: 'Is it ok if we push this code there?',
+				initialValue: true
+			});
+
+			if (p.isCancel(pushOk)) {
+				p.cancel('Setup cancelled');
+				process.exit(0);
+			}
+
+			if (!pushOk) {
+				p.cancel('Setup cancelled');
+				process.exit(0);
+			}
+			shouldPush = true;
+		} else {
+			// Repo exists but is not blank
+			p.log.warn(`We've detected that ${repoUrl} repo exists, but is not blank.`);
+
+			const action = await p.select({
+				message: 'Would you like us to:',
+				options: [
+					{ value: 'try-again', label: 'Try again', hint: 'You will delete/move the current repo and create the blank repo now' },
+					{ value: 'force-push', label: 'Push --force this code there', hint: 'This will completely overwrite the current repo with the new code' },
+					{ value: 'new-repo', label: 'Create a new repo' },
+					{ value: 'cancel', label: 'Cancel the current Cleanroom session' }
+				]
+			});
+
+			if (p.isCancel(action)) {
+				p.cancel('Setup cancelled');
+				process.exit(0);
+			}
+
+			if (action === 'cancel') {
+				p.cancel('Setup cancelled');
+				process.exit(0);
+			}
+
+			if (action === 'try-again') {
+				p.log.info(`Please delete or move the current ${repoUrl} repo, then create a new blank repo with the same name.`);
+
+				await p.confirm({
+					message: 'Press Enter when the blank repo is created',
+					initialValue: true
+				});
+
+				// Verify it's now blank
+				spinner.start('Checking if repo is now blank...');
+				const isNowBlank = await isGithubRepoBlank(ghUsername, currentSlug);
+				spinner.stop(isNowBlank ? 'Repo is now blank' : 'Repo still has content');
+
+				if (isNowBlank) {
+					shouldPush = true;
+				} else {
+					p.log.error(`Repo ${repoUrl} still has content. Please ensure the repo is blank and try again.`);
+					process.exit(1);
+				}
+			}
+
+			if (action === 'force-push') {
+				p.log.warn('Are you sure? This is a destructive action.');
+				const confirmText = await p.text({
+					message: `Please type "${ghUsername}/${currentSlug}" to continue with the overwrite action`,
+					placeholder: `${ghUsername}/${currentSlug}`,
+					validate(value) {
+						if (value !== `${ghUsername}/${currentSlug}`) {
+							return `You must type exactly: ${ghUsername}/${currentSlug}`;
+						}
+					}
+				});
+
+				if (p.isCancel(confirmText)) {
+					p.cancel('Setup cancelled');
+					process.exit(0);
+				}
+
+				shouldPush = true;
+				forcePush = true;
+			}
+
+			if (action === 'new-repo') {
+				// Ask for new repo name with slug validation
+				let validSlug = false;
+				while (!validSlug) {
+					const newRepoName = await p.text({
+						message: 'What should the new repo (slug) name be?',
+						placeholder: `${currentSlug}-new`,
+						validate(value) {
+							if (!value) return 'Repo name is required';
+							if (!isValidSlug(value)) return 'That is not a valid slug. Use only lowercase letters, numbers, dots, and hyphens.';
+						}
+					});
+
+					if (p.isCancel(newRepoName)) {
+						p.cancel('Setup cancelled');
+						process.exit(0);
+					}
+
+					currentSlug = newRepoName;
+					repoUrl = `https://github.com/${ghUsername}/${currentSlug}`;
+
+					// Check if this new repo exists
+					spinner.start(`Checking if ${repoUrl} exists...`);
+					const newRepoExists = await githubRepoExists(ghUsername, currentSlug);
+					spinner.stop('');
+
+					if (newRepoExists) {
+						p.log.warn(`Repo ${repoUrl} already exists. Please choose a different name.`);
+					} else {
+						validSlug = true;
+						p.log.info(`Please create a blank repo in your ${ghUsername} GitHub account called ${currentSlug}.`);
+
+						await p.confirm({
+							message: 'Press Enter when the blank repo is created',
+							initialValue: true
+						});
+
+						// Verify it was created
+						spinner.start('Verifying repo exists...');
+						const created = await githubRepoExists(ghUsername, currentSlug);
+						spinner.stop('');
+
+						if (!created) {
+							p.log.error(`Could not find repo ${repoUrl}. Please create it and try again.`);
+							process.exit(1);
+						}
+						shouldPush = true;
+					}
+				}
+			}
+		}
+	}
+
+	// Push to GitHub
+	if (shouldPush) {
+		spinner.start('Pushing to GitHub...');
+		try {
+			await execAsync(`git remote add origin git@github.com:${ghUsername}/${currentSlug}.git`, { cwd: outputDir });
+			if (forcePush) {
+				await execAsync('git push -u origin main --force', { cwd: outputDir });
+			} else {
+				await execAsync('git push -u origin main', { cwd: outputDir });
+			}
+			config.github.repoUrl = repoUrl;
+			spinner.stop('Pushed to GitHub!');
+			p.log.success(`Repository: ${config.github.repoUrl}`);
+		} catch (error) {
+			spinner.stop('Failed to push to GitHub');
+			p.log.error(`GitHub error: ${error instanceof Error ? error.message : 'Unknown error'}`);
+		}
 	}
 
 	// Guide user to create Cloudflare Pages project with Git integration
-	p.note(
-		[
+	cyanNote([
 			'Now let\'s deploy to Cloudflare Pages:',
 			'',
 			'1. Go to https://dash.cloudflare.com/',
@@ -415,7 +645,7 @@ async function main() {
 			'4. Click "Pages" tab, then "Connect to Git"',
 			'5. Select your GitHub account and the repo you just created',
 			'6. Configure build settings:',
-			`   • Project name: ${slug}`,
+			`   • Project name: ${currentSlug}`,
 			'   • Production branch: main',
 			'   • Build command: pnpm build',
 			'   • Build output directory: .svelte-kit/cloudflare',
@@ -433,7 +663,7 @@ async function main() {
 	});
 
 	config.cloudflare.configured = true;
-	p.log.success(`Site deployed to https://${slug}.pages.dev`);
+	p.log.success(`Site deployed to https://${currentSlug}.pages.dev`);
 
 	// Domain setup
 	const hasDomain = await p.confirm({
@@ -462,8 +692,7 @@ async function main() {
 			process.exit(0);
 		}
 
-		p.note(
-			[
+		cyanNote([
 				'To connect your Namecheap domain to Cloudflare Pages:',
 				'',
 				'1. In Cloudflare Pages, go to your project > Custom domains',
@@ -476,7 +705,7 @@ async function main() {
 				'6. Add the CNAME record Cloudflare provided:',
 				'   - Type: CNAME',
 				'   - Host: @ (or www)',
-				`   - Value: ${slug}.pages.dev`,
+				`   - Value: ${currentSlug}.pages.dev`,
 				'7. Wait for DNS propagation (up to 24 hours)'
 			].join('\n'),
 			'Domain Setup'
@@ -518,11 +747,11 @@ async function main() {
 	summaryLines.push(
 		``,
 		`GitHub: ${config.github.repoUrl}`,
-		`Cloudflare Pages: https://${slug}.pages.dev`,
+		`Cloudflare Pages: https://${currentSlug}.pages.dev`,
 		`Custom Domain: ${config.domain.hasDomain ? 'Yes' : 'No'}`
 	);
 
-	p.note(summaryLines.join('\n'), 'Project Configuration');
+	cyanNote(summaryLines.join('\n'), 'Project Configuration');
 
 	p.outro(`Project created in ./${slug}`);
 

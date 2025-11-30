@@ -148,95 +148,102 @@ export {
 
 function getDarkModeCSS(): string {
 	return `/* Dark mode CSS variables - Tailwind v4 style */
-@theme {
+:root {
 	/* Border radius */
-	--radius: 0.5rem;
-	--radius-sm: calc(var(--radius) - 4px);
-	--radius-md: calc(var(--radius) - 2px);
-	--radius-lg: var(--radius);
-	--radius-xl: calc(var(--radius) + 4px);
+	--app-radius: 0.5rem;
+	--app-radius-sm: calc(var(--app-radius) - 4px);
+	--app-radius-md: calc(var(--app-radius) - 2px);
+	--app-radius-lg: var(--app-radius);
+	--app-radius-xl: calc(var(--app-radius) + 4px);
 
 	/* Colors - Light mode defaults */
-	--color-background: hsl(0 0% 100%);
-	--color-foreground: hsl(240 10% 3.9%);
-
-	--color-card: hsl(0 0% 100%);
-	--color-card-foreground: hsl(240 10% 3.9%);
-
-	--color-popover: hsl(0 0% 100%);
-	--color-popover-foreground: hsl(240 10% 3.9%);
-
-	--color-primary: hsl(240 5.9% 10%);
-	--color-primary-foreground: hsl(0 0% 98%);
-
-	--color-secondary: hsl(240 4.8% 95.9%);
-	--color-secondary-foreground: hsl(240 5.9% 10%);
-
-	--color-muted: hsl(240 4.8% 95.9%);
-	--color-muted-foreground: hsl(240 3.8% 46.1%);
-
-	--color-accent: hsl(240 4.8% 95.9%);
-	--color-accent-foreground: hsl(240 5.9% 10%);
-
-	--color-destructive: hsl(0 84.2% 60.2%);
-	--color-destructive-foreground: hsl(0 0% 98%);
-
-	--color-border: hsl(240 5.9% 90%);
-	--color-input: hsl(240 5.9% 90%);
-	--color-ring: hsl(240 5.9% 10%);
+	--app-background: hsl(0 0% 100%);
+	--app-foreground: hsl(240 10% 3.9%);
+	--app-card: hsl(0 0% 100%);
+	--app-card-foreground: hsl(240 10% 3.9%);
+	--app-popover: hsl(0 0% 100%);
+	--app-popover-foreground: hsl(240 10% 3.9%);
+	--app-primary: hsl(240 5.9% 10%);
+	--app-primary-foreground: hsl(0 0% 98%);
+	--app-secondary: hsl(240 4.8% 95.9%);
+	--app-secondary-foreground: hsl(240 5.9% 10%);
+	--app-muted: hsl(240 4.8% 95.9%);
+	--app-muted-foreground: hsl(240 3.8% 46.1%);
+	--app-accent: hsl(240 4.8% 95.9%);
+	--app-accent-foreground: hsl(240 5.9% 10%);
+	--app-destructive: hsl(0 84.2% 60.2%);
+	--app-destructive-foreground: hsl(0 0% 98%);
+	--app-border: hsl(240 5.9% 90%);
+	--app-input: hsl(240 5.9% 90%);
+	--app-ring: hsl(240 5.9% 10%);
 
 	/* Animations */
-	--animate-accordion-down: accordion-down 0.2s ease-out;
-	--animate-accordion-up: accordion-up 0.2s ease-out;
-
-	@keyframes accordion-down {
-		from {
-			height: 0;
-		}
-		to {
-			height: var(--bits-accordion-content-height);
-		}
-	}
-
-	@keyframes accordion-up {
-		from {
-			height: var(--bits-accordion-content-height);
-		}
-		to {
-			height: 0;
-		}
-	}
+	--app-animate-accordion-down: accordion-down 0.2s ease-out;
+	--app-animate-accordion-up: accordion-up 0.2s ease-out;
 }
 
 /* Dark mode overrides */
 .dark {
-	--color-background: hsl(240 10% 3.9%);
-	--color-foreground: hsl(0 0% 98%);
+	--app-background: hsl(240 10% 3.9%);
+	--app-foreground: hsl(0 0% 98%);
+	--app-card: hsl(240 10% 3.9%);
+	--app-card-foreground: hsl(0 0% 98%);
+	--app-popover: hsl(240 10% 3.9%);
+	--app-popover-foreground: hsl(0 0% 98%);
+	--app-primary: hsl(0 0% 98%);
+	--app-primary-foreground: hsl(240 5.9% 10%);
+	--app-secondary: hsl(240 3.7% 15.9%);
+	--app-secondary-foreground: hsl(0 0% 98%);
+	--app-muted: hsl(240 3.7% 15.9%);
+	--app-muted-foreground: hsl(240 5% 64.9%);
+	--app-accent: hsl(240 3.7% 15.9%);
+	--app-accent-foreground: hsl(0 0% 98%);
+	--app-destructive: hsl(0 62.8% 30.6%);
+	--app-destructive-foreground: hsl(0 0% 98%);
+	--app-border: hsl(240 3.7% 15.9%);
+	--app-input: hsl(240 3.7% 15.9%);
+	--app-ring: hsl(240 4.9% 83.9%);
+}
 
-	--color-card: hsl(240 10% 3.9%);
-	--color-card-foreground: hsl(0 0% 98%);
+/* Keyframe animations */
+@keyframes accordion-down {
+	from { height: 0; }
+	to { height: var(--bits-accordion-content-height); }
+}
 
-	--color-popover: hsl(240 10% 3.9%);
-	--color-popover-foreground: hsl(0 0% 98%);
+@keyframes accordion-up {
+	from { height: var(--bits-accordion-content-height); }
+	to { height: 0; }
+}
 
-	--color-primary: hsl(0 0% 98%);
-	--color-primary-foreground: hsl(240 5.9% 10%);
-
-	--color-secondary: hsl(240 3.7% 15.9%);
-	--color-secondary-foreground: hsl(0 0% 98%);
-
-	--color-muted: hsl(240 3.7% 15.9%);
-	--color-muted-foreground: hsl(240 5% 64.9%);
-
-	--color-accent: hsl(240 3.7% 15.9%);
-	--color-accent-foreground: hsl(0 0% 98%);
-
-	--color-destructive: hsl(0 62.8% 30.6%);
-	--color-destructive-foreground: hsl(0 0% 98%);
-
-	--color-border: hsl(240 3.7% 15.9%);
-	--color-input: hsl(240 3.7% 15.9%);
-	--color-ring: hsl(240 4.9% 83.9%);
+/* Tailwind v4 theme - reference CSS variables */
+@theme inline {
+	--color-background: var(--app-background);
+	--color-foreground: var(--app-foreground);
+	--color-card: var(--app-card);
+	--color-card-foreground: var(--app-card-foreground);
+	--color-popover: var(--app-popover);
+	--color-popover-foreground: var(--app-popover-foreground);
+	--color-primary: var(--app-primary);
+	--color-primary-foreground: var(--app-primary-foreground);
+	--color-secondary: var(--app-secondary);
+	--color-secondary-foreground: var(--app-secondary-foreground);
+	--color-muted: var(--app-muted);
+	--color-muted-foreground: var(--app-muted-foreground);
+	--color-accent: var(--app-accent);
+	--color-accent-foreground: var(--app-accent-foreground);
+	--color-destructive: var(--app-destructive);
+	--color-destructive-foreground: var(--app-destructive-foreground);
+	--color-border: var(--app-border);
+	--color-input: var(--app-input);
+	--color-ring: var(--app-ring);
+	--radius: var(--app-radius);
+	--radius-sm: var(--app-radius-sm);
+	--radius-md: var(--app-radius-md);
+	--radius-lg: var(--app-radius-lg);
+	--radius-xl: var(--app-radius-xl);
+	--animate-accordion-down: var(--app-animate-accordion-down);
+	--animate-accordion-up: var(--app-animate-accordion-up);
 }
 
 /* Base dark mode styles */
@@ -254,7 +261,7 @@ function getDarkModeCSS(): string {
 		background:
 			linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
 			linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
-			hsl(240 10% 3.9%);
+			var(--app-background);
 		background-size: 48px 48px;
 	}
 }

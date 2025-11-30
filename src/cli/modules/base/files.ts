@@ -108,6 +108,46 @@ export function getAppCss(): string {
 
 :root {
   --font-logo: "Geist Variable", system-ui, sans-serif;
+
+  /* Colors - Light mode */
+  --app-background: hsl(0 0% 100%);
+  --app-foreground: hsl(240 10% 3.9%);
+  --app-card: hsl(0 0% 100%);
+  --app-card-foreground: hsl(240 10% 3.9%);
+  --app-primary: hsl(240 5.9% 10%);
+  --app-primary-foreground: hsl(0 0% 98%);
+  --app-secondary: hsl(240 4.8% 95.9%);
+  --app-secondary-foreground: hsl(240 5.9% 10%);
+  --app-muted: hsl(240 4.8% 95.9%);
+  --app-muted-foreground: hsl(240 3.8% 46.1%);
+  --app-accent: hsl(240 4.8% 95.9%);
+  --app-accent-foreground: hsl(240 5.9% 10%);
+  --app-destructive: hsl(0 84.2% 60.2%);
+  --app-destructive-foreground: hsl(0 0% 98%);
+  --app-border: hsl(240 5.9% 90%);
+  --app-input: hsl(240 5.9% 90%);
+  --app-ring: hsl(240 5.9% 10%);
+}
+
+/* Tailwind v4 theme - reference CSS variables */
+@theme inline {
+  --color-background: var(--app-background);
+  --color-foreground: var(--app-foreground);
+  --color-card: var(--app-card);
+  --color-card-foreground: var(--app-card-foreground);
+  --color-primary: var(--app-primary);
+  --color-primary-foreground: var(--app-primary-foreground);
+  --color-secondary: var(--app-secondary);
+  --color-secondary-foreground: var(--app-secondary-foreground);
+  --color-muted: var(--app-muted);
+  --color-muted-foreground: var(--app-muted-foreground);
+  --color-accent: var(--app-accent);
+  --color-accent-foreground: var(--app-accent-foreground);
+  --color-destructive: var(--app-destructive);
+  --color-destructive-foreground: var(--app-destructive-foreground);
+  --color-border: var(--app-border);
+  --color-input: var(--app-input);
+  --color-ring: var(--app-ring);
 }
 
 @layer base {
@@ -121,7 +161,7 @@ export function getAppCss(): string {
     background:
       linear-gradient(to bottom, rgba(0, 0, 0, 0.04) 1px, transparent 1px),
       linear-gradient(to right, rgba(0, 0, 0, 0.04) 1px, transparent 1px),
-      var(--color-background);
+      var(--app-background);
     background-size: 48px 48px;
   }
 
