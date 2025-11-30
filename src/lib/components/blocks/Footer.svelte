@@ -38,12 +38,12 @@
 
 <footer class="bg-background border-t border-border">
 	{#if centered}
-		<div class="py-6 text-center text-sm text-zinc-600 dark:text-zinc-400">
+		<div class="py-6 text-center text-sm text-muted-foreground">
 			<span>&copy; {year} {siteName}</span>
 		</div>
 	{:else}
 		<div
-			class="mx-auto {maxWidth} px-6 sm:px-10 py-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-zinc-600 dark:text-zinc-400"
+			class="mx-auto {maxWidth} px-6 sm:px-10 py-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-muted-foreground"
 		>
 			<div class="flex items-center gap-2">
 				{#if logoIcon}
@@ -73,7 +73,7 @@
 							<span class="text-xs">Connected</span>
 						</span>
 					{:else}
-						<span class="flex items-center gap-1 text-zinc-400">
+						<span class="flex items-center gap-1 text-muted-foreground">
 							<Database class="w-4 h-4" />
 							<XCircle class="w-3 h-3" />
 							<span class="text-xs">Not connected</span>

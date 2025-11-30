@@ -53,7 +53,7 @@
 </style>
 
 <Sonner.Toaster richColors />
-<div class="min-h-dvh flex flex-col bg-white">
+<div class="min-h-dvh flex flex-col bg-card">
 	<Nav
 		siteName="leaderboard"
 		logo="🎮"
@@ -75,7 +75,7 @@
 
 	<Footer siteName="leaderboard" logo="🎮" maxWidth="max-w-6xl">
 		{#each navLinks.filter(l => l.label) as link}
-			<a href={link.href} class="hover:text-zinc-700 dark:hover:text-zinc-300 transition-colors">
+			<a href={link.href} class="hover:text-foreground transition-colors">
 				{link.label}
 			</a>
 		{/each}

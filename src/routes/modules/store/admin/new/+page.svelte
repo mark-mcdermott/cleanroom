@@ -36,7 +36,7 @@
 <div class="max-w-2xl mx-auto px-6 py-16">
 	<a
 		href="/modules/store/admin"
-		class="inline-flex items-center gap-2 text-sm text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300 mb-8"
+		class="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-8"
 	>
 		<ArrowLeft class="w-4 h-4" />
 		Back to products
@@ -89,7 +89,7 @@
 					required
 					class="mt-1.5"
 				/>
-				<p class="text-xs text-zinc-500 dark:text-zinc-400 mt-1">URL-friendly identifier</p>
+				<p class="text-xs text-muted-foreground mt-1">URL-friendly identifier</p>
 			</div>
 
 			<div>
@@ -112,7 +112,7 @@
 				<div>
 					<Label.Root for="price">Price *</Label.Root>
 					<div class="relative mt-1.5">
-						<span class="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400">$</span>
+						<span class="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">$</span>
 						<Input.Root
 							type="number"
 							id="price"
@@ -128,7 +128,7 @@
 				<div>
 					<Label.Root for="compareAtPrice">Compare at Price</Label.Root>
 					<div class="relative mt-1.5">
-						<span class="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400">$</span>
+						<span class="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">$</span>
 						<Input.Root
 							type="number"
 							id="compareAtPrice"
@@ -139,7 +139,7 @@
 							class="pl-7"
 						/>
 					</div>
-					<p class="text-xs text-zinc-500 dark:text-zinc-400 mt-1">Original price if on sale</p>
+					<p class="text-xs text-muted-foreground mt-1">Original price if on sale</p>
 				</div>
 			</div>
 		</div>
@@ -190,7 +190,7 @@
 					placeholder="https://example.com/image.jpg"
 					class="mt-1.5"
 				/>
-				<p class="text-xs text-zinc-500 dark:text-zinc-400 mt-1">Enter a URL for the product image</p>
+				<p class="text-xs text-muted-foreground mt-1">Enter a URL for the product image</p>
 			</div>
 		</div>
 

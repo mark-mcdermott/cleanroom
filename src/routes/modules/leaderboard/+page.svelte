@@ -57,26 +57,26 @@
 <div class="max-w-2xl mx-auto px-6 py-16">
 	<div class="text-center mb-8">
 		<h1 class="text-3xl font-semibold tracking-tight">Click Game</h1>
-		<p class="text-zinc-600 mt-2">Click as fast as you can in 10 seconds!</p>
+		<p class="text-muted-foreground mt-2">Click as fast as you can in 10 seconds!</p>
 		{#if !data.isLoggedIn}
 			<p class="text-amber-600 mt-2 text-sm">Log in to save your scores to the leaderboard</p>
 		{/if}
 	</div>
 
 	<!-- Game Box -->
-	<div class="bg-white border-2 border-zinc-200 rounded-xl p-8 mb-8">
+	<div class="bg-card border-2 border-border rounded-xl p-8 mb-8">
 		<!-- Score Display -->
 		<div class="flex justify-between items-center mb-6">
 			<div class="text-center">
-				<p class="text-sm text-zinc-500">Score</p>
+				<p class="text-sm text-muted-foreground">Score</p>
 				<p class="text-3xl font-bold text-blue-600">{score}</p>
 			</div>
 			<div class="text-center">
-				<p class="text-sm text-zinc-500">Time Left</p>
-				<p class="text-3xl font-bold {timeLeft <= 3 ? 'text-red-600' : 'text-zinc-900'}">{timeLeft}s</p>
+				<p class="text-sm text-muted-foreground">Time Left</p>
+				<p class="text-3xl font-bold {timeLeft <= 3 ? 'text-red-600' : 'text-foreground'}">{timeLeft}s</p>
 			</div>
 			<div class="text-center">
-				<p class="text-sm text-zinc-500">Clicks</p>
+				<p class="text-sm text-muted-foreground">Clicks</p>
 				<p class="text-3xl font-bold text-green-600">{clickCount}</p>
 			</div>
 		</div>
@@ -84,7 +84,7 @@
 		<!-- Game Area -->
 		<div
 			class="w-full h-64 rounded-lg flex items-center justify-center cursor-pointer transition-all duration-100 select-none
-				{gameState === 'idle' ? 'bg-zinc-100 hover:bg-zinc-200' : ''}
+				{gameState === 'idle' ? 'bg-muted hover:bg-muted' : ''}
 				{gameState === 'playing' ? 'bg-blue-500 hover:bg-blue-600 active:bg-blue-700 active:scale-95' : ''}
 				{gameState === 'ended' ? 'bg-green-100' : ''}"
 			onclick={handleClick}
@@ -94,8 +94,8 @@
 		>
 			{#if gameState === 'idle'}
 				<div class="text-center">
-					<Play class="w-16 h-16 mx-auto text-zinc-400 mb-4" />
-					<p class="text-zinc-600 font-medium">Click Start to Play</p>
+					<Play class="w-16 h-16 mx-auto text-muted-foreground mb-4" />
+					<p class="text-muted-foreground font-medium">Click Start to Play</p>
 				</div>
 			{:else if gameState === 'playing'}
 				<div class="text-center text-white">

@@ -55,7 +55,7 @@
 			{title}
 		</h1>
 		{#if description}
-			<p class="text-zinc-600 dark:text-zinc-400 text-lg mt-6 {descriptionWidth} mx-auto px-4">
+			<p class="text-muted-foreground text-lg mt-6 {descriptionWidth} mx-auto px-4">
 				{description}
 			</p>
 		{/if}

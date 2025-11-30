@@ -19,7 +19,7 @@
 	{#if !data.user}
 		<Card.Root>
 			<Card.Content class="py-8 text-center">
-				<p class="text-zinc-600 mb-4">You need to be logged in to access settings.</p>
+				<p class="text-muted-foreground mb-4">You need to be logged in to access settings.</p>
 				<a href="/login">
 					<Button.Root>Log In</Button.Root>
 				</a>
@@ -48,12 +48,12 @@
 					<div>
 						<Label.Root for="email">Email</Label.Root>
 						<Input.Root id="email" value={data.user.email} disabled />
-						<p class="text-xs text-zinc-500 mt-1">Email cannot be changed</p>
+						<p class="text-xs text-muted-foreground mt-1">Email cannot be changed</p>
 					</div>
 				</Card.Content>
 				<Card.Footer>
 					<Button.Root disabled>Save Changes</Button.Root>
-					<p class="text-xs text-zinc-500 ml-3">Coming soon</p>
+					<p class="text-xs text-muted-foreground ml-3">Coming soon</p>
 				</Card.Footer>
 			</Card.Root>
 
@@ -82,7 +82,7 @@
 				</Card.Content>
 				<Card.Footer>
 					<Button.Root disabled>Update Password</Button.Root>
-					<p class="text-xs text-zinc-500 ml-3">Coming soon</p>
+					<p class="text-xs text-muted-foreground ml-3">Coming soon</p>
 				</Card.Footer>
 			</Card.Root>
 
@@ -95,9 +95,9 @@
 					</Card.Title>
 				</Card.Header>
 				<Card.Content>
-					<p class="text-sm text-zinc-600">
+					<p class="text-sm text-muted-foreground">
 						<span class="font-medium">User ID:</span>
-						<code class="ml-2 px-2 py-1 bg-zinc-100 rounded text-xs">{data.user.id}</code>
+						<code class="ml-2 px-2 py-1 bg-muted rounded text-xs">{data.user.id}</code>
 					</p>
 				</Card.Content>
 			</Card.Root>

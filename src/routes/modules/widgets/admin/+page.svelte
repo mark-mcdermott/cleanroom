@@ -17,7 +17,7 @@
 	<div class="flex items-center justify-between mb-8">
 		<div>
 			<h1 class="text-3xl font-semibold tracking-tight">Widgets Admin</h1>
-			<p class="text-zinc-600 mt-2">Manage all users and their widgets</p>
+			<p class="text-muted-foreground mt-2">Manage all users and their widgets</p>
 		</div>
 		<form method="POST" action="?/reset" use:enhance={() => {
 			return async ({ result }) => {
@@ -38,58 +38,58 @@
 
 	<!-- Stats Grid -->
 	<div class="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
-		<div class="bg-white border border-zinc-200 rounded-lg p-4">
+		<div class="bg-card border border-border rounded-lg p-4">
 			<div class="flex items-center gap-3">
 				<Package class="w-8 h-8 text-blue-500" />
 				<div>
 					<p class="text-2xl font-semibold">{data.stats.totalWidgets}</p>
-					<p class="text-sm text-zinc-500">Widgets</p>
+					<p class="text-sm text-muted-foreground">Widgets</p>
 				</div>
 			</div>
 		</div>
-		<div class="bg-white border border-zinc-200 rounded-lg p-4">
+		<div class="bg-card border border-border rounded-lg p-4">
 			<div class="flex items-center gap-3">
 				<Layers class="w-8 h-8 text-green-500" />
 				<div>
 					<p class="text-2xl font-semibold">{data.stats.totalThingys}</p>
-					<p class="text-sm text-zinc-500">Thingys</p>
+					<p class="text-sm text-muted-foreground">Thingys</p>
 				</div>
 			</div>
 		</div>
-		<div class="bg-white border border-zinc-200 rounded-lg p-4">
+		<div class="bg-card border border-border rounded-lg p-4">
 			<div class="flex items-center gap-3">
 				<StickyNote class="w-8 h-8 text-yellow-500" />
 				<div>
 					<p class="text-2xl font-semibold">{data.stats.totalNotes}</p>
-					<p class="text-sm text-zinc-500">Notes</p>
+					<p class="text-sm text-muted-foreground">Notes</p>
 				</div>
 			</div>
 		</div>
-		<div class="bg-white border border-zinc-200 rounded-lg p-4">
+		<div class="bg-card border border-border rounded-lg p-4">
 			<div class="flex items-center gap-3">
 				<Image class="w-8 h-8 text-purple-500" />
 				<div>
 					<p class="text-2xl font-semibold">{data.stats.totalPhotos}</p>
-					<p class="text-sm text-zinc-500">Photos</p>
+					<p class="text-sm text-muted-foreground">Photos</p>
 				</div>
 			</div>
 		</div>
-		<div class="bg-white border border-zinc-200 rounded-lg p-4">
+		<div class="bg-card border border-border rounded-lg p-4">
 			<div class="flex items-center gap-3">
 				<Images class="w-8 h-8 text-pink-500" />
 				<div>
 					<p class="text-2xl font-semibold">{data.stats.totalGalleries}</p>
-					<p class="text-sm text-zinc-500">Galleries</p>
+					<p class="text-sm text-muted-foreground">Galleries</p>
 				</div>
 			</div>
 		</div>
 	</div>
 
 	<!-- Users Table -->
-	<div class="bg-white border border-zinc-200 rounded-lg overflow-hidden">
-		<div class="px-6 py-4 border-b border-zinc-200">
+	<div class="bg-card border border-border rounded-lg overflow-hidden">
+		<div class="px-6 py-4 border-b border-border">
 			<h2 class="text-lg font-semibold flex items-center gap-2">
-				<Users class="w-5 h-5 text-zinc-400" />
+				<Users class="w-5 h-5 text-muted-foreground" />
 				All Users ({data.users.length})
 			</h2>
 		</div>
@@ -108,22 +108,22 @@
 					<Table.Row class="cursor-pointer" onclick={() => goto(`/modules/widgets/users/${user.id}/widgets`)}>
 						<Table.Cell>
 							<div class="flex items-center gap-3">
-								<div class="w-8 h-8 bg-zinc-100 rounded-full flex items-center justify-center text-sm font-medium">
+								<div class="w-8 h-8 bg-muted rounded-full flex items-center justify-center text-sm font-medium">
 									{user.name?.charAt(0).toUpperCase() || user.email.charAt(0).toUpperCase()}
 								</div>
 								<span class="font-medium">{user.name || 'No name'}</span>
 							</div>
 						</Table.Cell>
-						<Table.Cell class="text-zinc-600">{user.email}</Table.Cell>
+						<Table.Cell class="text-muted-foreground">{user.email}</Table.Cell>
 						<Table.Cell>
 							{#if user.admin}
 								<span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-amber-100 text-amber-800">Admin</span>
 							{:else}
-								<span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-zinc-100 text-zinc-700">User</span>
+								<span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-muted text-muted-foreground">User</span>
 							{/if}
 						</Table.Cell>
 						<Table.Cell>{user.widgetCount}</Table.Cell>
-						<Table.Cell class="text-zinc-500">{user.createdAt ? new Date(user.createdAt).toLocaleDateString() : 'N/A'}</Table.Cell>
+						<Table.Cell class="text-muted-foreground">{user.createdAt ? new Date(user.createdAt).toLocaleDateString() : 'N/A'}</Table.Cell>
 					</Table.Row>
 				{/each}
 			</Table.Body>

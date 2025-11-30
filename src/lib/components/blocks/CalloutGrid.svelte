@@ -19,7 +19,7 @@
 	};
 </script>
 
-<section class="bg-zinc-50 rounded-2xl p-8">
+<section class="bg-muted rounded-2xl p-8">
 	{#if title}
 		<h2 class="text-2xl font-semibold mt-0 mb-6 text-center">{title}</h2>
 	{/if}
@@ -29,7 +29,7 @@
 				<span class="text-2xl">{item.icon}</span>
 				<div>
 					<h3 class="font-semibold mb-1">{item.title}</h3>
-					<p class="text-zinc-600 dark:text-zinc-400 text-sm">{item.description}</p>
+					<p class="text-muted-foreground text-sm">{item.description}</p>
 				</div>
 			</div>
 		{/each}

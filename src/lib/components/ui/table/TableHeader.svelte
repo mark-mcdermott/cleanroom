@@ -10,6 +10,6 @@
 	let { class: className, children, ...restProps }: Props = $props();
 </script>
 
-<thead data-slot="table-header" class={cn('bg-zinc-50 border-b border-zinc-200', className)} {...restProps}>
+<thead data-slot="table-header" class={cn('bg-muted border-b border-border', className)} {...restProps}>
 	{@render children?.()}
 </thead>

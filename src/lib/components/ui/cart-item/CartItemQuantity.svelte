@@ -22,7 +22,7 @@
 >
 	<button
 		type="button"
-		class="w-7 h-7 rounded border border-border flex items-center justify-center hover:bg-zinc-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+		class="w-7 h-7 rounded border border-border flex items-center justify-center hover:bg-muted disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
 		disabled={quantity <= min}
 		onclick={onDecrement}
 	>
@@ -31,7 +31,7 @@
 	<span class="w-8 text-center text-sm font-medium">{quantity}</span>
 	<button
 		type="button"
-		class="w-7 h-7 rounded border border-border flex items-center justify-center hover:bg-zinc-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+		class="w-7 h-7 rounded border border-border flex items-center justify-center hover:bg-muted disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
 		disabled={quantity >= max}
 		onclick={onIncrement}
 	>

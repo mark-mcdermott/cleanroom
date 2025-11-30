@@ -366,7 +366,7 @@ function getLoginPageSvelte(config: ProjectConfig): string {
 		{/if}
 
 		<div>
-			<label for="email" class="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1">Email</label>
+			<label for="email" class="block text-sm font-medium text-muted-foreground mb-1">Email</label>
 			<input
 				type="email"
 				id="email"
@@ -378,7 +378,7 @@ function getLoginPageSvelte(config: ProjectConfig): string {
 		</div>
 
 		<div>
-			<label for="password" class="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1">Password</label>
+			<label for="password" class="block text-sm font-medium text-muted-foreground mb-1">Password</label>
 			<input
 				type="password"
 				id="password"
@@ -391,8 +391,8 @@ function getLoginPageSvelte(config: ProjectConfig): string {
 
 		<button type="submit" class="btn btn-dark w-full">Login</button>
 
-		<p class="text-center text-sm text-zinc-600 dark:text-zinc-400">
-			Don't have an account? <a href="/signup" class="text-zinc-900 dark:text-zinc-100 underline">Sign up</a>
+		<p class="text-center text-sm text-muted-foreground">
+			Don't have an account? <a href="/signup" class="text-foreground underline">Sign up</a>
 		</p>
 	</form>
 </div>
@@ -500,7 +500,7 @@ function getSignupPageSvelte(config: ProjectConfig): string {
 		{/if}
 
 		<div>
-			<label for="name" class="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1">Name (optional)</label>
+			<label for="name" class="block text-sm font-medium text-muted-foreground mb-1">Name (optional)</label>
 			<input
 				type="text"
 				id="name"
@@ -511,7 +511,7 @@ function getSignupPageSvelte(config: ProjectConfig): string {
 		</div>
 
 		<div>
-			<label for="email" class="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1">Email</label>
+			<label for="email" class="block text-sm font-medium text-muted-foreground mb-1">Email</label>
 			<input
 				type="email"
 				id="email"
@@ -523,7 +523,7 @@ function getSignupPageSvelte(config: ProjectConfig): string {
 		</div>
 
 		<div>
-			<label for="password" class="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1">Password</label>
+			<label for="password" class="block text-sm font-medium text-muted-foreground mb-1">Password</label>
 			<input
 				type="password"
 				id="password"
@@ -537,8 +537,8 @@ function getSignupPageSvelte(config: ProjectConfig): string {
 
 		<button type="submit" class="btn btn-dark w-full">Sign Up</button>
 
-		<p class="text-center text-sm text-zinc-600 dark:text-zinc-400">
-			Already have an account? <a href="/login" class="text-zinc-900 dark:text-zinc-100 underline">Login</a>
+		<p class="text-center text-sm text-muted-foreground">
+			Already have an account? <a href="/login" class="text-foreground underline">Login</a>
 		</p>
 	</form>
 </div>

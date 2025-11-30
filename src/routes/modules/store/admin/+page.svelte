@@ -49,7 +49,7 @@
 	<div class="flex items-center justify-between mb-8">
 		<div>
 			<h1 class="text-3xl font-semibold tracking-tight">Products</h1>
-			<p class="text-zinc-600 mt-2">Manage demo store products ({data.products.length} total)</p>
+			<p class="text-muted-foreground mt-2">Manage demo store products ({data.products.length} total)</p>
 		</div>
 		<div class="flex gap-3">
 			<form
@@ -81,8 +81,8 @@
 	</div>
 
 	{#if data.products.length === 0}
-		<div class="border border-zinc-200 rounded-lg p-8 text-center bg-white">
-			<p class="text-zinc-600 mb-4">No products yet. Create a new product or reset demo data to get started.</p>
+		<div class="border border-border rounded-lg p-8 text-center bg-card">
+			<p class="text-muted-foreground mb-4">No products yet. Create a new product or reset demo data to get started.</p>
 			<div class="flex justify-center gap-3">
 				<form
 					method="POST"
@@ -139,7 +139,7 @@
 								{/if}
 							</div>
 						</Table.Cell>
-						<Table.Cell class="text-zinc-500">
+						<Table.Cell class="text-muted-foreground">
 							{product.categoryName || '—'}
 						</Table.Cell>
 						<Table.Cell class="font-mono">
@@ -151,7 +151,7 @@
 							{:else if parseInt(product.inventory) <= 10}
 								<span class="text-amber-600">{product.inventory} left</span>
 							{:else}
-								<span class="text-zinc-600">{product.inventory}</span>
+								<span class="text-muted-foreground">{product.inventory}</span>
 							{/if}
 						</Table.Cell>
 						<Table.Cell>
@@ -164,14 +164,14 @@
 								</span>
 							{:else}
 								<span
-									class="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-zinc-100 text-zinc-700"
+									class="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-muted text-muted-foreground"
 								>
 									<EyeOff class="w-3 h-3" />
 									Draft
 								</span>
 							{/if}
 						</Table.Cell>
-						<Table.Cell class="text-zinc-500 text-sm">
+						<Table.Cell class="text-muted-foreground text-sm">
 							{formatDate(product.updatedAt)}
 						</Table.Cell>
 						<Table.Cell>
@@ -179,7 +179,7 @@
 								<a
 									href="/modules/store/admin/{product.id}/edit"
 									data-action="edit"
-									class="p-1.5 rounded text-zinc-400 hover:text-zinc-700 hover:bg-zinc-200 transition-colors cursor-pointer"
+									class="p-1.5 rounded text-muted-foreground hover:text-muted-foreground hover:bg-muted transition-colors cursor-pointer"
 									title="Edit product"
 									onclick={(e: MouseEvent) => e.stopPropagation()}
 								>
@@ -187,7 +187,7 @@
 								</a>
 								<button
 									data-action="delete"
-									class="p-1.5 rounded text-zinc-400 hover:text-red-600 hover:bg-red-50 transition-colors cursor-pointer"
+									class="p-1.5 rounded text-muted-foreground hover:text-red-600 hover:bg-red-50 transition-colors cursor-pointer"
 									title="Delete product"
 									onclick={(e: MouseEvent) => {
 										e.stopPropagation();

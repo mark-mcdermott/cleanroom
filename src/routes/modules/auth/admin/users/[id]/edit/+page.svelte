@@ -16,13 +16,13 @@
 <div class="max-w-xl mx-auto px-6 py-16">
 	<a
 		href="/modules/auth/admin/users/{data.targetUser.id}"
-		class="inline-flex items-center gap-2 text-sm text-zinc-600 hover:text-zinc-900 mb-6"
+		class="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-6"
 	>
 		<ArrowLeft class="w-4 h-4" />
 		Back to Employee
 	</a>
 
-	<div class="border border-zinc-200 rounded-lg p-6 bg-white">
+	<div class="border border-border rounded-lg p-6 bg-card">
 		<h1 class="text-2xl font-semibold tracking-tight mb-6">Edit Employee</h1>
 
 		{#if form?.error}
@@ -78,7 +78,7 @@
 				<Label.Root for="admin" class="text-sm font-normal">
 					Regional Manager privileges
 					{#if data.targetUser.id === data.currentUser.id}
-						<span class="text-zinc-500">(cannot change your own admin status)</span>
+						<span class="text-muted-foreground">(cannot change your own admin status)</span>
 					{/if}
 				</Label.Root>
 			</div>

@@ -21,6 +21,6 @@
 		{value}
 	</span>
 	{#if unit}
-		<span class="text-zinc-500 dark:text-zinc-400 text-lg ml-1">{unit}</span>
+		<span class="text-muted-foreground text-lg ml-1">{unit}</span>
 	{/if}
 </div>

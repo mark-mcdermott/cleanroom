@@ -27,12 +27,12 @@
 			bind:checked
 			{required}
 			{disabled}
-			class="w-5 h-5 rounded border-zinc-300 text-zinc-900 focus:ring-2 focus:ring-zinc-900 focus:ring-offset-0 {error
-				? 'border-red-500'
+			class="w-5 h-5 rounded border-border text-primary focus:ring-2 focus:ring-ring focus:ring-offset-0 {error
+				? 'border-destructive'
 				: ''}"
 		/>
 		{#if label}
-			<span class="text-sm font-medium text-zinc-700 dark:text-zinc-300">
+			<span class="text-sm font-medium text-muted-foreground">
 				{label}{#if required}<span class="text-red-500 ml-1">*</span>{/if}
 			</span>
 		{/if}

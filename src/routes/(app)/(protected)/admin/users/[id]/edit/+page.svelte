@@ -26,13 +26,13 @@
 <div class="max-w-xl mx-auto px-6 py-16">
 	<a
 		href="/admin/users/{data.targetUser.id}"
-		class="inline-flex items-center gap-2 text-sm text-zinc-600 hover:text-zinc-900 mb-6"
+		class="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-6"
 	>
 		<ArrowLeft class="w-4 h-4" />
 		Back to User
 	</a>
 
-	<div class="bg-white border border-zinc-200 rounded-lg p-6">
+	<div class="bg-card border border-border rounded-lg p-6">
 		<h1 class="text-2xl font-semibold tracking-tight mb-6">Edit User</h1>
 
 		{#if form?.error}
@@ -42,7 +42,7 @@
 		{/if}
 
 		<!-- Avatar Section -->
-		<div class="mb-8 pb-6 border-b border-zinc-200">
+		<div class="mb-8 pb-6 border-b border-border">
 			<Label.Root class="mb-3 block">Avatar</Label.Root>
 			<div class="flex items-center gap-6">
 				<!-- Avatar Preview -->
@@ -51,11 +51,11 @@
 						<img
 							src="{avatarUrl}?v={avatarCacheBuster}"
 							alt="User avatar"
-							class="w-20 h-20 rounded-full object-cover border-2 border-zinc-200"
+							class="w-20 h-20 rounded-full object-cover border-2 border-border"
 						/>
 					{:else}
-						<div class="w-20 h-20 rounded-full bg-zinc-100 border-2 border-zinc-200 flex items-center justify-center">
-							<User class="w-8 h-8 text-zinc-400" />
+						<div class="w-20 h-20 rounded-full bg-muted border-2 border-border flex items-center justify-center">
+							<User class="w-8 h-8 text-muted-foreground" />
 						</div>
 					{/if}
 				</div>
@@ -125,7 +125,7 @@
 						</form>
 					{/if}
 
-					<p class="text-xs text-zinc-500">JPEG, PNG, GIF, or WebP. Max 5MB.</p>
+					<p class="text-xs text-muted-foreground">JPEG, PNG, GIF, or WebP. Max 5MB.</p>
 				</div>
 			</div>
 		</div>
@@ -179,7 +179,7 @@
 				<Label.Root for="admin" class="text-sm font-normal">
 					Admin privileges
 					{#if data.targetUser.id === data.currentUser.id}
-						<span class="text-zinc-500">(cannot change your own admin status)</span>
+						<span class="text-muted-foreground">(cannot change your own admin status)</span>
 					{/if}
 				</Label.Root>
 			</div>

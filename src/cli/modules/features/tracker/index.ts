@@ -94,7 +94,7 @@ function getTrackerDashboardSvelte(): string {
 	<div class="flex items-center justify-between mb-8">
 		<div>
 			<h1 class="text-3xl font-semibold tracking-tight">Dashboard</h1>
-			<p class="text-zinc-500 dark:text-zinc-400 mt-1">{formatDate(new Date())} - Track your progress</p>
+			<p class="text-muted-foreground mt-1">{formatDate(new Date())} - Track your progress</p>
 		</div>
 		<div class="flex gap-2">
 			<Button.Root variant="outline" onclick={() => goto('/tracker/admin')} class="cursor-pointer">
@@ -109,31 +109,31 @@ function getTrackerDashboardSvelte(): string {
 	</div>
 
 	<div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-		<div class="bg-white border border-zinc-200 rounded-lg p-4">
+		<div class="bg-background border border-border rounded-lg p-4">
 			<Calendar class="w-5 h-5 text-blue-600 mb-2" />
 			<p class="text-2xl font-bold">{data.todayEntries.length}</p>
-			<p class="text-sm text-zinc-500 dark:text-zinc-400">today</p>
+			<p class="text-sm text-muted-foreground">today</p>
 		</div>
-		<div class="bg-white border border-zinc-200 rounded-lg p-4">
+		<div class="bg-background border border-border rounded-lg p-4">
 			<TrendingUp class="w-5 h-5 text-green-600 mb-2" />
 			<p class="text-2xl font-bold">{data.recentEntries.length}</p>
-			<p class="text-sm text-zinc-500 dark:text-zinc-400">this week</p>
+			<p class="text-sm text-muted-foreground">this week</p>
 		</div>
-		<div class="bg-white border border-zinc-200 rounded-lg p-4">
+		<div class="bg-background border border-border rounded-lg p-4">
 			<Target class="w-5 h-5 text-purple-600 mb-2" />
 			<p class="text-2xl font-bold">{metricsTracked}</p>
-			<p class="text-sm text-zinc-500 dark:text-zinc-400">tracked</p>
+			<p class="text-sm text-muted-foreground">tracked</p>
 		</div>
-		<div class="bg-white border border-zinc-200 rounded-lg p-4">
+		<div class="bg-background border border-border rounded-lg p-4">
 			<Target class="w-5 h-5 text-amber-600 mb-2" />
 			<p class="text-2xl font-bold">{data.goals.length}</p>
-			<p class="text-sm text-zinc-500 dark:text-zinc-400">goals</p>
+			<p class="text-sm text-muted-foreground">goals</p>
 		</div>
 	</div>
 
 	{#if data.categories.length === 0}
-		<div class="border border-dashed border-zinc-300 rounded-lg p-8 text-center">
-			<p class="text-zinc-600 dark:text-zinc-400 mb-4">Set up categories and metrics to start tracking.</p>
+		<div class="border border-dashed border-border rounded-lg p-8 text-center">
+			<p class="text-muted-foreground mb-4">Set up categories and metrics to start tracking.</p>
 			<Button.Root variant="outline" onclick={() => goto('/tracker/admin')} class="cursor-pointer">
 				Set Up Tracker
 			</Button.Root>

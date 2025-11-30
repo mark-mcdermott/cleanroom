@@ -35,7 +35,7 @@
 <div class="max-w-5xl mx-auto px-6 py-16">
 	<a
 		href="/modules/store"
-		class="inline-flex items-center gap-2 text-sm text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300 mb-8"
+		class="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-8"
 	>
 		<ArrowLeft class="w-4 h-4" />
 		Back to shop
@@ -43,7 +43,7 @@
 
 	<div class="grid md:grid-cols-2 gap-12">
 		<!-- Product Image -->
-		<div class="relative aspect-square rounded-xl overflow-hidden bg-zinc-100">
+		<div class="relative aspect-square rounded-xl overflow-hidden bg-muted">
 			{#if data.product.image}
 				<img
 					src={data.product.image}
@@ -52,12 +52,12 @@
 				/>
 			{:else}
 				<div class="w-full h-full flex items-center justify-center">
-					<span class="text-zinc-400 text-8xl">📦</span>
+					<span class="text-muted-foreground text-8xl">📦</span>
 				</div>
 			{/if}
 			{#if outOfStock}
 				<span
-					class="absolute top-4 left-4 px-3 py-1.5 text-sm font-medium rounded bg-zinc-500 text-white"
+					class="absolute top-4 left-4 px-3 py-1.5 text-sm font-medium rounded bg-muted0 text-white"
 				>
 					Out of Stock
 				</span>
@@ -73,7 +73,7 @@
 		<!-- Product Details -->
 		<div>
 			{#if data.categoryName}
-				<p class="text-sm text-zinc-500 dark:text-zinc-400 mb-2">{data.categoryName}</p>
+				<p class="text-sm text-muted-foreground mb-2">{data.categoryName}</p>
 			{/if}
 
 			<h1 class="text-3xl font-semibold tracking-tight mb-4">{data.product.name}</h1>
@@ -83,7 +83,7 @@
 					${formatPrice(data.product.price)}
 				</span>
 				{#if onSale && data.product.compareAtPrice}
-					<span class="text-lg text-zinc-400 line-through">
+					<span class="text-lg text-muted-foreground line-through">
 						${formatPrice(data.product.compareAtPrice)}
 					</span>
 					<span class="px-2 py-0.5 text-sm font-medium bg-red-100 text-red-700 rounded">
@@ -94,7 +94,7 @@
 
 			{#if data.product.description}
 				<div class="prose prose-zinc mb-8">
-					<p class="text-zinc-600 dark:text-zinc-400 leading-relaxed">{data.product.description}</p>
+					<p class="text-muted-foreground leading-relaxed">{data.product.description}</p>
 				</div>
 			{/if}
 
@@ -124,7 +124,7 @@
 						<div class="flex items-center gap-2">
 							<button
 								type="button"
-								class="w-8 h-8 rounded border border-border flex items-center justify-center hover:bg-zinc-100 disabled:opacity-50 transition-colors"
+								class="w-8 h-8 rounded border border-border flex items-center justify-center hover:bg-muted disabled:opacity-50 transition-colors"
 								disabled={quantity <= 1}
 								onclick={() => (quantity = Math.max(1, quantity - 1))}
 							>
@@ -133,7 +133,7 @@
 							<span class="w-12 text-center font-medium">{quantity}</span>
 							<button
 								type="button"
-								class="w-8 h-8 rounded border border-border flex items-center justify-center hover:bg-zinc-100 disabled:opacity-50 transition-colors"
+								class="w-8 h-8 rounded border border-border flex items-center justify-center hover:bg-muted disabled:opacity-50 transition-colors"
 								disabled={quantity >= parseInt(data.product.inventory)}
 								onclick={() =>
 									(quantity = Math.min(parseInt(data.product.inventory), quantity + 1))}
@@ -141,7 +141,7 @@
 								<Plus class="w-4 h-4" />
 							</button>
 						</div>
-						<span class="text-sm text-zinc-500 dark:text-zinc-400">
+						<span class="text-sm text-muted-foreground">
 							{data.product.inventory} available
 						</span>
 					</div>
@@ -157,7 +157,7 @@
 				</Button.Root>
 			{/if}
 
-			<p class="text-xs text-zinc-400 mt-4">
+			<p class="text-xs text-muted-foreground mt-4">
 				This is a demo store. No actual payment will be processed.
 			</p>
 		</div>

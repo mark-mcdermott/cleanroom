@@ -17,9 +17,9 @@
 
 	function getRankIcon(index: number) {
 		if (index === 0) return { color: 'text-yellow-500', bg: 'bg-yellow-50' };
-		if (index === 1) return { color: 'text-zinc-400', bg: 'bg-zinc-50' };
+		if (index === 1) return { color: 'text-muted-foreground', bg: 'bg-muted' };
 		if (index === 2) return { color: 'text-amber-600', bg: 'bg-amber-50' };
-		return { color: 'text-zinc-500', bg: '' };
+		return { color: 'text-muted-foreground', bg: '' };
 	}
 </script>
 
@@ -35,7 +35,7 @@
 				<Trophy class="w-8 h-8 text-yellow-500" />
 				Leaderboard
 			</h1>
-			<p class="text-zinc-600 mt-2">Top scores from the Click Game</p>
+			<p class="text-muted-foreground mt-2">Top scores from the Click Game</p>
 		</div>
 		<Button.Root onclick={() => goto('/modules/leaderboard')} class="cursor-pointer">
 			<Gamepad2 class="w-4 h-4 mr-2" />
@@ -44,16 +44,16 @@
 	</div>
 
 	{#if data.scores.length === 0}
-		<div class="bg-white border border-zinc-200 rounded-lg p-12 text-center">
-			<Trophy class="w-16 h-16 mx-auto text-zinc-300 mb-4" />
-			<p class="text-zinc-600 mb-4">No scores yet. Be the first to play!</p>
+		<div class="bg-card border border-border rounded-lg p-12 text-center">
+			<Trophy class="w-16 h-16 mx-auto text-muted-foreground mb-4" />
+			<p class="text-muted-foreground mb-4">No scores yet. Be the first to play!</p>
 			<Button.Root onclick={() => goto('/modules/leaderboard')} class="cursor-pointer">
 				<Gamepad2 class="w-4 h-4 mr-2" />
 				Play Now
 			</Button.Root>
 		</div>
 	{:else}
-		<div class="bg-white border border-zinc-200 rounded-lg overflow-hidden">
+		<div class="bg-card border border-border rounded-lg overflow-hidden">
 			<Table.Root>
 				<Table.Header>
 					<Table.Row>
@@ -72,24 +72,24 @@
 									{#if index < 3}
 										<Medal class="w-5 h-5 {rankStyle.color}" />
 									{:else}
-										<span class="w-5 text-center text-zinc-500">{index + 1}</span>
+										<span class="w-5 text-center text-muted-foreground">{index + 1}</span>
 									{/if}
 								</div>
 							</Table.Cell>
 							<Table.Cell>
 								<div class="flex items-center gap-3">
-									<div class="w-8 h-8 bg-zinc-100 rounded-full flex items-center justify-center text-sm font-medium">
+									<div class="w-8 h-8 bg-muted rounded-full flex items-center justify-center text-sm font-medium">
 										{(score.userName?.charAt(0) || score.userEmail?.charAt(0) || '?').toUpperCase()}
 									</div>
 									<span class="font-medium">{score.userName || score.userEmail || 'Anonymous'}</span>
 								</div>
 							</Table.Cell>
 							<Table.Cell class="text-right">
-								<span class="font-bold text-lg {index === 0 ? 'text-yellow-600' : index === 1 ? 'text-zinc-600' : index === 2 ? 'text-amber-700' : 'text-zinc-900'}">
+								<span class="font-bold text-lg {index === 0 ? 'text-yellow-600' : index === 1 ? 'text-muted-foreground' : index === 2 ? 'text-amber-700' : 'text-foreground'}">
 									{parseInt(score.score).toLocaleString()}
 								</span>
 							</Table.Cell>
-							<Table.Cell class="text-right text-zinc-500 text-sm">
+							<Table.Cell class="text-right text-muted-foreground text-sm">
 								{formatDate(score.createdAt)}
 							</Table.Cell>
 						</Table.Row>

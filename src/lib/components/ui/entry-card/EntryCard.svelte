@@ -14,7 +14,7 @@
 <div
 	data-slot="entry-card"
 	class={cn(
-		'flex items-center gap-4 p-4 bg-white rounded-lg border border-border hover:border-zinc-300 transition-colors',
+		'flex items-center gap-4 p-4 bg-card rounded-lg border border-border hover:border-muted-foreground/30 transition-colors',
 		className
 	)}
 	{...restProps}

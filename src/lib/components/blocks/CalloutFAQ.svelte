@@ -14,18 +14,18 @@
 	let { title, items }: Props = $props();
 </script>
 
-<div class="bg-zinc-50 rounded-2xl p-6">
+<div class="bg-muted rounded-2xl p-6">
 	{#if title}
 		<h3 class="font-semibold mb-4">{title}</h3>
 	{/if}
 	<div class="space-y-4 text-sm">
 		{#each items as item}
 			<div>
-				<p class="font-medium text-zinc-900 dark:text-zinc-100">{item.question}</p>
+				<p class="font-medium text-foreground">{item.question}</p>
 				{#if typeof item.answer === 'string'}
-					<p class="text-zinc-600 dark:text-zinc-400">{@html item.answer}</p>
+					<p class="text-muted-foreground">{@html item.answer}</p>
 				{:else}
-					<p class="text-zinc-600 dark:text-zinc-400">{@render item.answer()}</p>
+					<p class="text-muted-foreground">{@render item.answer()}</p>
 				{/if}
 			</div>
 		{/each}

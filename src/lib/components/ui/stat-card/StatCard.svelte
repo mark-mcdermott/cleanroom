@@ -14,7 +14,7 @@
 <div
 	data-slot="stat-card"
 	class={cn(
-		'bg-white rounded-xl border border-border p-4 flex flex-col',
+		'bg-card rounded-xl border border-border p-4 flex flex-col',
 		className
 	)}
 	{...restProps}

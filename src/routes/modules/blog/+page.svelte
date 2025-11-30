@@ -11,11 +11,11 @@
 
 <div class="max-w-3xl mx-auto px-6 py-16">
 	<h1 class="text-4xl font-semibold tracking-tight mb-2">Blog</h1>
-	<p class="text-zinc-600 mb-12">Latest thoughts, ideas, and updates.</p>
+	<p class="text-muted-foreground mb-12">Latest thoughts, ideas, and updates.</p>
 
 	{#if data.posts.length === 0}
-		<div class="border border-zinc-200 rounded-lg p-8 text-center bg-white">
-			<p class="text-zinc-600">No posts yet. Run <code class="bg-zinc-100 px-2 py-1 rounded">pnpm db:seed</code> to create sample posts.</p>
+		<div class="border border-border rounded-lg p-8 text-center bg-card">
+			<p class="text-muted-foreground">No posts yet. Run <code class="bg-muted px-2 py-1 rounded">pnpm db:seed</code> to create sample posts.</p>
 		</div>
 	{:else}
 		<div class="space-y-10">

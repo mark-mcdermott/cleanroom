@@ -21,14 +21,14 @@
 	{...restProps}
 >
 	<div class="flex items-center justify-between text-sm mb-1.5">
-		<span class="text-zinc-500 dark:text-zinc-400">
+		<span class="text-muted-foreground">
 			{isComplete ? 'Goal reached!' : `${percentage}% of goal`}
 		</span>
 		<span class="font-medium" style="color: {color}">
 			{value} / {goal}
 		</span>
 	</div>
-	<div class="h-2 bg-zinc-100 rounded-full overflow-hidden">
+	<div class="h-2 bg-muted rounded-full overflow-hidden">
 		<div
 			class="h-full rounded-full transition-all duration-500"
 			style="width: {percentage}%; background-color: {color}"

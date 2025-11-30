@@ -14,7 +14,7 @@
 	<header class="mb-10">
 		<a
 			href="/modules/blog"
-			class="inline-flex items-center gap-2 text-sm text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300 transition-colors mb-6"
+			class="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors mb-6"
 		>
 			<ArrowLeft class="w-4 h-4" />
 			Back to blog

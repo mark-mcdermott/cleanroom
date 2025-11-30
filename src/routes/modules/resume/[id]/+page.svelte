@@ -163,24 +163,24 @@
 	</div>
 
 	<!-- Tabs -->
-	<div class="border-b border-zinc-200 mb-6">
+	<div class="border-b border-border mb-6">
 		<div class="flex gap-4">
 			<button
-				class="px-4 py-2 border-b-2 transition-colors cursor-pointer {activeTab === 'form' ? 'border-blue-600 text-blue-600' : 'border-transparent text-zinc-600 hover:text-zinc-900'}"
+				class="px-4 py-2 border-b-2 transition-colors cursor-pointer {activeTab === 'form' ? 'border-blue-600 text-blue-600' : 'border-transparent text-muted-foreground hover:text-foreground'}"
 				onclick={() => activeTab = 'form'}
 			>
 				<Edit class="w-4 h-4 inline mr-1" />
 				Edit Form
 			</button>
 			<button
-				class="px-4 py-2 border-b-2 transition-colors cursor-pointer {activeTab === 'latex' ? 'border-blue-600 text-blue-600' : 'border-transparent text-zinc-600 hover:text-zinc-900'}"
+				class="px-4 py-2 border-b-2 transition-colors cursor-pointer {activeTab === 'latex' ? 'border-blue-600 text-blue-600' : 'border-transparent text-muted-foreground hover:text-foreground'}"
 				onclick={() => activeTab = 'latex'}
 			>
 				<Code class="w-4 h-4 inline mr-1" />
 				LaTeX Editor
 			</button>
 			<button
-				class="px-4 py-2 border-b-2 transition-colors cursor-pointer {activeTab === 'preview' ? 'border-blue-600 text-blue-600' : 'border-transparent text-zinc-600 hover:text-zinc-900'}"
+				class="px-4 py-2 border-b-2 transition-colors cursor-pointer {activeTab === 'preview' ? 'border-blue-600 text-blue-600' : 'border-transparent text-muted-foreground hover:text-foreground'}"
 				onclick={() => activeTab = 'preview'}
 			>
 				<Eye class="w-4 h-4 inline mr-1" />
@@ -288,7 +288,7 @@
 				</Card.Header>
 				<Card.Content class="space-y-4">
 					{#each resumeData.experience as exp, expIndex}
-						<div class="border border-zinc-200 rounded-lg p-4 space-y-4">
+						<div class="border border-border rounded-lg p-4 space-y-4">
 							<div class="flex justify-between">
 								<span class="font-medium">Experience {expIndex + 1}</span>
 								<Button.Root type="button" variant="ghost" size="sm" onclick={() => removeExperience(expIndex)} class="text-red-600 cursor-pointer">
@@ -327,7 +327,7 @@
 						</div>
 					{/each}
 					{#if resumeData.experience.length === 0}
-						<p class="text-zinc-500 dark:text-zinc-400 text-center py-4">No experience added</p>
+						<p class="text-muted-foreground text-center py-4">No experience added</p>
 					{/if}
 				</Card.Content>
 			</Card.Root>
@@ -346,9 +346,9 @@
 				</Card.Header>
 				<Card.Content class="space-y-4">
 					{#each resumeData.education as edu, eduIndex}
-						<div class="border border-zinc-200 rounded-lg p-4 space-y-4">
+						<div class="border border-border rounded-lg p-4 space-y-4">
 							<div class="flex justify-between">
-								<span class="font-medium dark:text-zinc-300">Education {eduIndex + 1}</span>
+								<span class="font-medium">Education {eduIndex + 1}</span>
 								<Button.Root type="button" variant="ghost" size="sm" onclick={() => removeEducation(eduIndex)} class="text-red-600 cursor-pointer">
 									<Trash2 class="w-4 h-4" />
 								</Button.Root>
@@ -369,7 +369,7 @@
 						</div>
 					{/each}
 					{#if resumeData.education.length === 0}
-						<p class="text-zinc-500 dark:text-zinc-400 text-center py-4">No education added</p>
+						<p class="text-muted-foreground text-center py-4">No education added</p>
 					{/if}
 				</Card.Content>
 			</Card.Root>
@@ -388,7 +388,7 @@
 				</Card.Header>
 				<Card.Content class="space-y-4">
 					{#each resumeData.skills as skillCat, catIndex}
-						<div class="border border-zinc-200 rounded-lg p-4 space-y-4">
+						<div class="border border-border rounded-lg p-4 space-y-4">
 							<div class="flex gap-4">
 								<Input.Root type="text" bind:value={skillCat.category} placeholder="Category" class="flex-1" />
 								<Button.Root type="button" variant="ghost" size="sm" onclick={() => removeSkillCategory(catIndex)} class="text-red-600 cursor-pointer">
@@ -411,7 +411,7 @@
 						</div>
 					{/each}
 					{#if resumeData.skills.length === 0}
-						<p class="text-zinc-500 dark:text-zinc-400 text-center py-4">No skills added</p>
+						<p class="text-muted-foreground text-center py-4">No skills added</p>
 					{/if}
 				</Card.Content>
 			</Card.Root>
@@ -430,9 +430,9 @@
 				</Card.Header>
 				<Card.Content class="space-y-4">
 					{#each resumeData.projects as project, projIndex}
-						<div class="border border-zinc-200 rounded-lg p-4 space-y-4">
+						<div class="border border-border rounded-lg p-4 space-y-4">
 							<div class="flex justify-between">
-								<span class="font-medium dark:text-zinc-300">Project {projIndex + 1}</span>
+								<span class="font-medium">Project {projIndex + 1}</span>
 								<Button.Root type="button" variant="ghost" size="sm" onclick={() => removeProject(projIndex)} class="text-red-600 cursor-pointer">
 									<Trash2 class="w-4 h-4" />
 								</Button.Root>
@@ -445,7 +445,7 @@
 						</div>
 					{/each}
 					{#if resumeData.projects.length === 0}
-						<p class="text-zinc-500 dark:text-zinc-400 text-center py-4">No projects added</p>
+						<p class="text-muted-foreground text-center py-4">No projects added</p>
 					{/if}
 				</Card.Content>
 			</Card.Root>
@@ -501,13 +501,13 @@
 							<Code class="w-5 h-5" />
 							LaTeX Source
 						</Card.Title>
-						<p class="text-sm text-zinc-500">Edit the LaTeX directly for fine-grained control</p>
+						<p class="text-sm text-muted-foreground">Edit the LaTeX directly for fine-grained control</p>
 					</Card.Header>
 					<Card.Content>
 						<textarea
 							name="latex"
 							bind:value={latexSource}
-							class="w-full h-[600px] font-mono text-sm p-4 border border-zinc-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+							class="w-full h-[600px] font-mono text-sm p-4 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
 							spellcheck="false"
 						></textarea>
 					</Card.Content>
@@ -530,14 +530,14 @@
 					<Eye class="w-5 h-5" />
 					Resume Preview
 				</Card.Title>
-				<p class="text-sm text-zinc-500 dark:text-zinc-400">Preview how your resume will look. Use Print/PDF to export.</p>
+				<p class="text-sm text-muted-foreground">Preview how your resume will look. Use Print/PDF to export.</p>
 			</Card.Header>
 			<Card.Content>
-				<div class="bg-white border border-zinc-200 rounded-lg p-8 max-w-[8.5in] mx-auto shadow-sm">
+				<div class="bg-card border border-border rounded-lg p-8 max-w-[8.5in] mx-auto shadow-sm">
 					<!-- Header -->
 					<div class="text-center mb-6">
-						<h1 class="text-3xl font-bold text-zinc-900">{resumeData.personal.fullName || 'Your Name'}</h1>
-						<div class="text-sm text-zinc-600 dark:text-zinc-400 mt-2 flex flex-wrap justify-center gap-2">
+						<h1 class="text-3xl font-bold text-foreground">{resumeData.personal.fullName || 'Your Name'}</h1>
+						<div class="text-sm text-muted-foreground mt-2 flex flex-wrap justify-center gap-2">
 							{#if resumeData.personal.email}
 								<span>{resumeData.personal.email}</span>
 							{/if}
@@ -565,7 +565,7 @@
 					{#if resumeData.personal.summary}
 						<div class="mb-6">
 							<h2 class="text-lg font-bold text-blue-600 border-b border-blue-600 pb-1 mb-2">Summary</h2>
-							<p class="text-sm text-zinc-700 dark:text-zinc-300">{resumeData.personal.summary}</p>
+							<p class="text-sm text-muted-foreground">{resumeData.personal.summary}</p>
 						</div>
 					{/if}
 
@@ -577,11 +577,11 @@
 								<div class="mb-4">
 									<div class="flex justify-between items-baseline">
 										<span class="font-semibold">{exp.position}</span>
-										<span class="text-sm text-zinc-500 dark:text-zinc-400">{exp.startDate} - {exp.current ? 'Present' : exp.endDate}</span>
+										<span class="text-sm text-muted-foreground">{exp.startDate} - {exp.current ? 'Present' : exp.endDate}</span>
 									</div>
-									<div class="text-sm italic text-zinc-600 dark:text-zinc-400">{exp.company}{exp.location ? ` — ${exp.location}` : ''}</div>
+									<div class="text-sm italic text-muted-foreground">{exp.company}{exp.location ? ` — ${exp.location}` : ''}</div>
 									{#if exp.highlights.filter(h => h.trim()).length > 0}
-										<ul class="list-disc list-inside text-sm text-zinc-700 dark:text-zinc-300 mt-2">
+										<ul class="list-disc list-inside text-sm text-muted-foreground mt-2">
 											{#each exp.highlights.filter(h => h.trim()) as highlight}
 												<li>{highlight}</li>
 											{/each}
@@ -600,9 +600,9 @@
 								<div class="mb-3">
 									<div class="flex justify-between items-baseline">
 										<span class="font-semibold">{edu.degree}{edu.field ? ` in ${edu.field}` : ''}</span>
-										<span class="text-sm text-zinc-500 dark:text-zinc-400">{edu.startDate ? `${edu.startDate} - ` : ''}{edu.endDate || ''}</span>
+										<span class="text-sm text-muted-foreground">{edu.startDate ? `${edu.startDate} - ` : ''}{edu.endDate || ''}</span>
 									</div>
-									<div class="text-sm italic text-zinc-600 dark:text-zinc-400">
+									<div class="text-sm italic text-muted-foreground">
 										{edu.institution}{edu.location ? ` — ${edu.location}` : ''}{edu.gpa ? ` • GPA: ${edu.gpa}` : ''}
 									</div>
 								</div>
@@ -618,7 +618,7 @@
 								{#if skillCat.skills.filter(s => s.trim()).length > 0}
 									<div class="mb-2">
 										<span class="font-semibold text-sm">{skillCat.category}:</span>
-										<span class="text-sm text-zinc-700 dark:text-zinc-300">{skillCat.skills.filter(s => s.trim()).join(', ')}</span>
+										<span class="text-sm text-muted-foreground">{skillCat.skills.filter(s => s.trim()).join(', ')}</span>
 									</div>
 								{/if}
 							{/each}
@@ -638,7 +638,7 @@
 										{/if}
 									</div>
 									{#if project.description}
-										<p class="text-sm text-zinc-700 dark:text-zinc-300">{project.description}</p>
+										<p class="text-sm text-muted-foreground">{project.description}</p>
 									{/if}
 								</div>
 							{/each}

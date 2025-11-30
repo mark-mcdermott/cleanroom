@@ -63,7 +63,7 @@
 	<div class="flex items-center justify-between mb-8">
 		<div>
 			<h1 class="text-3xl font-semibold tracking-tight">Tracker Admin</h1>
-			<p class="text-zinc-500 mt-1">Manage categories and metrics</p>
+			<p class="text-muted-foreground mt-1">Manage categories and metrics</p>
 		</div>
 		<form
 			method="POST"
@@ -100,20 +100,20 @@
 		</div>
 
 		{#if data.categories.length === 0}
-			<div class="border border-zinc-200 rounded-lg p-6 text-center bg-white">
-				<p class="text-zinc-600 mb-4">No categories yet. Reset demo data or create one manually.</p>
+			<div class="border border-border rounded-lg p-6 text-center bg-card">
+				<p class="text-muted-foreground mb-4">No categories yet. Reset demo data or create one manually.</p>
 			</div>
 		{:else}
 			<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
 				{#each data.categories as category}
-					<div class="p-4 bg-white rounded-lg border border-border hover:border-zinc-300 transition-colors group relative">
+					<div class="p-4 bg-card rounded-lg border border-border hover:border-border transition-colors group relative">
 						<span class="text-2xl">{category.icon || '📊'}</span>
 						<h3 class="font-medium mt-2">{category.name}</h3>
-						<p class="text-xs text-zinc-500 mt-0.5">
+						<p class="text-xs text-muted-foreground mt-0.5">
 							{data.metrics.filter((m) => m.categoryId === category.id).length} metrics
 						</p>
 						<button
-							class="absolute top-2 right-2 p-1 rounded text-zinc-300 hover:text-red-500 hover:bg-red-50 opacity-0 group-hover:opacity-100 transition-all cursor-pointer"
+							class="absolute top-2 right-2 p-1 rounded text-muted-foreground hover:text-red-500 hover:bg-red-50 opacity-0 group-hover:opacity-100 transition-all cursor-pointer"
 							onclick={() => handleDeleteCategory(category.id, category.name)}
 							title="Delete category"
 						>
@@ -136,8 +136,8 @@
 		</div>
 
 		{#if data.metrics.length === 0}
-			<div class="border border-zinc-200 rounded-lg p-6 text-center bg-white">
-				<p class="text-zinc-600 mb-4">No metrics yet. Reset demo data or create one manually.</p>
+			<div class="border border-border rounded-lg p-6 text-center bg-card">
+				<p class="text-muted-foreground mb-4">No metrics yet. Reset demo data or create one manually.</p>
 			</div>
 		{:else}
 			<Table.Root>
@@ -168,20 +168,20 @@
 									<span class="font-medium">{metric.name}</span>
 								</div>
 							</Table.Cell>
-							<Table.Cell class="text-zinc-500">
+							<Table.Cell class="text-muted-foreground">
 								{getCategoryIcon(metric.categoryId)} {getCategoryName(metric.categoryId)}
 							</Table.Cell>
-							<Table.Cell class="text-zinc-500">
+							<Table.Cell class="text-muted-foreground">
 								{metric.unit || '—'}
 							</Table.Cell>
 							<Table.Cell>
-								<span class="px-2 py-0.5 rounded text-xs font-medium bg-zinc-100 text-zinc-600">
+								<span class="px-2 py-0.5 rounded text-xs font-medium bg-muted text-muted-foreground">
 									{metric.valueType}
 								</span>
 							</Table.Cell>
 							<Table.Cell>
 								{#if metric.archived}
-									<span class="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-zinc-100 text-zinc-600">
+									<span class="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-muted text-muted-foreground">
 										<Archive class="w-3 h-3" />
 										Archived
 									</span>
@@ -196,7 +196,7 @@
 									<a
 										href="/modules/tracker/admin/metrics/{metric.id}/edit"
 										data-action="edit"
-										class="p-1.5 rounded text-zinc-400 hover:text-zinc-700 hover:bg-zinc-200 transition-colors cursor-pointer"
+										class="p-1.5 rounded text-muted-foreground hover:text-muted-foreground hover:bg-muted transition-colors cursor-pointer"
 										title="Edit metric"
 										onclick={(e: MouseEvent) => e.stopPropagation()}
 									>
@@ -204,7 +204,7 @@
 									</a>
 									<button
 										data-action="delete"
-										class="p-1.5 rounded text-zinc-400 hover:text-red-600 hover:bg-red-50 transition-colors cursor-pointer"
+										class="p-1.5 rounded text-muted-foreground hover:text-red-600 hover:bg-red-50 transition-colors cursor-pointer"
 										title="Delete metric"
 										onclick={(e: MouseEvent) => {
 											e.stopPropagation();

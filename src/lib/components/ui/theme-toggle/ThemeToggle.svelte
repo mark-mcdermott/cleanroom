@@ -56,12 +56,20 @@
 		// Get stored theme or default to system (for 3-state) or light (for 2-state)
 		const stored = localStorage.getItem(STORAGE_KEY) as ThemeMode | null;
 
-		if (stored && (mode === 'light-dark-system' || stored !== 'system')) {
-			theme = stored;
+		if (stored) {
+			if (mode === 'light-dark' && stored === 'system') {
+				// 2-state toggle: resolve 'system' to actual preference
+				theme = getSystemTheme();
+			} else if (mode === 'light-dark-system' || stored !== 'system') {
+				theme = stored;
+			} else {
+				theme = 'light';
+			}
 		} else if (mode === 'light-dark-system') {
 			theme = 'system';
 		} else {
-			theme = 'light';
+			// 2-state toggle with no stored value: respect system preference
+			theme = getSystemTheme();
 		}
 
 		applyTheme(theme);
@@ -93,7 +101,7 @@
 	type="button"
 	onclick={cycleTheme}
 	class={cn(
-		'p-2 rounded-md text-zinc-500 hover:text-zinc-700 dark:text-zinc-400 dark:hover:text-zinc-200 transition-colors cursor-pointer',
+		'p-2 rounded-md text-muted-foreground hover:text-foreground transition-colors cursor-pointer',
 		className
 	)}
 	title={tooltip()}

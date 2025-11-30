@@ -24,7 +24,7 @@
 
 <div>
 	{#if label}
-		<label for={name} class="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">
+		<label for={name} class="block text-sm font-medium text-muted-foreground mb-2">
 			{label}{#if required}<span class="text-red-500 ml-1">*</span>{/if}
 		</label>
 	{/if}
@@ -36,10 +36,10 @@
 		{rows}
 		{required}
 		{disabled}
-		class="w-full px-4 py-3 border rounded-lg outline-none transition-shadow resize-none {error
-			? 'border-red-500 focus:ring-2 focus:ring-red-500'
-			: 'border-zinc-300 focus:ring-2 focus:ring-zinc-900 focus:border-transparent'} {disabled
-			? 'bg-zinc-100 cursor-not-allowed'
+		class="w-full px-4 py-3 border rounded-lg outline-none transition-shadow resize-none bg-background text-foreground {error
+			? 'border-destructive focus:ring-2 focus:ring-destructive'
+			: 'border-border focus:ring-2 focus:ring-ring focus:border-transparent'} {disabled
+			? 'bg-muted cursor-not-allowed'
 			: ''}"
 	></textarea>
 	{#if error}

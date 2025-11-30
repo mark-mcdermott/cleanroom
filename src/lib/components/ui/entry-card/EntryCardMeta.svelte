@@ -13,7 +13,7 @@
 
 <p
 	data-slot="entry-card-meta"
-	class={cn('text-sm text-zinc-500 dark:text-zinc-400 mt-0.5', className)}
+	class={cn('text-sm text-muted-foreground mt-0.5', className)}
 	{...restProps}
 >
 	{#if children}

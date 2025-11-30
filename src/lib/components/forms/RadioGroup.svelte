@@ -27,7 +27,7 @@
 
 <div>
 	{#if label}
-		<p class="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-3">
+		<p class="block text-sm font-medium text-muted-foreground mb-3">
 			{label}{#if required}<span class="text-red-500 ml-1">*</span>{/if}
 		</p>
 	{/if}
@@ -41,11 +41,11 @@
 					bind:group={value}
 					{required}
 					{disabled}
-					class="w-5 h-5 border-zinc-300 text-zinc-900 focus:ring-2 focus:ring-zinc-900 focus:ring-offset-0 {error
-						? 'border-red-500'
+					class="w-5 h-5 border-border text-primary focus:ring-2 focus:ring-ring focus:ring-offset-0 {error
+						? 'border-destructive'
 						: ''}"
 				/>
-				<span class="text-sm text-zinc-700 dark:text-zinc-300">{option.label}</span>
+				<span class="text-sm text-muted-foreground">{option.label}</span>
 			</label>
 		{/each}
 	</div>

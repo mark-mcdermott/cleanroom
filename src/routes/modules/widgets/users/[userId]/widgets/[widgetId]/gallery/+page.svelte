@@ -20,13 +20,13 @@
 
 <div class="max-w-4xl mx-auto px-6 py-16">
 	<a href="/modules/widgets/users/{data.targetUser.id}/widgets/{data.widget.id}"
-		class="inline-flex items-center gap-2 text-sm text-zinc-600 hover:text-zinc-900 mb-6">
+		class="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-6">
 		<ArrowLeft class="w-4 h-4" />Back to {data.widget.name}
 	</a>
 
 	<div class="flex items-center justify-between mb-6">
 		<h1 class="text-2xl font-semibold tracking-tight flex items-center gap-2">
-			<Images class="w-6 h-6 text-zinc-400" />
+			<Images class="w-6 h-6 text-muted-foreground" />
 			{data.gallery?.name || 'Gallery'}
 		</h1>
 		{#if data.canEdit && data.gallery}
@@ -37,9 +37,9 @@
 	</div>
 
 	{#if !data.gallery}
-		<div class="bg-white border border-zinc-200 rounded-lg p-8 text-center">
-			<Images class="w-12 h-12 mx-auto text-zinc-300 mb-4" />
-			<p class="text-zinc-600 mb-4">No gallery created yet.</p>
+		<div class="bg-card border border-border rounded-lg p-8 text-center">
+			<Images class="w-12 h-12 mx-auto text-muted-foreground mb-4" />
+			<p class="text-muted-foreground mb-4">No gallery created yet.</p>
 			{#if data.canEdit}
 				<form method="POST" action="?/createGallery" use:enhance={() => {
 					return async ({ result }) => {
@@ -53,7 +53,7 @@
 		</div>
 	{:else}
 		{#if showUpload && data.canEdit}
-			<div class="bg-white border border-zinc-200 rounded-lg p-6 mb-6">
+			<div class="bg-card border border-border rounded-lg p-6 mb-6">
 				<h2 class="text-lg font-semibold mb-4">Add Photo to Gallery</h2>
 				<form method="POST" action="?/addPhoto" enctype="multipart/form-data" use:enhance={() => {
 					uploading = true;
@@ -66,8 +66,8 @@
 					<input type="hidden" name="galleryId" value={data.gallery.id} />
 					<div class="space-y-2">
 						<Label.Root for="photo">Photo</Label.Root>
-						<div class="border-2 border-dashed border-zinc-300 rounded-lg p-4 text-center">
-							{#if previewUrl}<img src={previewUrl} alt="Preview" class="max-h-32 mx-auto mb-2 rounded" />{:else}<Upload class="w-6 h-6 mx-auto text-zinc-400" />{/if}
+						<div class="border-2 border-dashed border-border rounded-lg p-4 text-center">
+							{#if previewUrl}<img src={previewUrl} alt="Preview" class="max-h-32 mx-auto mb-2 rounded" />{:else}<Upload class="w-6 h-6 mx-auto text-muted-foreground" />{/if}
 							<Input.Root id="photo" name="photo" type="file" accept="image/*" onchange={handleFileChange} class="mt-2" required />
 						</div>
 					</div>
@@ -81,13 +81,13 @@
 		{/if}
 
 		{#if data.photos.length === 0}
-			<div class="bg-white border border-zinc-200 rounded-lg p-8 text-center">
-				<p class="text-zinc-500">Gallery is empty. Add some photos!</p>
+			<div class="bg-card border border-border rounded-lg p-8 text-center">
+				<p class="text-muted-foreground">Gallery is empty. Add some photos!</p>
 			</div>
 		{:else}
 			<div class="grid grid-cols-2 md:grid-cols-3 gap-4">
 				{#each data.photos as photo}
-					<div class="relative group aspect-square bg-zinc-100 rounded-lg overflow-hidden">
+					<div class="relative group aspect-square bg-muted rounded-lg overflow-hidden">
 						<img src={photo.url} alt={photo.caption || 'Gallery photo'} class="w-full h-full object-cover" />
 						{#if photo.caption}
 							<div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-3">

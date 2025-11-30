@@ -284,8 +284,8 @@ function getVideosPage(): string {
 	<meta name="description" content="Discover travel videos from around the world" />
 </svelte:head>
 
-<div class="min-h-screen bg-zinc-950 text-white">
-	<div class="border-b border-zinc-800 bg-zinc-900/50 backdrop-blur-sm sticky top-0 z-10">
+<div class="min-h-screen bg-background text-foreground">
+	<div class="border-b border-border bg-secondary/50 backdrop-blur-sm sticky top-0 z-10">
 		<div class="max-w-7xl mx-auto px-6 py-4">
 			<div class="flex items-center justify-between">
 				<div class="flex items-center gap-3">
@@ -295,7 +295,7 @@ function getVideosPage(): string {
 				{#if selectedLocation || selectedTags.length > 0}
 					<button
 						onclick={clearFilters}
-						class="flex items-center gap-2 px-3 py-1.5 text-sm bg-zinc-800 hover:bg-zinc-700 rounded-full transition-colors cursor-pointer"
+						class="flex items-center gap-2 px-3 py-1.5 text-sm bg-secondary hover:bg-accent rounded-full transition-colors cursor-pointer"
 					>
 						<X class="w-4 h-4" />
 						Clear filters
@@ -308,13 +308,13 @@ function getVideosPage(): string {
 	<div class="max-w-7xl mx-auto px-6 py-8">
 		<div class="grid lg:grid-cols-[400px_1fr] gap-8">
 			<div class="space-y-6">
-				<div class="bg-zinc-900 rounded-2xl p-4 border border-zinc-800">
+				<div class="bg-secondary rounded-2xl p-4 border border-border">
 					<h2 class="text-lg font-medium mb-4 flex items-center gap-2">
 						<MapPin class="w-5 h-5 text-blue-400" />
 						Explore the Globe
 					</h2>
 					<div
-						class="relative aspect-square rounded-xl overflow-hidden bg-zinc-950 cursor-grab active:cursor-grabbing"
+						class="relative aspect-square rounded-xl overflow-hidden bg-primary cursor-grab active:cursor-grabbing"
 						onpointerdown={handlePointerDown}
 						onpointermove={handlePointerMove}
 						onpointerup={handlePointerUp}
@@ -330,12 +330,12 @@ function getVideosPage(): string {
 							style="width: 100%; height: 100%;"
 						></canvas>
 						<div class="absolute bottom-3 left-3 right-3 text-center">
-							<p class="text-xs text-zinc-500">Drag to rotate</p>
+							<p class="text-xs text-muted-foreground">Drag to rotate</p>
 						</div>
 					</div>
 				</div>
 
-				<div class="bg-zinc-900 rounded-2xl p-4 border border-zinc-800">
+				<div class="bg-secondary rounded-2xl p-4 border border-border">
 					<h2 class="text-lg font-medium mb-4">Destinations</h2>
 					<div class="space-y-2 max-h-64 overflow-y-auto">
 						{#each locations as location}
@@ -344,7 +344,7 @@ function getVideosPage(): string {
 									selectLocation(location.name);
 									focusOnLocation(location.lat, location.lng);
 								}}
-								class="w-full text-left px-3 py-2 rounded-lg flex items-center justify-between transition-colors cursor-pointer {selectedLocation === location.name ? 'bg-blue-600 text-white' : 'bg-zinc-800 hover:bg-zinc-700 text-zinc-300'}"
+								class="w-full text-left px-3 py-2 rounded-lg flex items-center justify-between transition-colors cursor-pointer {selectedLocation === location.name ? 'bg-blue-600 text-white' : 'bg-muted hover:bg-accent text-muted-foreground'}"
 							>
 								<span class="flex items-center gap-2">
 									{#if location.type === 'attraction'}
@@ -354,13 +354,13 @@ function getVideosPage(): string {
 									{/if}
 									{location.name}
 								</span>
-								<span class="text-xs text-zinc-400">{location.country}</span>
+								<span class="text-xs text-muted-foreground">{location.country}</span>
 							</button>
 						{/each}
 					</div>
 				</div>
 
-				<div class="bg-zinc-900 rounded-2xl p-4 border border-zinc-800">
+				<div class="bg-secondary rounded-2xl p-4 border border-border">
 					<h2 class="text-lg font-medium mb-4 flex items-center gap-2">
 						<Filter class="w-5 h-5 text-blue-400" />
 						Filter by Category
@@ -369,7 +369,7 @@ function getVideosPage(): string {
 						{#each allTags as tag}
 							<button
 								onclick={() => toggleTag(tag.id)}
-								class="px-3 py-1.5 rounded-full text-sm transition-all cursor-pointer {selectedTags.includes(tag.id) ? tag.color + ' text-white' : 'bg-zinc-800 text-zinc-400 hover:bg-zinc-700'}"
+								class="px-3 py-1.5 rounded-full text-sm transition-all cursor-pointer {selectedTags.includes(tag.id) ? tag.color + ' text-white' : 'bg-muted text-muted-foreground hover:bg-accent'}"
 							>
 								{tag.label}
 							</button>
@@ -386,16 +386,16 @@ function getVideosPage(): string {
 						{:else}
 							All Videos
 						{/if}
-						<span class="text-zinc-500 font-normal text-base ml-2">
+						<span class="text-muted-foreground font-normal text-base ml-2">
 							({filteredVideos().length} videos)
 						</span>
 					</h2>
 				</div>
 
 				{#if filteredVideos().length === 0}
-					<div class="text-center py-16 bg-zinc-900 rounded-2xl border border-zinc-800">
-						<Globe class="w-16 h-16 text-zinc-600 mx-auto mb-4" />
-						<p class="text-zinc-400">No videos match your filters</p>
+					<div class="text-center py-16 bg-secondary rounded-2xl border border-border">
+						<Globe class="w-16 h-16 text-muted-foreground mx-auto mb-4" />
+						<p class="text-muted-foreground">No videos match your filters</p>
 						<button
 							onclick={clearFilters}
 							class="mt-4 px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors cursor-pointer"
@@ -406,7 +406,7 @@ function getVideosPage(): string {
 				{:else}
 					<div class="grid sm:grid-cols-2 gap-4">
 						{#each filteredVideos() as video}
-							<div class="group bg-zinc-900 rounded-xl overflow-hidden border border-zinc-800 hover:border-zinc-600 transition-colors cursor-pointer">
+							<div class="group bg-secondary rounded-xl overflow-hidden border border-border hover:border-accent transition-colors cursor-pointer">
 								<div class="relative aspect-video">
 									<img
 										src={video.thumbnail}
@@ -432,8 +432,8 @@ function getVideosPage(): string {
 									<h3 class="font-medium text-sm line-clamp-2 mb-2 group-hover:text-blue-400 transition-colors">
 										{video.title}
 									</h3>
-									<p class="text-xs text-zinc-500 mb-2">{video.creator}</p>
-									<div class="flex items-center gap-3 text-xs text-zinc-400 mb-3">
+									<p class="text-xs text-muted-foreground mb-2">{video.creator}</p>
+									<div class="flex items-center gap-3 text-xs text-muted-foreground mb-3">
 										<span class="flex items-center gap-1">
 											<Eye class="w-3 h-3" />
 											{video.views}
@@ -446,7 +446,7 @@ function getVideosPage(): string {
 									<div class="flex flex-wrap gap-1">
 										{#each video.tags.slice(0, 3) as tag}
 											{@const tagInfo = allTags.find(t => t.id === tag)}
-											<span class="px-2 py-0.5 rounded text-xs {tagInfo?.color || 'bg-zinc-700'} text-white">
+											<span class="px-2 py-0.5 rounded text-xs {tagInfo?.color || 'bg-muted'} text-white">
 												{tagInfo?.label || tag}
 											</span>
 										{/each}

@@ -43,7 +43,7 @@
 			</form>
 		</Card.Content>
 		<Card.Footer class="justify-center">
-			<p class="text-sm text-zinc-600 dark:text-zinc-400">
+			<p class="text-sm text-muted-foreground">
 				Don't have an account?
 				<a href="/modules/resume/signup" class="text-blue-600 hover:underline">Sign up</a>
 			</p>

@@ -69,7 +69,7 @@
 	<div class="flex items-center justify-between mb-8">
 		<div>
 			<h1 class="text-3xl font-semibold tracking-tight">Dashboard</h1>
-			<p class="text-zinc-500 mt-1">
+			<p class="text-muted-foreground mt-1">
 				{formatDate(new Date())} - Track your progress
 			</p>
 		</div>
@@ -119,7 +119,7 @@
 		<div class="mb-8">
 			<div class="flex items-center justify-between mb-4">
 				<h2 class="text-xl font-semibold">Today's Goals</h2>
-				<a href="/modules/tracker/metrics" class="text-sm text-zinc-500 hover:text-zinc-700 flex items-center gap-1">
+				<a href="/modules/tracker/metrics" class="text-sm text-muted-foreground hover:text-muted-foreground flex items-center gap-1">
 					View all metrics <ArrowRight class="w-4 h-4" />
 				</a>
 			</div>
@@ -133,7 +133,7 @@
 							<MetricCard.Header>
 								<div>
 									<MetricCard.Title>{metric.name}</MetricCard.Title>
-									<p class="text-sm text-zinc-500 mt-0.5">Daily Goal</p>
+									<p class="text-sm text-muted-foreground mt-0.5">Daily Goal</p>
 								</div>
 								<ProgressRing.Root value={progress} size={56} strokeWidth={6} color={metric.color || '#3b82f6'}>
 									<span class="text-xs font-semibold">{progress}%</span>
@@ -152,14 +152,14 @@
 	<div class="mb-8">
 		<div class="flex items-center justify-between mb-4">
 			<h2 class="text-xl font-semibold">Recent Entries</h2>
-			<a href="/modules/tracker/history" class="text-sm text-zinc-500 hover:text-zinc-700 flex items-center gap-1">
+			<a href="/modules/tracker/history" class="text-sm text-muted-foreground hover:text-muted-foreground flex items-center gap-1">
 				View all <ArrowRight class="w-4 h-4" />
 			</a>
 		</div>
 
 		{#if data.todayEntries.length === 0 && data.recentEntries.length === 0}
-			<div class="border border-zinc-200 rounded-lg p-8 text-center bg-white">
-				<p class="text-zinc-600 mb-4">
+			<div class="border border-border rounded-lg p-8 text-center bg-card">
+				<p class="text-muted-foreground mb-4">
 					No entries yet. Start tracking by logging your first entry!
 				</p>
 				<Button.Root onclick={() => goto('/modules/tracker/log')} class="cursor-pointer">
@@ -177,7 +177,7 @@
 							<EntryCard.Meta>
 								{formatDate(entry.date)} at {formatTime(entry.date)}
 								{#if entry.notes}
-									<span class="text-zinc-400 mx-1">•</span>
+									<span class="text-muted-foreground mx-1">•</span>
 									<span class="truncate">{entry.notes}</span>
 								{/if}
 							</EntryCard.Meta>
@@ -187,7 +187,7 @@
 								{entry.value}
 							</span>
 							{#if entry.metricUnit}
-								<span class="text-zinc-500 text-sm ml-1">{entry.metricUnit}</span>
+								<span class="text-muted-foreground text-sm ml-1">{entry.metricUnit}</span>
 							{/if}
 						</EntryCard.Value>
 					</EntryCard.Root>
@@ -204,11 +204,11 @@
 				{#each data.categories as category}
 					<button
 						onclick={() => goto(`/modules/tracker/log?category=${category.slug}`)}
-						class="p-4 bg-white rounded-xl border border-border hover:border-zinc-300 transition-colors text-left cursor-pointer"
+						class="p-4 bg-card rounded-xl border border-border hover:border-border transition-colors text-left cursor-pointer"
 					>
 						<span class="text-2xl">{category.icon || '📊'}</span>
 						<h3 class="font-medium mt-2">{category.name}</h3>
-						<p class="text-sm text-zinc-500 mt-0.5">
+						<p class="text-sm text-muted-foreground mt-0.5">
 							{data.metrics.filter((m) => m.categoryId === category.id).length} metrics
 						</p>
 					</button>
@@ -218,8 +218,8 @@
 	{/if}
 
 	{#if data.categories.length === 0}
-		<div class="border border-dashed border-zinc-300 rounded-lg p-8 text-center">
-			<p class="text-zinc-600 mb-4">
+		<div class="border border-dashed border-border rounded-lg p-8 text-center">
+			<p class="text-muted-foreground mb-4">
 				No categories or metrics set up yet. Go to the admin panel to get started.
 			</p>
 			<Button.Root variant="outline" onclick={() => goto('/modules/tracker/admin')} class="cursor-pointer">

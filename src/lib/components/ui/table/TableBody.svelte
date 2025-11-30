@@ -10,6 +10,6 @@
 	let { class: className, children, ...restProps }: Props = $props();
 </script>
 
-<tbody data-slot="table-body" class={cn('bg-white divide-y divide-zinc-200', className)} {...restProps}>
+<tbody data-slot="table-body" class={cn('bg-card divide-y divide-border', className)} {...restProps}>
 	{@render children?.()}
 </tbody>

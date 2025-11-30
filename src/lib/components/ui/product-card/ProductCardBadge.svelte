@@ -15,7 +15,7 @@
 		sale: 'bg-red-500 text-white',
 		new: 'bg-emerald-500 text-white',
 		featured: 'bg-amber-500 text-white',
-		'out-of-stock': 'bg-zinc-500 text-white'
+		'out-of-stock': 'bg-muted-foreground text-background'
 	};
 </script>
 

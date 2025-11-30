@@ -13,7 +13,7 @@
 
 <h3
 	data-slot="product-card-name"
-	class={cn('font-medium text-foreground group-hover:text-zinc-600 dark:group-hover:text-zinc-400 transition-colors line-clamp-2', className)}
+	class={cn('font-medium text-foreground group-hover:text-muted-foreground transition-colors line-clamp-2', className)}
 	{...restProps}
 >
 	{#if children}

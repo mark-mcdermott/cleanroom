@@ -315,7 +315,7 @@ function getStoreListingSvelte(config: ProjectConfig): string {
 	<div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
 		<div>
 			<h1 class="text-4xl font-semibold tracking-tight mb-2">Shop</h1>
-			<p class="text-zinc-600 dark:text-zinc-400">Browse our collection of products.</p>
+			<p class="text-muted-foreground">Browse our collection of products.</p>
 		</div>
 
 		{#if data.categories.length > 0}
@@ -324,7 +324,7 @@ function getStoreListingSvelte(config: ProjectConfig): string {
 					href="/store"
 					class="px-3 py-1.5 rounded-full text-sm font-medium transition-colors {!data.selectedCategory
 						? 'bg-foreground text-background'
-						: 'bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-200 dark:hover:bg-zinc-700'}"
+						: 'bg-muted text-muted-foreground hover:bg-accent'}"
 				>
 					All
 				</a>
@@ -334,7 +334,7 @@ function getStoreListingSvelte(config: ProjectConfig): string {
 						class="px-3 py-1.5 rounded-full text-sm font-medium transition-colors {data.selectedCategory ===
 						category.slug
 							? 'bg-foreground text-background'
-							: 'bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-200 dark:hover:bg-zinc-700'}"
+							: 'bg-muted text-muted-foreground hover:bg-accent'}"
 					>
 						{category.name}
 					</a>
@@ -344,8 +344,8 @@ function getStoreListingSvelte(config: ProjectConfig): string {
 	</div>
 
 	{#if data.products.length === 0}
-		<div class="border border-zinc-200 rounded-lg p-8 text-center bg-white">
-			<p class="text-zinc-600 dark:text-zinc-400">No products available.</p>
+		<div class="border border-border rounded-lg p-8 text-center bg-background">
+			<p class="text-muted-foreground">No products available.</p>
 		</div>
 	{:else}
 		<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
@@ -407,25 +407,25 @@ function getProductDetailSvelte(config: ProjectConfig): string {
 </svelte:head>
 
 <div class="max-w-5xl mx-auto px-6 py-16">
-	<a href="/store" class="inline-flex items-center gap-2 text-sm text-zinc-500 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-300 mb-8">
+	<a href="/store" class="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-8">
 		<ArrowLeft class="w-4 h-4" />
 		Back to shop
 	</a>
 
 	<div class="grid md:grid-cols-2 gap-12">
-		<div class="relative aspect-square rounded-xl overflow-hidden bg-zinc-100">
+		<div class="relative aspect-square rounded-xl overflow-hidden bg-muted">
 			{#if data.product.image}
 				<img src={data.product.image} alt={data.product.name} class="w-full h-full object-cover" />
 			{:else}
 				<div class="w-full h-full flex items-center justify-center">
-					<span class="text-zinc-400 text-8xl">📦</span>
+					<span class="text-muted-foreground text-8xl">📦</span>
 				</div>
 			{/if}
 		</div>
 
 		<div>
 			{#if data.categoryName}
-				<p class="text-sm text-zinc-500 dark:text-zinc-400 mb-2">{data.categoryName}</p>
+				<p class="text-sm text-muted-foreground mb-2">{data.categoryName}</p>
 			{/if}
 
 			<h1 class="text-3xl font-semibold tracking-tight mb-4">{data.product.name}</h1>
@@ -435,14 +435,14 @@ function getProductDetailSvelte(config: ProjectConfig): string {
 					\${formatPrice(data.product.price)}
 				</span>
 				{#if onSale && data.product.compareAtPrice}
-					<span class="text-lg text-zinc-400 line-through">
+					<span class="text-lg text-muted-foreground line-through">
 						\${formatPrice(data.product.compareAtPrice)}
 					</span>
 				{/if}
 			</div>
 
 			{#if data.product.description}
-				<p class="text-zinc-600 dark:text-zinc-400 leading-relaxed mb-8">{data.product.description}</p>
+				<p class="text-muted-foreground leading-relaxed mb-8">{data.product.description}</p>
 			{/if}
 
 			{#if !outOfStock}
@@ -633,7 +633,7 @@ function getProductCardImageComponent(): string {
 </script>
 
 {#if src}
-	<div class={cn('relative aspect-square overflow-hidden rounded-lg bg-zinc-100 mb-3', className)}>
+	<div class={cn('relative aspect-square overflow-hidden rounded-lg bg-muted mb-3', className)}>
 		<img
 			{src}
 			{alt}
@@ -643,8 +643,8 @@ function getProductCardImageComponent(): string {
 		/>
 	</div>
 {:else}
-	<div class={cn('relative aspect-square overflow-hidden rounded-lg bg-zinc-100 mb-3 flex items-center justify-center', className)}>
-		<span class="text-zinc-400 text-4xl">📦</span>
+	<div class={cn('relative aspect-square overflow-hidden rounded-lg bg-muted mb-3 flex items-center justify-center', className)}>
+		<span class="text-muted-foreground text-4xl">📦</span>
 	</div>
 {/if}
 `;
@@ -666,7 +666,7 @@ function getProductCardNameComponent(): string {
 
 <h3
 	data-slot="product-card-name"
-	class={cn('font-medium text-foreground group-hover:text-zinc-600 dark:group-hover:text-zinc-400 transition-colors line-clamp-2', className)}
+	class={cn('font-medium text-foreground group-hover:text-muted-foreground transition-colors line-clamp-2', className)}
 	{...restProps}
 >
 	{#if children}
@@ -703,7 +703,7 @@ function getProductCardPriceComponent(): string {
 		{currency}{formatPrice(price)}
 	</span>
 	{#if hasDiscount}
-		<span class="text-zinc-400 line-through text-sm">
+		<span class="text-muted-foreground line-through text-sm">
 			{currency}{formatPrice(compareAtPrice)}
 		</span>
 	{/if}
@@ -729,7 +729,7 @@ function getProductCardBadgeComponent(): string {
 		sale: 'bg-red-500 text-white',
 		new: 'bg-emerald-500 text-white',
 		featured: 'bg-amber-500 text-white',
-		'out-of-stock': 'bg-zinc-500 text-white'
+		'out-of-stock': 'bg-muted text-white'
 	};
 </script>
 

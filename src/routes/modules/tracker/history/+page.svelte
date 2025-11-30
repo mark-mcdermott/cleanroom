@@ -63,7 +63,7 @@
 <div class="max-w-4xl mx-auto px-6 py-8">
 	<a
 		href="/modules/tracker"
-		class="inline-flex items-center gap-2 text-sm text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300 mb-8"
+		class="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-8"
 	>
 		<ArrowLeft class="w-4 h-4" />
 		Back to dashboard
@@ -72,12 +72,12 @@
 	<div class="flex items-center justify-between mb-8">
 		<div>
 			<h1 class="text-3xl font-semibold tracking-tight">History</h1>
-			<p class="text-zinc-500 dark:text-zinc-400 mt-1">{data.entries.length} entries</p>
+			<p class="text-muted-foreground mt-1">{data.entries.length} entries</p>
 		</div>
 
 		<!-- Filter -->
 		<div class="flex items-center gap-2">
-			<Filter class="w-4 h-4 text-zinc-400" />
+			<Filter class="w-4 h-4 text-muted-foreground" />
 			<Select.Root
 				value={data.selectedMetric || undefined}
 				onValueChange={(v) => {
@@ -113,8 +113,8 @@
 	</div>
 
 	{#if data.entries.length === 0}
-		<div class="border border-zinc-200 rounded-lg p-8 text-center bg-white">
-			<p class="text-zinc-600 dark:text-zinc-400">
+		<div class="border border-border rounded-lg p-8 text-center bg-card">
+			<p class="text-muted-foreground">
 				{data.selectedMetric ? 'No entries for this metric yet.' : 'No entries yet. Start tracking!'}
 			</p>
 		</div>
@@ -122,7 +122,7 @@
 		<div class="space-y-8">
 			{#each dateKeys as dateKey}
 				<div>
-					<h2 class="text-sm font-medium text-zinc-500 dark:text-zinc-400 mb-3 sticky top-0 bg-background py-2">
+					<h2 class="text-sm font-medium text-muted-foreground mb-3 sticky top-0 bg-background py-2">
 						{formatDate(dateKey)}
 					</h2>
 					<div class="space-y-2">
@@ -134,7 +134,7 @@
 									<EntryCard.Meta>
 										{formatTime(entry.date)}
 										{#if entry.notes}
-											<span class="text-zinc-400 mx-1">•</span>
+											<span class="text-muted-foreground mx-1">•</span>
 											<span class="truncate">{entry.notes}</span>
 										{/if}
 									</EntryCard.Meta>
@@ -146,11 +146,11 @@
 												{entry.value}
 											</span>
 											{#if entry.metricUnit}
-												<span class="text-zinc-500 dark:text-zinc-400 text-sm ml-1">{entry.metricUnit}</span>
+												<span class="text-muted-foreground text-sm ml-1">{entry.metricUnit}</span>
 											{/if}
 										</div>
 										<button
-											class="p-1.5 rounded text-zinc-300 hover:text-red-500 hover:bg-red-50 opacity-0 group-hover:opacity-100 transition-all cursor-pointer"
+											class="p-1.5 rounded text-muted-foreground hover:text-red-500 hover:bg-red-50 opacity-0 group-hover:opacity-100 transition-all cursor-pointer"
 											onclick={() => handleDelete(entry.id)}
 											title="Delete entry"
 										>

@@ -16,14 +16,14 @@
 <div class="max-w-xl mx-auto px-6 py-8">
 	<a
 		href="/modules/tracker/admin"
-		class="inline-flex items-center gap-2 text-sm text-zinc-500 hover:text-zinc-700 mb-8"
+		class="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-muted-foreground mb-8"
 	>
 		<ArrowLeft class="w-4 h-4" />
 		Back to admin
 	</a>
 
 	<h1 class="text-3xl font-semibold tracking-tight mb-2">New Category</h1>
-	<p class="text-zinc-500 mb-8">Create a new category to organize your metrics</p>
+	<p class="text-muted-foreground mb-8">Create a new category to organize your metrics</p>
 
 	<form
 		method="POST"
@@ -58,7 +58,7 @@
 		<div>
 			<Label.Root for="icon">Icon (Emoji) *</Label.Root>
 			<Input.Root type="text" id="icon" name="icon" placeholder="e.g., 🏃" required class="mt-1.5" />
-			<p class="text-sm text-zinc-500 mt-1">Choose an emoji that represents this category</p>
+			<p class="text-sm text-muted-foreground mt-1">Choose an emoji that represents this category</p>
 		</div>
 
 		<!-- Color -->
@@ -66,7 +66,7 @@
 			<Label.Root for="color">Color</Label.Root>
 			<div class="flex items-center gap-3 mt-1.5">
 				<Input.Root type="color" id="color" name="color" value="#3b82f6" class="w-16 h-10 p-1" />
-				<span class="text-sm text-zinc-500">Choose a color for this category</span>
+				<span class="text-sm text-muted-foreground">Choose a color for this category</span>
 			</div>
 		</div>
 

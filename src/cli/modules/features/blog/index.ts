@@ -298,11 +298,11 @@ function getMarkdownBlogPostSvelte(config: ProjectConfig): string {
 
 <article class="max-w-3xl mx-auto px-6 py-16">
 	<header class="mb-8">
-		<a href="/blog" class="text-sm text-zinc-500 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-300 mb-4 inline-block">
+		<a href="/blog" class="text-sm text-muted-foreground hover:text-foreground mb-4 inline-block">
 			&larr; Back to blog
 		</a>
 		<h1 class="text-4xl font-semibold tracking-tight mt-2">{data.post.title}</h1>
-		<time class="text-zinc-500 dark:text-zinc-400 mt-2 block">
+		<time class="text-muted-foreground mt-2 block">
 			{formatDate(data.post.publishedAt)}
 		</time>
 	</header>
@@ -345,14 +345,14 @@ function getMarkdownBlogPostSvelte(config: ProjectConfig): string {
 		margin-bottom: 0.5rem;
 	}
 	.prose :global(code) {
-		background: #f4f4f5;
+		background: var(--color-muted);
 		padding: 0.125rem 0.25rem;
 		border-radius: 0.25rem;
 		font-size: 0.875rem;
 	}
 	.prose :global(pre) {
-		background: #18181b;
-		color: #fafafa;
+		background: var(--color-primary);
+		color: var(--color-primary-foreground);
 		padding: 1rem;
 		border-radius: 0.5rem;
 		overflow-x: auto;
@@ -363,18 +363,18 @@ function getMarkdownBlogPostSvelte(config: ProjectConfig): string {
 		padding: 0;
 	}
 	.prose :global(blockquote) {
-		border-left: 3px solid #e4e4e7;
+		border-left: 3px solid var(--color-border);
 		padding-left: 1rem;
 		font-style: italic;
-		color: #71717a;
+		color: var(--color-muted-foreground);
 		margin-bottom: 1rem;
 	}
 	.prose :global(a) {
-		color: #18181b;
+		color: var(--color-foreground);
 		text-decoration: underline;
 	}
 	.prose :global(a:hover) {
-		color: #52525b;
+		color: var(--color-muted-foreground);
 	}
 </style>
 `;
@@ -460,7 +460,7 @@ function getBlogListingSvelte(config: ProjectConfig): string {
 	<h1 class="text-4xl font-semibold tracking-tight mb-8">Blog</h1>
 
 	{#if data.posts.length === 0}
-		<p class="text-zinc-600 dark:text-zinc-400">No posts yet. Check back soon!</p>
+		<p class="text-muted-foreground">No posts yet. Check back soon!</p>
 	{:else}
 		<div class="space-y-8">
 			{#each data.posts as post}
@@ -473,13 +473,13 @@ function getBlogListingSvelte(config: ProjectConfig): string {
 								class="w-full h-48 object-cover rounded-lg mb-4"
 							/>
 						{/if}
-						<h2 class="text-2xl font-semibold group-hover:text-zinc-600 dark:group-hover:text-zinc-400 transition-colors">
+						<h2 class="text-2xl font-semibold group-hover:text-muted-foreground transition-colors">
 							{post.title}
 						</h2>
 						{#if post.excerpt}
-							<p class="text-zinc-600 dark:text-zinc-400 mt-2">{post.excerpt}</p>
+							<p class="text-muted-foreground mt-2">{post.excerpt}</p>
 						{/if}
-						<time class="text-sm text-zinc-500 dark:text-zinc-400 mt-2 block">
+						<time class="text-sm text-muted-foreground mt-2 block">
 							{formatDate(post.publishedAt)}
 						</time>
 					</a>
@@ -515,11 +515,11 @@ function getDbBlogPostSvelte(config: ProjectConfig): string {
 
 <article class="max-w-3xl mx-auto px-6 py-16">
 	<header class="mb-8">
-		<a href="/blog" class="text-sm text-zinc-500 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-300 mb-4 inline-block">
+		<a href="/blog" class="text-sm text-muted-foreground hover:text-foreground mb-4 inline-block">
 			&larr; Back to blog
 		</a>
 		<h1 class="text-4xl font-semibold tracking-tight mt-2">{data.post.title}</h1>
-		<time class="text-zinc-500 dark:text-zinc-400 mt-2 block">
+		<time class="text-muted-foreground mt-2 block">
 			{formatDate(data.post.publishedAt || data.post.createdAt)}
 		</time>
 	</header>
@@ -562,14 +562,14 @@ function getDbBlogPostSvelte(config: ProjectConfig): string {
 		margin-bottom: 0.5rem;
 	}
 	.prose :global(code) {
-		background: #f4f4f5;
+		background: var(--color-muted);
 		padding: 0.125rem 0.25rem;
 		border-radius: 0.25rem;
 		font-size: 0.875rem;
 	}
 	.prose :global(pre) {
-		background: #18181b;
-		color: #fafafa;
+		background: var(--color-primary);
+		color: var(--color-primary-foreground);
 		padding: 1rem;
 		border-radius: 0.5rem;
 		overflow-x: auto;
@@ -580,18 +580,18 @@ function getDbBlogPostSvelte(config: ProjectConfig): string {
 		padding: 0;
 	}
 	.prose :global(blockquote) {
-		border-left: 3px solid #e4e4e7;
+		border-left: 3px solid var(--color-border);
 		padding-left: 1rem;
 		font-style: italic;
-		color: #71717a;
+		color: var(--color-muted-foreground);
 		margin-bottom: 1rem;
 	}
 	.prose :global(a) {
-		color: #18181b;
+		color: var(--color-foreground);
 		text-decoration: underline;
 	}
 	.prose :global(a:hover) {
-		color: #52525b;
+		color: var(--color-muted-foreground);
 	}
 </style>
 `;

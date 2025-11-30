@@ -41,7 +41,7 @@
 					{data.targetUser.name || data.targetUser.email}'s Widgets
 				{/if}
 			</h1>
-			<p class="text-zinc-600 mt-2">{data.widgets.length} widget{data.widgets.length !== 1 ? 's' : ''}</p>
+			<p class="text-muted-foreground mt-2">{data.widgets.length} widget{data.widgets.length !== 1 ? 's' : ''}</p>
 		</div>
 		<div class="flex gap-3">
 			{#if data.canEdit}
@@ -69,8 +69,8 @@
 	</div>
 
 	{#if data.widgets.length === 0}
-		<div class="border border-zinc-200 rounded-lg p-8 text-center bg-white">
-			<p class="text-zinc-600 mb-4">No widgets yet. Create your first widget to get started!</p>
+		<div class="border border-border rounded-lg p-8 text-center bg-card">
+			<p class="text-muted-foreground mb-4">No widgets yet. Create your first widget to get started!</p>
 			{#if data.canEdit}
 				<div class="flex gap-3 justify-center">
 					<form method="POST" action="?/reset" use:enhance={() => {
@@ -98,15 +98,15 @@
 			{#each data.widgets as widget}
 				<a
 					href="/modules/widgets/users/{data.targetUser.id}/widgets/{widget.id}"
-					class="block bg-white border border-zinc-200 rounded-lg p-6 hover:border-zinc-300 hover:shadow-sm transition-all"
+					class="block bg-card border border-border rounded-lg p-6 hover:border-border hover:shadow-sm transition-all"
 				>
 					<div class="flex items-start justify-between">
 						<div class="flex-1">
 							<h2 class="text-xl font-semibold tracking-tight">{widget.name}</h2>
 							{#if widget.description}
-								<p class="text-zinc-600 mt-1 line-clamp-2">{widget.description}</p>
+								<p class="text-muted-foreground mt-1 line-clamp-2">{widget.description}</p>
 							{/if}
-							<p class="text-sm text-zinc-400 mt-3">
+							<p class="text-sm text-muted-foreground mt-3">
 								Created {widget.createdAt ? new Date(widget.createdAt).toLocaleDateString() : 'N/A'}
 							</p>
 						</div>
@@ -114,13 +114,13 @@
 							<div class="flex items-center gap-2 ml-4" onclick={(e: MouseEvent) => e.preventDefault()}>
 								<a
 									href="/modules/widgets/users/{data.targetUser.id}/widgets/{widget.id}/edit"
-									class="p-2 rounded text-zinc-400 hover:text-zinc-700 hover:bg-zinc-100 transition-colors"
+									class="p-2 rounded text-muted-foreground hover:text-muted-foreground hover:bg-muted transition-colors"
 									title="Edit widget"
 								>
 									<Pencil class="w-4 h-4" />
 								</a>
 								<button
-									class="p-2 rounded text-zinc-400 hover:text-red-600 hover:bg-red-50 transition-colors cursor-pointer"
+									class="p-2 rounded text-muted-foreground hover:text-red-600 hover:bg-red-50 transition-colors cursor-pointer"
 									title="Delete widget"
 									onclick={(e: MouseEvent) => {
 										e.stopPropagation();

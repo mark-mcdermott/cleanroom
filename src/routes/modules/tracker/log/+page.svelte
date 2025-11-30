@@ -50,18 +50,18 @@
 <div class="max-w-xl mx-auto px-6 py-8">
 	<a
 		href="/modules/tracker"
-		class="inline-flex items-center gap-2 text-sm text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300 mb-8"
+		class="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-8"
 	>
 		<ArrowLeft class="w-4 h-4" />
 		Back to dashboard
 	</a>
 
 	<h1 class="text-3xl font-semibold tracking-tight mb-2">Log Entry</h1>
-	<p class="text-zinc-500 dark:text-zinc-400 mb-8">Record your progress for any metric</p>
+	<p class="text-muted-foreground mb-8">Record your progress for any metric</p>
 
 	{#if data.metrics.length === 0}
-		<div class="border border-zinc-200 rounded-lg p-8 text-center bg-white">
-			<p class="text-zinc-600 dark:text-zinc-400 mb-4">
+		<div class="border border-border rounded-lg p-8 text-center bg-card">
+			<p class="text-muted-foreground mb-4">
 				No metrics set up yet. Create metrics in the admin panel first.
 			</p>
 			<Button.Root variant="outline" onclick={() => goto('/modules/tracker/admin')} class="cursor-pointer">
@@ -125,14 +125,14 @@
 							<Select.Item value={metric.id}>
 								{metric.icon || '📊'} {metric.name}
 								{#if metric.unit}
-									<span class="text-zinc-400">({metric.unit})</span>
+									<span class="text-muted-foreground">({metric.unit})</span>
 								{/if}
 							</Select.Item>
 						{/each}
 					</Select.Content>
 				</Select.Root>
 				{#if selectedMetric() && selectedMetric()?.description}
-					<p class="text-sm text-zinc-500 dark:text-zinc-400 mt-1.5">{selectedMetric()?.description}</p>
+					<p class="text-sm text-muted-foreground mt-1.5">{selectedMetric()?.description}</p>
 				{/if}
 			</div>
 
@@ -155,7 +155,7 @@
 						{#each [1, 2, 3, 4, 5] as rating}
 							<label class="cursor-pointer">
 								<input type="radio" name="value" value={rating} class="sr-only peer" />
-								<span class="w-10 h-10 rounded-lg border-2 border-zinc-200 flex items-center justify-center text-lg peer-checked:border-amber-400 peer-checked:bg-amber-50 hover:border-zinc-300 transition-colors">
+								<span class="w-10 h-10 rounded-lg border-2 border-border flex items-center justify-center text-lg peer-checked:border-amber-400 peer-checked:bg-amber-50 hover:border-border transition-colors">
 									{rating}
 								</span>
 							</label>
@@ -174,7 +174,7 @@
 							required
 						/>
 						{#if selectedMetric()?.unit}
-							<span class="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400">
+							<span class="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground">
 								{selectedMetric()?.unit}
 							</span>
 						{/if}
@@ -192,7 +192,7 @@
 					value={new Date().toISOString().slice(0, 16)}
 					class="mt-1.5"
 				/>
-				<p class="text-sm text-zinc-500 dark:text-zinc-400 mt-1">Leave as-is for current time</p>
+				<p class="text-sm text-muted-foreground mt-1">Leave as-is for current time</p>
 			</div>
 
 			<!-- Notes -->

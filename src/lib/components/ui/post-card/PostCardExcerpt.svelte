@@ -13,7 +13,7 @@
 
 <p
 	data-slot="post-card-excerpt"
-	class={cn('text-zinc-600 dark:text-zinc-400 mt-2 leading-relaxed', className)}
+	class={cn('text-muted-foreground mt-2 leading-relaxed', className)}
 	{...restProps}
 >
 	{#if children}

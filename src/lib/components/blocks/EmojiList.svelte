@@ -23,7 +23,7 @@
 				<div class="text-2xl">{item.icon}</div>
 				<div>
 					<h3 class="font-medium mb-1">{item.title}</h3>
-					<p class="text-zinc-600 dark:text-zinc-400">{@html item.description}</p>
+					<p class="text-muted-foreground">{@html item.description}</p>
 				</div>
 			</div>
 		{/each}

@@ -22,7 +22,7 @@
 	<div class="flex items-center justify-between mb-8">
 		<div>
 			<h1 class="text-3xl font-semibold tracking-tight">Shopping Cart</h1>
-			<p class="text-zinc-600 dark:text-zinc-400 mt-1">
+			<p class="text-muted-foreground mt-1">
 				{data.items.length}
 				{data.items.length === 1 ? 'item' : 'items'}
 			</p>
@@ -48,15 +48,15 @@
 	</div>
 
 	{#if data.items.length === 0}
-		<div class="border border-zinc-200 rounded-lg p-12 text-center bg-white">
-			<ShoppingBag class="w-12 h-12 mx-auto text-zinc-300 mb-4" />
-			<p class="text-zinc-600 dark:text-zinc-400 mb-4">Your cart is empty</p>
+		<div class="border border-border rounded-lg p-12 text-center bg-card">
+			<ShoppingBag class="w-12 h-12 mx-auto text-muted-foreground mb-4" />
+			<p class="text-muted-foreground mb-4">Your cart is empty</p>
 			<Button.Root onclick={() => goto('/modules/store')} class="cursor-pointer">
 				Continue Shopping
 			</Button.Root>
 		</div>
 	{:else}
-		<div class="bg-white border border-zinc-200 rounded-lg divide-y divide-zinc-200">
+		<div class="bg-card border border-border rounded-lg divide-y divide-border">
 			{#each data.items as item}
 				<div class="p-4">
 					<CartItem.Root>
@@ -67,7 +67,7 @@
 							<a href="/modules/store/{item.productSlug}" class="hover:underline">
 								<CartItem.Name>{item.productName}</CartItem.Name>
 							</a>
-							<p class="text-sm text-zinc-500 dark:text-zinc-400 mt-1">
+							<p class="text-sm text-muted-foreground mt-1">
 								${formatPrice(item.productPrice || '0')} each
 							</p>
 							<div class="flex items-center gap-4 mt-3">
@@ -127,7 +127,7 @@
 									<input type="hidden" name="itemId" value={item.id} />
 									<button
 										type="submit"
-										class="text-sm text-zinc-400 hover:text-red-600 transition-colors cursor-pointer"
+										class="text-sm text-muted-foreground hover:text-red-600 transition-colors cursor-pointer"
 									>
 										Remove
 									</button>
@@ -146,23 +146,23 @@
 		</div>
 
 		<!-- Order Summary -->
-		<div class="mt-8 bg-zinc-50 border border-zinc-200 rounded-lg p-6">
+		<div class="mt-8 bg-muted border border-border rounded-lg p-6">
 			<h2 class="text-lg font-semibold mb-4">Order Summary</h2>
 			<div class="space-y-2 text-sm">
 				<div class="flex justify-between">
-					<span class="text-zinc-600 dark:text-zinc-400">Subtotal</span>
+					<span class="text-muted-foreground">Subtotal</span>
 					<span>${formatPrice(data.subtotal)}</span>
 				</div>
 				<div class="flex justify-between">
-					<span class="text-zinc-600 dark:text-zinc-400">Shipping</span>
-					<span class="text-zinc-500 dark:text-zinc-400">Calculated at checkout</span>
+					<span class="text-muted-foreground">Shipping</span>
+					<span class="text-muted-foreground">Calculated at checkout</span>
 				</div>
 				<div class="flex justify-between">
-					<span class="text-zinc-600 dark:text-zinc-400">Tax</span>
-					<span class="text-zinc-500 dark:text-zinc-400">Calculated at checkout</span>
+					<span class="text-muted-foreground">Tax</span>
+					<span class="text-muted-foreground">Calculated at checkout</span>
 				</div>
 			</div>
-			<div class="border-t border-zinc-200 mt-4 pt-4">
+			<div class="border-t border-border mt-4 pt-4">
 				<div class="flex justify-between text-lg font-semibold">
 					<span>Estimated Total</span>
 					<span>${formatPrice(data.subtotal)}</span>
@@ -174,14 +174,14 @@
 			>
 				Proceed to Checkout
 			</Button.Root>
-			<p class="text-xs text-zinc-400 text-center mt-3">
+			<p class="text-xs text-muted-foreground text-center mt-3">
 				This is a demo store. No actual payment will be processed.
 			</p>
 		</div>
 
 		<a
 			href="/modules/store"
-			class="inline-flex items-center gap-2 text-sm text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300 mt-6"
+			class="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mt-6"
 		>
 			<ArrowLeft class="w-4 h-4" />
 			Continue Shopping

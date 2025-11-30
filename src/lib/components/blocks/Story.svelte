@@ -13,7 +13,7 @@
 	{/if}
 	<div class="prose prose-zinc max-w-none">
 		{#each paragraphs as paragraph, i}
-			<p class="text-zinc-600 dark:text-zinc-400 leading-relaxed {i < paragraphs.length - 1 ? 'mb-4' : ''}">
+			<p class="text-muted-foreground leading-relaxed {i < paragraphs.length - 1 ? 'mb-4' : ''}">
 				{paragraph}
 			</p>
 		{/each}

@@ -17,7 +17,7 @@
 	<div class="flex items-center justify-between mb-6">
 		<a
 			href="/modules/blog/admin"
-			class="inline-flex items-center gap-2 text-sm text-zinc-600 hover:text-zinc-900"
+			class="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground"
 		>
 			<ArrowLeft class="w-4 h-4" />
 			Back to Posts
@@ -26,7 +26,7 @@
 			<a
 				href="/modules/blog/{data.post.slug}"
 				target="_blank"
-				class="inline-flex items-center gap-2 text-sm text-zinc-600 hover:text-zinc-900"
+				class="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground"
 			>
 				View Post
 				<ExternalLink class="w-4 h-4" />
@@ -34,7 +34,7 @@
 		{/if}
 	</div>
 
-	<div class="bg-white border border-zinc-200 rounded-lg p-6">
+	<div class="bg-card border border-border rounded-lg p-6">
 		<h1 class="text-2xl font-semibold tracking-tight mb-6">Edit Post</h1>
 
 		{#if form?.error}
@@ -79,7 +79,7 @@
 					placeholder="post-url-slug"
 					required
 				/>
-				<p class="text-xs text-zinc-500">URL-friendly identifier (lowercase, hyphens only)</p>
+				<p class="text-xs text-muted-foreground">URL-friendly identifier (lowercase, hyphens only)</p>
 			</div>
 
 			<div class="space-y-2">
@@ -103,7 +103,7 @@
 					class="min-h-64 font-mono text-sm"
 					required
 				/>
-				<p class="text-xs text-zinc-500">HTML tags are supported for formatting</p>
+				<p class="text-xs text-muted-foreground">HTML tags are supported for formatting</p>
 			</div>
 
 			<div class="space-y-2">

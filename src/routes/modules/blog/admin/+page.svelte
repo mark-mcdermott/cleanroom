@@ -44,7 +44,7 @@
 	<div class="flex items-center justify-between mb-8">
 		<div>
 			<h1 class="text-3xl font-semibold tracking-tight">Posts</h1>
-			<p class="text-zinc-600 mt-2">Manage demo blog posts ({data.posts.length} total)</p>
+			<p class="text-muted-foreground mt-2">Manage demo blog posts ({data.posts.length} total)</p>
 		</div>
 		<div class="flex gap-3">
 			<form method="POST" action="?/reset" use:enhance={() => {
@@ -70,8 +70,8 @@
 	</div>
 
 	{#if data.posts.length === 0}
-		<div class="border border-zinc-200 rounded-lg p-8 text-center bg-white">
-			<p class="text-zinc-600 mb-4">No posts yet. Create a new post or reset demo data to get started.</p>
+		<div class="border border-border rounded-lg p-8 text-center bg-card">
+			<p class="text-muted-foreground mb-4">No posts yet. Create a new post or reset demo data to get started.</p>
 			<div class="flex justify-center gap-3">
 				<form method="POST" action="?/reset" use:enhance={() => {
 					return async ({ result }) => {
@@ -118,7 +118,7 @@
 						<Table.Cell>
 							<span class="font-medium">{post.title}</span>
 						</Table.Cell>
-						<Table.Cell class="text-zinc-500 font-mono text-sm">
+						<Table.Cell class="text-muted-foreground font-mono text-sm">
 							{post.slug}
 						</Table.Cell>
 						<Table.Cell>
@@ -128,16 +128,16 @@
 									Published
 								</span>
 							{:else}
-								<span class="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-zinc-100 text-zinc-700">
+								<span class="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-muted text-muted-foreground">
 									<EyeOff class="w-3 h-3" />
 									Draft
 								</span>
 							{/if}
 						</Table.Cell>
-						<Table.Cell class="text-zinc-500 text-sm">
+						<Table.Cell class="text-muted-foreground text-sm">
 							{formatDate(post.publishedAt)}
 						</Table.Cell>
-						<Table.Cell class="text-zinc-500 text-sm">
+						<Table.Cell class="text-muted-foreground text-sm">
 							{formatDate(post.updatedAt)}
 						</Table.Cell>
 						<Table.Cell>
@@ -145,7 +145,7 @@
 								<a
 									href="/modules/blog/admin/{post.id}/edit"
 									data-action="edit"
-									class="p-1.5 rounded text-zinc-400 hover:text-zinc-700 hover:bg-zinc-200 transition-colors cursor-pointer"
+									class="p-1.5 rounded text-muted-foreground hover:text-muted-foreground hover:bg-muted transition-colors cursor-pointer"
 									title="Edit post"
 									onclick={(e: MouseEvent) => e.stopPropagation()}
 								>
@@ -153,7 +153,7 @@
 								</a>
 								<button
 									data-action="delete"
-									class="p-1.5 rounded text-zinc-400 hover:text-red-600 hover:bg-red-50 transition-colors cursor-pointer"
+									class="p-1.5 rounded text-muted-foreground hover:text-red-600 hover:bg-red-50 transition-colors cursor-pointer"
 									title="Delete post"
 									onclick={(e: MouseEvent) => {
 										e.stopPropagation();

@@ -28,7 +28,7 @@
 		{currency}{formatPrice(price)}
 	</span>
 	{#if hasDiscount}
-		<span class="text-zinc-400 line-through text-sm">
+		<span class="text-muted-foreground line-through text-sm">
 			{currency}{formatPrice(compareAtPrice)}
 		</span>
 	{/if}

@@ -18,8 +18,8 @@
 	}: Props = $props();
 
 	const variants = {
-		primary: 'bg-zinc-900 text-white hover:bg-zinc-800',
-		secondary: 'bg-white text-zinc-900 border border-zinc-300 hover:bg-zinc-50'
+		primary: 'bg-primary text-primary-foreground hover:bg-primary/90',
+		secondary: 'bg-background text-foreground border border-border hover:bg-muted'
 	};
 </script>
 

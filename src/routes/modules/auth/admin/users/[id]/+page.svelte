@@ -23,55 +23,55 @@
 <div class="max-w-2xl mx-auto px-6 py-16">
 	<a
 		href="/modules/auth/admin/users"
-		class="inline-flex items-center gap-2 text-sm text-zinc-600 hover:text-zinc-900 mb-6"
+		class="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-6"
 	>
 		<ArrowLeft class="w-4 h-4" />
 		Back to The Office
 	</a>
 
-	<div class="bg-white border border-zinc-200 rounded-lg p-6">
+	<div class="bg-card border border-border rounded-lg p-6">
 		<div class="flex items-start gap-4 mb-6">
-			<div class="w-16 h-16 bg-zinc-100 rounded-full flex items-center justify-center text-2xl font-medium">
+			<div class="w-16 h-16 bg-muted rounded-full flex items-center justify-center text-2xl font-medium">
 				{data.targetUser.name?.charAt(0).toUpperCase() || data.targetUser.email.charAt(0).toUpperCase()}
 			</div>
 			<div class="flex-1">
 				<h1 class="text-2xl font-semibold tracking-tight">
 					{data.targetUser.name || 'No name'}
 				</h1>
-				<p class="text-zinc-600">{data.targetUser.email}</p>
+				<p class="text-muted-foreground">{data.targetUser.email}</p>
 				{#if data.targetUser.admin}
 					<span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-amber-100 text-amber-800 mt-2">
 						Regional Manager
 					</span>
 				{:else}
-					<span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-zinc-100 text-zinc-700 mt-2">
+					<span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-muted text-muted-foreground mt-2">
 						Staff
 					</span>
 				{/if}
 			</div>
 		</div>
 
-		<div class="space-y-3 text-sm border-t border-zinc-200 pt-6">
+		<div class="space-y-3 text-sm border-t border-border pt-6">
 			<div class="flex justify-between">
-				<span class="text-zinc-500">Employee ID</span>
-				<span class="font-mono text-zinc-700">{data.targetUser.id}</span>
+				<span class="text-muted-foreground">Employee ID</span>
+				<span class="font-mono text-muted-foreground">{data.targetUser.id}</span>
 			</div>
 			<div class="flex justify-between">
-				<span class="text-zinc-500">Hired</span>
-				<span class="text-zinc-700">
+				<span class="text-muted-foreground">Hired</span>
+				<span class="text-muted-foreground">
 					{data.targetUser.createdAt ? new Date(data.targetUser.createdAt).toLocaleString() : 'N/A'}
 				</span>
 			</div>
 			<div class="flex justify-between">
-				<span class="text-zinc-500">Updated</span>
-				<span class="text-zinc-700">
+				<span class="text-muted-foreground">Updated</span>
+				<span class="text-muted-foreground">
 					{data.targetUser.updatedAt ? new Date(data.targetUser.updatedAt).toLocaleString() : 'N/A'}
 				</span>
 			</div>
 		</div>
 
 		{#if data.currentUser.admin}
-			<div class="flex gap-3 mt-8 pt-6 border-t border-zinc-200">
+			<div class="flex gap-3 mt-8 pt-6 border-t border-border">
 				<Button.Root variant="outline" class="flex items-center gap-2 cursor-pointer" onclick={() => goto(`/modules/auth/admin/users/${data.targetUser.id}/edit`)}>
 					<Pencil class="w-4 h-4" />
 					Edit

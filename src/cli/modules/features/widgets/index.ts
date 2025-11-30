@@ -172,22 +172,22 @@ function getModuleLayoutSvelte(names: WidgetEntityNames): string {
 	const isAdminRoute = $derived($page.url.pathname.includes('/admin'));
 </script>
 
-<div class="min-h-screen bg-zinc-50">
-	<header class="bg-white border-b border-zinc-200 sticky top-0 z-10">
+<div class="min-h-screen bg-background">
+	<header class="bg-background border-b border-border sticky top-0 z-10">
 		<div class="max-w-6xl mx-auto px-6 py-4">
 			<div class="flex items-center justify-between">
 				<div class="flex items-center gap-4">
-					<a href="/sites/demo" class="text-sm text-zinc-500 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-300">
+					<a href="/sites/demo" class="text-sm text-muted-foreground hover:text-foreground">
 						<ArrowLeft class="w-4 h-4 inline mr-1" />Demo Home
 					</a>
-					<span class="text-zinc-300">|</span>
+					<span class="text-muted-foreground">|</span>
 					<a href="/modules/${names.widget.plural}" class="flex items-center gap-2 text-lg font-semibold">
 						<Package class="w-5 h-5 text-blue-500" />${names.widget.pascalPlural} Module
 					</a>
 				</div>
 				<div class="flex items-center gap-3">
 					{#if data.currentUser}
-						<span class="text-sm text-zinc-600 dark:text-zinc-400">
+						<span class="text-sm text-muted-foreground">
 							{data.currentUser.name || data.currentUser.email}
 							{#if data.currentUser.admin}
 								<span class="ml-1 text-amber-600">(Admin)</span>
@@ -265,11 +265,11 @@ function getModuleLandingSvelte(): string {
 <div class="flex items-center justify-center min-h-[60vh]">
 	{#if data.needsSetup}
 		<div class="text-center">
-			<p class="text-zinc-600 dark:text-zinc-400 mb-4">Database not configured.</p>
+			<p class="text-muted-foreground mb-4">Database not configured.</p>
 			<a href="/sites/demo" class="text-blue-600 hover:underline">Return to demo home</a>
 		</div>
 	{:else}
-		<p class="text-zinc-500 dark:text-zinc-400">Redirecting...</p>
+		<p class="text-muted-foreground">Redirecting...</p>
 	{/if}
 </div>
 `;
@@ -395,7 +395,7 @@ function getWidgetListSvelte(names: WidgetEntityNames): string {
 	<div class="flex items-center justify-between mb-8">
 		<div>
 			<h1 class="text-3xl font-semibold tracking-tight">{data.targetUser.name || data.targetUser.email}'s ${names.widget.pascalPlural}</h1>
-			<p class="text-zinc-600 dark:text-zinc-400 mt-2">{data.${names.widget.plural}.length} ${names.widget.singular}{data.${names.widget.plural}.length !== 1 ? 's' : ''}</p>
+			<p class="text-muted-foreground mt-2">{data.${names.widget.plural}.length} ${names.widget.singular}{data.${names.widget.plural}.length !== 1 ? 's' : ''}</p>
 		</div>
 		{#if data.canEdit}
 			<Button.Root onclick={() => showForm = !showForm} class="cursor-pointer">
@@ -405,7 +405,7 @@ function getWidgetListSvelte(names: WidgetEntityNames): string {
 	</div>
 
 	{#if showForm && data.canEdit}
-		<div class="bg-white border border-zinc-200 rounded-lg p-6 mb-8">
+		<div class="bg-card border border-border rounded-lg p-6 mb-8">
 			<h2 class="text-lg font-semibold mb-4">Create ${names.widget.pascalSingular}</h2>
 			<form method="POST" action="?/create" use:enhance={() => {
 				return async ({ result }) => {
@@ -427,9 +427,9 @@ function getWidgetListSvelte(names: WidgetEntityNames): string {
 	{/if}
 
 	{#if data.${names.widget.plural}.length === 0}
-		<div class="bg-white border border-zinc-200 rounded-lg p-8 text-center">
-			<Package class="w-12 h-12 mx-auto text-zinc-300 mb-4" />
-			<p class="text-zinc-600 dark:text-zinc-400 mb-4">No ${names.widget.plural} yet.</p>
+		<div class="bg-card border border-border rounded-lg p-8 text-center">
+			<Package class="w-12 h-12 mx-auto text-muted-foreground mb-4" />
+			<p class="text-muted-foreground mb-4">No ${names.widget.plural} yet.</p>
 			{#if data.canEdit}
 				<Button.Root onclick={() => showForm = true} class="cursor-pointer">
 					<Plus class="w-4 h-4 mr-2" />Create First ${names.widget.pascalSingular}
@@ -437,7 +437,7 @@ function getWidgetListSvelte(names: WidgetEntityNames): string {
 			{/if}
 		</div>
 	{:else}
-		<div class="bg-white border border-zinc-200 rounded-lg overflow-hidden">
+		<div class="bg-card border border-border rounded-lg overflow-hidden">
 			<Table.Root>
 				<Table.Header>
 					<Table.Row>
@@ -458,15 +458,15 @@ function getWidgetListSvelte(names: WidgetEntityNames): string {
 									<div>
 										<p class="font-medium">{${names.widget.singular}.name}</p>
 										{#if ${names.widget.singular}.description}
-											<p class="text-sm text-zinc-500 dark:text-zinc-400 line-clamp-1">{${names.widget.singular}.description}</p>
+											<p class="text-sm text-muted-foreground line-clamp-1">{${names.widget.singular}.description}</p>
 										{/if}
 									</div>
 								</div>
 							</Table.Cell>
-							<Table.Cell><span class="flex items-center gap-1"><Layers class="w-4 h-4 text-zinc-400" />{${names.widget.singular}.${names.thingy.singular}Count}</span></Table.Cell>
-							<Table.Cell><span class="flex items-center gap-1"><StickyNote class="w-4 h-4 text-zinc-400" />{${names.widget.singular}.noteCount}</span></Table.Cell>
-							<Table.Cell><span class="flex items-center gap-1"><Image class="w-4 h-4 text-zinc-400" />{${names.widget.singular}.photoCount}</span></Table.Cell>
-							<Table.Cell class="text-zinc-500 dark:text-zinc-400">{new Date(${names.widget.singular}.createdAt).toLocaleDateString()}</Table.Cell>
+							<Table.Cell><span class="flex items-center gap-1"><Layers class="w-4 h-4 text-muted-foreground" />{${names.widget.singular}.${names.thingy.singular}Count}</span></Table.Cell>
+							<Table.Cell><span class="flex items-center gap-1"><StickyNote class="w-4 h-4 text-muted-foreground" />{${names.widget.singular}.noteCount}</span></Table.Cell>
+							<Table.Cell><span class="flex items-center gap-1"><Image class="w-4 h-4 text-muted-foreground" />{${names.widget.singular}.photoCount}</span></Table.Cell>
+							<Table.Cell class="text-muted-foreground">{new Date(${names.widget.singular}.createdAt).toLocaleDateString()}</Table.Cell>
 							{#if data.canEdit}
 								<Table.Cell onclick={(e: MouseEvent) => e.stopPropagation()}>
 									<form method="POST" action="?/delete" use:enhance={() => {
@@ -724,14 +724,14 @@ function getWidgetDetailSvelte(names: WidgetEntityNames): string {
 <svelte:head><title>{data.${names.widget.singular}.name}</title></svelte:head>
 
 <div class="max-w-4xl mx-auto px-6 py-16">
-	<a href="/modules/${names.widget.plural}/users/{data.targetUser.id}/${names.widget.plural}" class="inline-flex items-center gap-2 text-sm text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 mb-6">
+	<a href="/modules/${names.widget.plural}/users/{data.targetUser.id}/${names.widget.plural}" class="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-6">
 		<ArrowLeft class="w-4 h-4" />Back to ${names.widget.plural}
 	</a>
 
 	<div class="flex items-start justify-between mb-8">
 		<div>
 			<h1 class="text-3xl font-semibold tracking-tight">{data.${names.widget.singular}.name}</h1>
-			{#if data.${names.widget.singular}.description}<p class="text-zinc-600 dark:text-zinc-400 mt-2">{data.${names.widget.singular}.description}</p>{/if}
+			{#if data.${names.widget.singular}.description}<p class="text-muted-foreground mt-2">{data.${names.widget.singular}.description}</p>{/if}
 		</div>
 		{#if data.canEdit}
 			<div class="flex gap-2">
@@ -744,12 +744,12 @@ function getWidgetDetailSvelte(names: WidgetEntityNames): string {
 	<!-- ${names.thingy.pascalPlural} Section -->
 	<div class="mb-8">
 		<div class="flex items-center justify-between mb-4">
-			<h2 class="text-xl font-semibold flex items-center gap-2"><Layers class="w-5 h-5 text-zinc-400" />${names.thingy.pascalPlural} ({data.${names.thingy.plural}.length})</h2>
+			<h2 class="text-xl font-semibold flex items-center gap-2"><Layers class="w-5 h-5 text-muted-foreground" />${names.thingy.pascalPlural} ({data.${names.thingy.plural}.length})</h2>
 			{#if data.canEdit}<Button.Root variant="outline" size="sm" onclick={() => show${names.thingy.pascalSingular}Form = !show${names.thingy.pascalSingular}Form} class="cursor-pointer"><Plus class="w-4 h-4 mr-1" />{show${names.thingy.pascalSingular}Form ? 'Cancel' : 'Add'}</Button.Root>{/if}
 		</div>
 
 		{#if show${names.thingy.pascalSingular}Form && data.canEdit}
-			<div class="bg-white border border-zinc-200 rounded-lg p-4 mb-4">
+			<div class="bg-card border border-border rounded-lg p-4 mb-4">
 				<form method="POST" action="?/create${names.thingy.pascalSingular}" use:enhance={() => {
 					return async ({ result }) => {
 						if (result.type === 'success') { toast.success('${names.thingy.pascalSingular} created!'); show${names.thingy.pascalSingular}Form = false; window.location.reload(); }
@@ -764,15 +764,15 @@ function getWidgetDetailSvelte(names: WidgetEntityNames): string {
 		{/if}
 
 		{#if data.${names.thingy.plural}.length === 0}
-			<div class="bg-white border border-zinc-200 rounded-lg p-6 text-center text-zinc-500 dark:text-zinc-400">No ${names.thingy.plural} yet.</div>
+			<div class="bg-card border border-border rounded-lg p-6 text-center text-muted-foreground">No ${names.thingy.plural} yet.</div>
 		{:else}
 			<div class="space-y-2">
 				{#each data.${names.thingy.plural} as ${names.thingy.singular}}
-					<a href="/modules/${names.widget.plural}/users/{data.targetUser.id}/${names.widget.plural}/{data.${names.widget.singular}.id}/${names.thingy.plural}/{${names.thingy.singular}.id}" class="flex items-center gap-3 p-4 bg-white border border-zinc-200 rounded-lg hover:bg-zinc-50">
+					<a href="/modules/${names.widget.plural}/users/{data.targetUser.id}/${names.widget.plural}/{data.${names.widget.singular}.id}/${names.thingy.plural}/{${names.thingy.singular}.id}" class="flex items-center gap-3 p-4 bg-card border border-border rounded-lg hover:bg-background">
 						<Layers class="w-5 h-5 text-green-500" />
 						<div class="flex-1">
 							<p class="font-medium">{${names.thingy.singular}.name}</p>
-							{#if ${names.thingy.singular}.description}<p class="text-sm text-zinc-500 dark:text-zinc-400">{${names.thingy.singular}.description}</p>{/if}
+							{#if ${names.thingy.singular}.description}<p class="text-sm text-muted-foreground">{${names.thingy.singular}.description}</p>{/if}
 						</div>
 					</a>
 				{/each}
@@ -783,12 +783,12 @@ function getWidgetDetailSvelte(names: WidgetEntityNames): string {
 	<!-- Notes Section -->
 	<div class="mb-8">
 		<div class="flex items-center justify-between mb-4">
-			<h2 class="text-xl font-semibold flex items-center gap-2"><StickyNote class="w-5 h-5 text-zinc-400" />Notes ({data.notes.length})</h2>
+			<h2 class="text-xl font-semibold flex items-center gap-2"><StickyNote class="w-5 h-5 text-muted-foreground" />Notes ({data.notes.length})</h2>
 			{#if data.canEdit}<Button.Root variant="outline" size="sm" onclick={() => showNoteForm = !showNoteForm} class="cursor-pointer"><Plus class="w-4 h-4 mr-1" />{showNoteForm ? 'Cancel' : 'Add'}</Button.Root>{/if}
 		</div>
 
 		{#if showNoteForm && data.canEdit}
-			<div class="bg-white border border-zinc-200 rounded-lg p-4 mb-4">
+			<div class="bg-card border border-border rounded-lg p-4 mb-4">
 				<form method="POST" action="?/addNote" use:enhance={() => {
 					return async ({ result }) => {
 						if (result.type === 'success') { toast.success('Note added!'); showNoteForm = false; window.location.reload(); }
@@ -802,11 +802,11 @@ function getWidgetDetailSvelte(names: WidgetEntityNames): string {
 		{/if}
 
 		{#if data.notes.length === 0}
-			<div class="bg-white border border-zinc-200 rounded-lg p-6 text-center text-zinc-500 dark:text-zinc-400">No notes yet.</div>
+			<div class="bg-card border border-border rounded-lg p-6 text-center text-muted-foreground">No notes yet.</div>
 		{:else}
 			<div class="space-y-2">
 				{#each data.notes as note}
-					<div class="flex items-start gap-3 p-4 bg-white border border-zinc-200 rounded-lg">
+					<div class="flex items-start gap-3 p-4 bg-card border border-border rounded-lg">
 						<StickyNote class="w-5 h-5 text-yellow-500 mt-0.5" />
 						<p class="flex-1 whitespace-pre-wrap">{note.content}</p>
 						{#if data.canEdit}
@@ -829,12 +829,12 @@ function getWidgetDetailSvelte(names: WidgetEntityNames): string {
 	<!-- Photos Section -->
 	<div>
 		<div class="flex items-center justify-between mb-4">
-			<h2 class="text-xl font-semibold flex items-center gap-2"><Image class="w-5 h-5 text-zinc-400" />Photos ({data.photos.length})</h2>
+			<h2 class="text-xl font-semibold flex items-center gap-2"><Image class="w-5 h-5 text-muted-foreground" />Photos ({data.photos.length})</h2>
 			{#if data.canEdit}<Button.Root variant="outline" size="sm" onclick={() => showPhotoForm = !showPhotoForm} class="cursor-pointer"><Plus class="w-4 h-4 mr-1" />{showPhotoForm ? 'Cancel' : 'Add'}</Button.Root>{/if}
 		</div>
 
 		{#if showPhotoForm && data.canEdit}
-			<div class="bg-white border border-zinc-200 rounded-lg p-4 mb-4">
+			<div class="bg-card border border-border rounded-lg p-4 mb-4">
 				<form method="POST" action="?/addPhoto" enctype="multipart/form-data" use:enhance={() => {
 					uploading = true;
 					return async ({ result }) => {
@@ -843,8 +843,8 @@ function getWidgetDetailSvelte(names: WidgetEntityNames): string {
 						else if (result.type === 'failure') { toast.error((result.data as { error?: string })?.error || 'Failed'); }
 					};
 				}} class="space-y-3">
-					<div class="border-2 border-dashed border-zinc-300 rounded-lg p-4 text-center">
-						{#if previewUrl}<img src={previewUrl} alt="Preview" class="max-h-32 mx-auto mb-2 rounded" />{:else}<Upload class="w-6 h-6 mx-auto text-zinc-400" />{/if}
+					<div class="border-2 border-dashed border-border rounded-lg p-4 text-center">
+						{#if previewUrl}<img src={previewUrl} alt="Preview" class="max-h-32 mx-auto mb-2 rounded" />{:else}<Upload class="w-6 h-6 mx-auto text-muted-foreground" />{/if}
 						<Input.Root name="photo" type="file" accept="image/*" onchange={handleFileChange} class="mt-2" required />
 					</div>
 					<Input.Root name="caption" placeholder="Caption (optional)" />
@@ -854,11 +854,11 @@ function getWidgetDetailSvelte(names: WidgetEntityNames): string {
 		{/if}
 
 		{#if data.photos.length === 0}
-			<div class="bg-white border border-zinc-200 rounded-lg p-6 text-center text-zinc-500 dark:text-zinc-400">No photos yet.</div>
+			<div class="bg-card border border-border rounded-lg p-6 text-center text-muted-foreground">No photos yet.</div>
 		{:else}
 			<div class="grid grid-cols-2 md:grid-cols-3 gap-4">
 				{#each data.photos as photo}
-					<div class="relative group aspect-square bg-zinc-100 rounded-lg overflow-hidden">
+					<div class="relative group aspect-square bg-muted rounded-lg overflow-hidden">
 						<img src={photo.url} alt={photo.caption || 'Photo'} class="w-full h-full object-cover" />
 						{#if photo.caption}
 							<div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-3">
@@ -1006,7 +1006,7 @@ function getAdminPageSvelte(names: WidgetEntityNames): string {
 	<div class="flex items-center justify-between mb-8">
 		<div>
 			<h1 class="text-3xl font-semibold tracking-tight">${names.widget.pascalPlural} Admin</h1>
-			<p class="text-zinc-600 dark:text-zinc-400 mt-2">Manage all users and their ${names.widget.plural}</p>
+			<p class="text-muted-foreground mt-2">Manage all users and their ${names.widget.plural}</p>
 		</div>
 		<form method="POST" action="?/reset" use:enhance={() => {
 			return async ({ result }) => {
@@ -1020,57 +1020,57 @@ function getAdminPageSvelte(names: WidgetEntityNames): string {
 
 	<!-- Stats Grid -->
 	<div class="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
-		<div class="bg-white border border-zinc-200 rounded-lg p-4">
+		<div class="bg-card border border-border rounded-lg p-4">
 			<div class="flex items-center gap-3">
 				<Package class="w-8 h-8 text-blue-500" />
 				<div>
 					<p class="text-2xl font-semibold">{data.stats.total${names.widget.pascalPlural}}</p>
-					<p class="text-sm text-zinc-500 dark:text-zinc-400">${names.widget.pascalPlural}</p>
+					<p class="text-sm text-muted-foreground">${names.widget.pascalPlural}</p>
 				</div>
 			</div>
 		</div>
-		<div class="bg-white border border-zinc-200 rounded-lg p-4">
+		<div class="bg-card border border-border rounded-lg p-4">
 			<div class="flex items-center gap-3">
 				<Layers class="w-8 h-8 text-green-500" />
 				<div>
 					<p class="text-2xl font-semibold">{data.stats.total${names.thingy.pascalPlural}}</p>
-					<p class="text-sm text-zinc-500 dark:text-zinc-400">${names.thingy.pascalPlural}</p>
+					<p class="text-sm text-muted-foreground">${names.thingy.pascalPlural}</p>
 				</div>
 			</div>
 		</div>
-		<div class="bg-white border border-zinc-200 rounded-lg p-4">
+		<div class="bg-card border border-border rounded-lg p-4">
 			<div class="flex items-center gap-3">
 				<StickyNote class="w-8 h-8 text-yellow-500" />
 				<div>
 					<p class="text-2xl font-semibold">{data.stats.totalNotes}</p>
-					<p class="text-sm text-zinc-500 dark:text-zinc-400">Notes</p>
+					<p class="text-sm text-muted-foreground">Notes</p>
 				</div>
 			</div>
 		</div>
-		<div class="bg-white border border-zinc-200 rounded-lg p-4">
+		<div class="bg-card border border-border rounded-lg p-4">
 			<div class="flex items-center gap-3">
 				<Image class="w-8 h-8 text-purple-500" />
 				<div>
 					<p class="text-2xl font-semibold">{data.stats.totalPhotos}</p>
-					<p class="text-sm text-zinc-500 dark:text-zinc-400">Photos</p>
+					<p class="text-sm text-muted-foreground">Photos</p>
 				</div>
 			</div>
 		</div>
-		<div class="bg-white border border-zinc-200 rounded-lg p-4">
+		<div class="bg-card border border-border rounded-lg p-4">
 			<div class="flex items-center gap-3">
 				<Images class="w-8 h-8 text-pink-500" />
 				<div>
 					<p class="text-2xl font-semibold">{data.stats.totalGalleries}</p>
-					<p class="text-sm text-zinc-500 dark:text-zinc-400">Galleries</p>
+					<p class="text-sm text-muted-foreground">Galleries</p>
 				</div>
 			</div>
 		</div>
 	</div>
 
 	<!-- Users Table -->
-	<div class="bg-white border border-zinc-200 rounded-lg overflow-hidden">
-		<div class="px-6 py-4 border-b border-zinc-200">
-			<h2 class="text-lg font-semibold flex items-center gap-2"><Users class="w-5 h-5 text-zinc-400" />All Users ({data.users.length})</h2>
+	<div class="bg-card border border-border rounded-lg overflow-hidden">
+		<div class="px-6 py-4 border-b border-border">
+			<h2 class="text-lg font-semibold flex items-center gap-2"><Users class="w-5 h-5 text-muted-foreground" />All Users ({data.users.length})</h2>
 		</div>
 		<Table.Root>
 			<Table.Header>
@@ -1087,22 +1087,22 @@ function getAdminPageSvelte(names: WidgetEntityNames): string {
 					<Table.Row class="cursor-pointer" onclick={() => goto(\`/modules/${names.widget.plural}/users/\${user.id}/${names.widget.plural}\`)}>
 						<Table.Cell>
 							<div class="flex items-center gap-3">
-								<div class="w-8 h-8 bg-zinc-100 rounded-full flex items-center justify-center text-sm font-medium">
+								<div class="w-8 h-8 bg-muted rounded-full flex items-center justify-center text-sm font-medium">
 									{user.name?.charAt(0).toUpperCase() || user.email.charAt(0).toUpperCase()}
 								</div>
 								<span class="font-medium">{user.name || 'No name'}</span>
 							</div>
 						</Table.Cell>
-						<Table.Cell class="text-zinc-600 dark:text-zinc-400">{user.email}</Table.Cell>
+						<Table.Cell class="text-muted-foreground">{user.email}</Table.Cell>
 						<Table.Cell>
 							{#if user.admin}
 								<span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-amber-100 text-amber-800">Admin</span>
 							{:else}
-								<span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300">User</span>
+								<span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-muted text-muted-foreground">User</span>
 							{/if}
 						</Table.Cell>
 						<Table.Cell>{user.${names.widget.singular}Count}</Table.Cell>
-						<Table.Cell class="text-zinc-500 dark:text-zinc-400">{user.createdAt ? new Date(user.createdAt).toLocaleDateString() : 'N/A'}</Table.Cell>
+						<Table.Cell class="text-muted-foreground">{user.createdAt ? new Date(user.createdAt).toLocaleDateString() : 'N/A'}</Table.Cell>
 					</Table.Row>
 				{/each}
 			</Table.Body>

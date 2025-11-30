@@ -19,11 +19,11 @@
 
 <div class="max-w-xl mx-auto px-6 py-16">
 	<a href="/modules/widgets/users/{data.targetUser.id}/widgets/{data.widget.id}/thingys/{data.thingy.id}"
-		class="inline-flex items-center gap-2 text-sm text-zinc-600 hover:text-zinc-900 mb-6">
+		class="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-6">
 		<ArrowLeft class="w-4 h-4" />Back to {data.thingy.name}
 	</a>
 
-	<div class="border border-zinc-200 rounded-lg p-6 bg-white">
+	<div class="border border-border rounded-lg p-6 bg-card">
 		<h1 class="text-2xl font-semibold tracking-tight mb-6">Add Photo</h1>
 
 		{#if form?.error}
@@ -40,9 +40,9 @@
 		}} class="space-y-4">
 			<div class="space-y-2">
 				<Label.Root for="photo">Photo</Label.Root>
-				<div class="border-2 border-dashed border-zinc-300 rounded-lg p-6 text-center">
+				<div class="border-2 border-dashed border-border rounded-lg p-6 text-center">
 					{#if previewUrl}<img src={previewUrl} alt="Preview" class="max-h-48 mx-auto mb-4 rounded" />
-					{:else}<Upload class="w-8 h-8 mx-auto text-zinc-400 mb-2" /><p class="text-sm text-zinc-600">Click to select</p>{/if}
+					{:else}<Upload class="w-8 h-8 mx-auto text-muted-foreground mb-2" /><p class="text-sm text-muted-foreground">Click to select</p>{/if}
 					<Input.Root id="photo" name="photo" type="file" accept="image/*" onchange={handleFileChange} class="mt-2" required />
 				</div>
 			</div>

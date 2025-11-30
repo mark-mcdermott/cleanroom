@@ -12,11 +12,11 @@
 
 <div class="max-w-xl mx-auto px-6 py-16">
 	<a href="/modules/widgets/users/{data.targetUser.id}/widgets/{data.widget.id}/thingys/{data.thingy.id}/photos/{data.photo.id}"
-		class="inline-flex items-center gap-2 text-sm text-zinc-600 hover:text-zinc-900 mb-6">
+		class="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-6">
 		<ArrowLeft class="w-4 h-4" />Back to Photo
 	</a>
 
-	<div class="border border-zinc-200 rounded-lg p-6 bg-white">
+	<div class="border border-border rounded-lg p-6 bg-card">
 		<h1 class="text-2xl font-semibold tracking-tight mb-6">Edit Photo</h1>
 		<img src={data.photo.url} alt={data.photo.caption || 'Photo'} class="max-h-48 rounded mb-6" />
 

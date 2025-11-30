@@ -10,7 +10,7 @@
 </script>
 
 {#if src}
-	<div class={cn('relative aspect-square overflow-hidden rounded-lg bg-zinc-100 mb-3', className)}>
+	<div class={cn('relative aspect-square overflow-hidden rounded-lg bg-muted mb-3', className)}>
 		<img
 			{src}
 			{alt}
@@ -20,7 +20,7 @@
 		/>
 	</div>
 {:else}
-	<div class={cn('relative aspect-square overflow-hidden rounded-lg bg-zinc-100 mb-3 flex items-center justify-center', className)}>
-		<span class="text-zinc-400 text-4xl">📦</span>
+	<div class={cn('relative aspect-square overflow-hidden rounded-lg bg-muted mb-3 flex items-center justify-center', className)}>
+		<span class="text-muted-foreground text-4xl">📦</span>
 	</div>
 {/if}

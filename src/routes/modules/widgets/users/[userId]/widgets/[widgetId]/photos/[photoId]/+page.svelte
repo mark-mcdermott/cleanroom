@@ -20,21 +20,21 @@
 
 <div class="max-w-4xl mx-auto px-6 py-16">
 	<a href="/modules/widgets/users/{data.targetUser.id}/widgets/{data.widget.id}"
-		class="inline-flex items-center gap-2 text-sm text-zinc-600 hover:text-zinc-900 mb-6">
+		class="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-6">
 		<ArrowLeft class="w-4 h-4" />Back to {data.widget.name}
 	</a>
 
-	<div class="bg-white border border-zinc-200 rounded-lg overflow-hidden">
-		<img src={data.photo.url} alt={data.photo.caption || 'Photo'} class="w-full max-h-[600px] object-contain bg-zinc-100" />
+	<div class="bg-card border border-border rounded-lg overflow-hidden">
+		<img src={data.photo.url} alt={data.photo.caption || 'Photo'} class="w-full max-h-[600px] object-contain bg-muted" />
 		<div class="p-6">
 			<div class="flex items-start justify-between">
 				<div>
 					{#if data.photo.caption}
-						<p class="text-zinc-700">{data.photo.caption}</p>
+						<p class="text-muted-foreground">{data.photo.caption}</p>
 					{:else}
-						<p class="text-zinc-400 italic">No caption</p>
+						<p class="text-muted-foreground italic">No caption</p>
 					{/if}
-					<p class="text-sm text-zinc-400 mt-2">
+					<p class="text-sm text-muted-foreground mt-2">
 						{data.photo.filename || 'Unknown'} &bull; Added {data.photo.createdAt ? new Date(data.photo.createdAt).toLocaleString() : 'N/A'}
 					</p>
 				</div>

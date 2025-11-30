@@ -32,11 +32,11 @@
 				<Check class="w-8 h-8 text-emerald-600" />
 			</div>
 			<h1 class="text-3xl font-semibold tracking-tight mb-4">Order Placed!</h1>
-			<p class="text-zinc-600 dark:text-zinc-400 mb-2">
+			<p class="text-muted-foreground mb-2">
 				Thank you for your demo order. Your order number is:
 			</p>
-			<p class="font-mono text-sm bg-zinc-100 px-4 py-2 rounded mb-6">{orderId}</p>
-			<p class="text-sm text-zinc-500 dark:text-zinc-400 mb-8">
+			<p class="font-mono text-sm bg-muted px-4 py-2 rounded mb-6">{orderId}</p>
+			<p class="text-sm text-muted-foreground mb-8">
 				This is a demo store, so no actual payment was processed and no products will be shipped.
 			</p>
 			<Button.Root onclick={() => goto('/modules/store')} class="cursor-pointer">
@@ -46,7 +46,7 @@
 	{:else}
 		<a
 			href="/modules/store/cart"
-			class="inline-flex items-center gap-2 text-sm text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300 mb-8"
+			class="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-8"
 		>
 			<ArrowLeft class="w-4 h-4" />
 			Back to cart
@@ -195,14 +195,14 @@
 
 			<!-- Order Summary -->
 			<div class="lg:col-span-2">
-				<div class="bg-zinc-50 border border-zinc-200 rounded-lg p-6 sticky top-6">
+				<div class="bg-muted border border-border rounded-lg p-6 sticky top-6">
 					<h2 class="text-lg font-semibold mb-4">Order Summary</h2>
 
 					<div class="space-y-4 mb-6">
 						{#each data.items as item}
 							<div class="flex gap-3">
 								<div
-									class="w-16 h-16 rounded bg-zinc-200 flex-shrink-0 overflow-hidden"
+									class="w-16 h-16 rounded bg-muted flex-shrink-0 overflow-hidden"
 								>
 									{#if item.productImage}
 										<img
@@ -212,13 +212,13 @@
 										/>
 									{:else}
 										<div class="w-full h-full flex items-center justify-center">
-											<span class="text-zinc-400">📦</span>
+											<span class="text-muted-foreground">📦</span>
 										</div>
 									{/if}
 								</div>
 								<div class="flex-1 min-w-0">
 									<p class="font-medium text-sm truncate">{item.productName}</p>
-									<p class="text-xs text-zinc-500 dark:text-zinc-400">Qty: {item.quantity}</p>
+									<p class="text-xs text-muted-foreground">Qty: {item.quantity}</p>
 								</div>
 								<div class="text-sm font-medium">
 									${formatPrice(
@@ -229,13 +229,13 @@
 						{/each}
 					</div>
 
-					<div class="border-t border-zinc-200 pt-4 space-y-2 text-sm">
+					<div class="border-t border-border pt-4 space-y-2 text-sm">
 						<div class="flex justify-between">
-							<span class="text-zinc-600 dark:text-zinc-400">Subtotal</span>
+							<span class="text-muted-foreground">Subtotal</span>
 							<span>${formatPrice(data.subtotal)}</span>
 						</div>
 						<div class="flex justify-between">
-							<span class="text-zinc-600 dark:text-zinc-400">Shipping</span>
+							<span class="text-muted-foreground">Shipping</span>
 							<span>
 								{#if data.shipping === 0}
 									<span class="text-emerald-600">Free</span>
@@ -245,12 +245,12 @@
 							</span>
 						</div>
 						<div class="flex justify-between">
-							<span class="text-zinc-600 dark:text-zinc-400">Tax (8%)</span>
+							<span class="text-muted-foreground">Tax (8%)</span>
 							<span>${formatPrice(data.tax)}</span>
 						</div>
 					</div>
 
-					<div class="border-t border-zinc-200 mt-4 pt-4">
+					<div class="border-t border-border mt-4 pt-4">
 						<div class="flex justify-between text-lg font-semibold">
 							<span>Total</span>
 							<span>${formatPrice(data.total)}</span>
@@ -258,7 +258,7 @@
 					</div>
 
 					{#if data.subtotal < 5000}
-						<p class="text-xs text-zinc-500 dark:text-zinc-400 mt-4">
+						<p class="text-xs text-muted-foreground mt-4">
 							Add ${formatPrice(5000 - data.subtotal)} more for free shipping!
 						</p>
 					{/if}

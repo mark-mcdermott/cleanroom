@@ -14,7 +14,7 @@
 <div
 	data-slot="metric-card"
 	class={cn(
-		'bg-white rounded-xl border border-border p-5 hover:border-zinc-300 transition-colors',
+		'bg-card rounded-xl border border-border p-5 hover:border-muted-foreground/30 transition-colors',
 		className
 	)}
 	{...restProps}

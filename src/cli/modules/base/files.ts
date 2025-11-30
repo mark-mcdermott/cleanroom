@@ -113,7 +113,7 @@ export function getAppCss(): string {
 @layer base {
   html {
     font-family: "Inter", system-ui, sans-serif;
-    @apply antialiased bg-white text-zinc-900;
+    @apply antialiased bg-background text-foreground;
     scroll-behavior: smooth;
   }
 
@@ -121,7 +121,7 @@ export function getAppCss(): string {
     background:
       linear-gradient(to bottom, rgba(0, 0, 0, 0.04) 1px, transparent 1px),
       linear-gradient(to right, rgba(0, 0, 0, 0.04) 1px, transparent 1px),
-      #ffffff;
+      var(--color-background);
     background-size: 48px 48px;
   }
 
@@ -145,19 +145,19 @@ export function getAppCss(): string {
 
 @layer components {
   .card {
-    @apply bg-white border border-zinc-200 rounded-2xl shadow-sm p-8 sm:p-12;
+    @apply bg-background border border-border rounded-2xl shadow-sm p-8 sm:p-12;
   }
 
   .btn {
-    @apply inline-flex items-center justify-center px-4 py-2 text-sm font-medium rounded-md transition border border-zinc-300 hover:border-zinc-500 no-underline;
+    @apply inline-flex items-center justify-center px-4 py-2 text-sm font-medium rounded-md transition border border-border hover:border-foreground/50 no-underline;
   }
 
   .btn-dark {
-    @apply bg-zinc-900 text-white hover:bg-zinc-700 hover:border-zinc-700;
+    @apply bg-primary text-primary-foreground hover:bg-primary/90 hover:border-primary/90;
   }
 
   .btn-light {
-    @apply bg-transparent text-zinc-800 hover:border-zinc-600 hover:text-zinc-900;
+    @apply bg-transparent text-foreground hover:border-foreground/50;
   }
 }
 

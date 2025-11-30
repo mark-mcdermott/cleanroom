@@ -39,7 +39,7 @@
 <div class="max-w-xl mx-auto px-6 py-8">
 	<a
 		href="/modules/tracker/admin"
-		class="inline-flex items-center gap-2 text-sm text-zinc-500 hover:text-zinc-700 mb-8"
+		class="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-muted-foreground mb-8"
 	>
 		<ArrowLeft class="w-4 h-4" />
 		Back to admin
@@ -48,7 +48,7 @@
 	<div class="flex items-start justify-between mb-8">
 		<div>
 			<h1 class="text-3xl font-semibold tracking-tight mb-2">Edit Metric</h1>
-			<p class="text-zinc-500">
+			<p class="text-muted-foreground">
 				<span class="text-2xl mr-2">{data.metric.icon || '📊'}</span>
 				{data.metric.name}
 			</p>
@@ -123,7 +123,7 @@
 					{#each valueTypes as type}
 						<Select.Item value={type.value}>
 							{type.label}
-							<span class="text-zinc-400 ml-2">— {type.description}</span>
+							<span class="text-muted-foreground ml-2">— {type.description}</span>
 						</Select.Item>
 					{/each}
 				</Select.Content>
@@ -167,7 +167,7 @@
 					value={data.metric.color || '#3b82f6'}
 					class="w-16 h-10 p-1"
 				/>
-				<span class="text-sm text-zinc-500">Choose a color for charts and badges</span>
+				<span class="text-sm text-muted-foreground">Choose a color for charts and badges</span>
 			</div>
 		</div>
 
@@ -224,10 +224,10 @@
 		</div>
 
 		<!-- Archived Status -->
-		<div class="flex items-center justify-between p-4 bg-zinc-50 rounded-lg border border-border">
+		<div class="flex items-center justify-between p-4 bg-muted rounded-lg border border-border">
 			<div>
 				<p class="font-medium">Archive Metric</p>
-				<p class="text-sm text-zinc-500">Archived metrics won't appear in the log form</p>
+				<p class="text-sm text-muted-foreground">Archived metrics won't appear in the log form</p>
 			</div>
 			<label class="relative inline-flex items-center cursor-pointer">
 				<input
@@ -237,7 +237,7 @@
 					checked={data.metric.archived}
 					class="sr-only peer"
 				/>
-				<div class="w-11 h-6 bg-zinc-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-zinc-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-zinc-600"></div>
+				<div class="w-11 h-6 bg-muted peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-card after:border-border after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
 			</label>
 		</div>
 

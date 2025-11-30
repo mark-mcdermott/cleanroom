@@ -40,7 +40,7 @@
 				<div class="space-y-2">
 					<Label.Root for="password">Password</Label.Root>
 					<Input.Root type="password" id="password" name="password" required minlength={6} />
-					<p class="text-xs text-zinc-500">At least 6 characters</p>
+					<p class="text-xs text-muted-foreground">At least 6 characters</p>
 				</div>
 
 				<Button.Root type="submit" class="w-full cursor-pointer">
@@ -49,7 +49,7 @@
 			</form>
 		</Card.Content>
 		<Card.Footer class="justify-center">
-			<p class="text-sm text-zinc-600">
+			<p class="text-sm text-muted-foreground">
 				Already have an account?
 				<a href="/modules/resume/login" class="text-blue-600 hover:underline">Log in</a>
 			</p>

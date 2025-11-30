@@ -23,7 +23,7 @@
 
 <div
 	data-slot="view-toggle"
-	class={cn('inline-flex rounded-lg bg-zinc-100 dark:bg-zinc-800 p-1', className)}
+	class={cn('inline-flex rounded-lg bg-muted p-1', className)}
 	role="tablist"
 	{...restProps}
 >
@@ -36,8 +36,8 @@
 			class={cn(
 				'inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium transition-all',
 				isActive
-					? 'bg-white dark:bg-zinc-700 text-zinc-900 dark:text-zinc-100 shadow-sm'
-					: 'text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100'
+					? 'bg-background text-foreground shadow-sm'
+					: 'text-muted-foreground hover:text-foreground'
 			)}
 		>
 			{#if option.icon}

@@ -39,7 +39,7 @@
 	<div class="flex items-center justify-between mb-8">
 		<div>
 			<h1 class="text-3xl font-semibold tracking-tight">The Office</h1>
-			<p class="text-zinc-600 mt-2">Dunder Mifflin Scranton Branch ({data.users.length} employees)</p>
+			<p class="text-muted-foreground mt-2">Dunder Mifflin Scranton Branch ({data.users.length} employees)</p>
 		</div>
 		<form method="POST" action="?/reset" use:enhance={() => {
 			return async ({ result }) => {
@@ -59,8 +59,8 @@
 	</div>
 
 	{#if data.users.length === 0}
-		<div class="border border-zinc-200 rounded-lg p-8 text-center bg-white">
-			<p class="text-zinc-600 mb-4">No employees found. Reset the demo to populate Dunder Mifflin staff.</p>
+		<div class="border border-border rounded-lg p-8 text-center bg-card">
+			<p class="text-muted-foreground mb-4">No employees found. Reset the demo to populate Dunder Mifflin staff.</p>
 			<form method="POST" action="?/reset" use:enhance={() => {
 				return async ({ result }) => {
 					if (result.type === 'success') {
@@ -99,25 +99,25 @@
 				>
 					<Table.Cell>
 						<div class="flex items-center gap-3">
-							<div class="w-8 h-8 bg-zinc-100 rounded-full flex items-center justify-center text-sm font-medium">
+							<div class="w-8 h-8 bg-muted rounded-full flex items-center justify-center text-sm font-medium">
 								{user.name?.charAt(0).toUpperCase() || user.email.charAt(0).toUpperCase()}
 							</div>
 							<span class="font-medium">{user.name || 'No name'}</span>
 						</div>
 					</Table.Cell>
-					<Table.Cell class="text-zinc-600">{user.email}</Table.Cell>
+					<Table.Cell class="text-muted-foreground">{user.email}</Table.Cell>
 					<Table.Cell>
 						{#if user.admin}
 							<span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-amber-100 text-amber-800">
 								Regional Manager
 							</span>
 						{:else}
-							<span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-zinc-100 text-zinc-700">
+							<span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-muted text-muted-foreground">
 								Staff
 							</span>
 						{/if}
 					</Table.Cell>
-					<Table.Cell class="text-zinc-500">
+					<Table.Cell class="text-muted-foreground">
 						{user.createdAt ? new Date(user.createdAt).toLocaleDateString() : 'N/A'}
 					</Table.Cell>
 					<Table.Cell>
@@ -125,7 +125,7 @@
 							<a
 								href="/modules/auth/admin/users/{user.id}/edit"
 								data-action="edit"
-								class="p-1.5 rounded text-zinc-400 hover:text-zinc-700 hover:bg-zinc-200 transition-colors cursor-pointer"
+								class="p-1.5 rounded text-muted-foreground hover:text-muted-foreground hover:bg-muted transition-colors cursor-pointer"
 								title="Edit user"
 								onclick={(e: MouseEvent) => e.stopPropagation()}
 							>
@@ -133,7 +133,7 @@
 							</a>
 							<button
 								data-action="delete"
-								class="p-1.5 rounded text-zinc-400 hover:text-red-600 hover:bg-red-50 transition-colors cursor-pointer"
+								class="p-1.5 rounded text-muted-foreground hover:text-red-600 hover:bg-red-50 transition-colors cursor-pointer"
 								title="Delete user"
 								onclick={(e: MouseEvent) => {
 									e.stopPropagation();

@@ -7,6 +7,7 @@ import { lobbyModule } from './lobby';
 import { officeUsersModule } from './office-users';
 import { resumeModule } from './resume';
 import { storeModule } from './store';
+import { themePreviewModule } from './theme-preview';
 import { trackerModule } from './tracker';
 import { videosModule } from './videos';
 import { widgetsModule } from './widgets';
@@ -20,6 +21,7 @@ export const featureModules: Record<string, FeatureModule> = {
 	'office-users': officeUsersModule,
 	resume: resumeModule,
 	store: storeModule,
+	'theme-preview': themePreviewModule,
 	tracker: trackerModule,
 	videos: videosModule,
 	widgets: widgetsModule

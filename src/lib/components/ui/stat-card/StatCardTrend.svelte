@@ -22,7 +22,7 @@
 		'flex items-center gap-1 text-sm mt-2',
 		isPositive && 'text-emerald-600',
 		isNegative && 'text-red-600',
-		isNeutral && 'text-zinc-500 dark:text-zinc-400',
+		isNeutral && 'text-muted-foreground',
 		className
 	)}
 	{...restProps}
@@ -37,5 +37,5 @@
 		<Minus class="w-4 h-4" />
 		<span>0%</span>
 	{/if}
-	<span class="text-zinc-400">{label}</span>
+	<span class="text-muted-foreground">{label}</span>
 </div>

@@ -59,7 +59,7 @@
 			<Sparkles class="w-10 h-10 text-purple-600" />
 			<h1 class="text-3xl font-semibold tracking-tight">Meditation Lobby</h1>
 		</div>
-		<p class="text-zinc-600 dark:text-zinc-400">
+		<p class="text-muted-foreground">
 			A peaceful space for group meditation with video and chat
 		</p>
 	</div>
@@ -67,20 +67,20 @@
 	{#if !isInRoom}
 		<!-- Join Room Form -->
 		<div class="max-w-md mx-auto">
-			<div class="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-8 shadow-sm">
+			<div class="bg-card border border-border rounded-xl p-8 shadow-sm">
 				<div class="text-center mb-6">
 					<div class="w-16 h-16 bg-purple-100 dark:bg-purple-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
 						<Users class="w-8 h-8 text-purple-600" />
 					</div>
 					<h2 class="text-xl font-semibold">Join the Lobby</h2>
-					<p class="text-sm text-zinc-500 dark:text-zinc-400 mt-2">
+					<p class="text-sm text-muted-foreground mt-2">
 						Enter your name to join the meditation session
 					</p>
 				</div>
 
 				<form onsubmit={(e) => { e.preventDefault(); joinRoom(); }} class="space-y-4">
 					<div>
-						<label for="name" class="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">
+						<label for="name" class="block text-sm font-medium text-muted-foreground mb-2">
 							Your Name
 						</label>
 						<input
@@ -88,7 +88,7 @@
 							id="name"
 							bind:value={userName}
 							placeholder="Enter your name"
-							class="w-full px-4 py-2 border border-zinc-300 dark:border-zinc-600 rounded-lg bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-purple-500"
+							class="w-full px-4 py-2 border border-border rounded-lg bg-input text-foreground focus:outline-none focus:ring-2 focus:ring-purple-500"
 						/>
 					</div>
 					<Button.Root type="submit" class="w-full cursor-pointer bg-purple-600 hover:bg-purple-700">
@@ -111,16 +111,16 @@
 			<!-- Main Video Area -->
 			<div class="flex-1 flex flex-col">
 				<!-- Video Grid -->
-				<div class="flex-1 bg-zinc-900 rounded-xl p-4 grid grid-cols-2 gap-3">
+				<div class="flex-1 bg-primary rounded-xl p-4 grid grid-cols-2 gap-3">
 					{#each mockParticipants as participant}
-						<div class="relative bg-zinc-800 rounded-lg overflow-hidden flex items-center justify-center">
+						<div class="relative bg-secondary rounded-lg overflow-hidden flex items-center justify-center">
 							{#if participant.isVideoOn}
-								<div class="absolute inset-0 bg-gradient-to-br from-purple-900/50 to-zinc-900"></div>
-								<div class="relative z-10 w-20 h-20 bg-purple-600 rounded-full flex items-center justify-center text-white text-2xl font-semibold">
+								<div class="absolute inset-0 bg-gradient-to-br from-purple-900/50 to-primary"></div>
+								<div class="relative z-10 w-20 h-20 bg-purple-600 rounded-full flex items-center justify-center text-primary-foreground text-2xl font-semibold">
 									{getInitials(participant.name)}
 								</div>
 							{:else}
-								<div class="w-20 h-20 bg-zinc-700 rounded-full flex items-center justify-center text-white text-2xl font-semibold">
+								<div class="w-20 h-20 bg-muted rounded-full flex items-center justify-center text-primary-foreground text-2xl font-semibold">
 									{getInitials(participant.name)}
 								</div>
 							{/if}
@@ -142,7 +142,7 @@
 				<div class="flex items-center justify-center gap-3 mt-4">
 					<button
 						onclick={() => isMuted = !isMuted}
-						class="w-12 h-12 rounded-full flex items-center justify-center transition-colors cursor-pointer {isMuted ? 'bg-red-500 text-white' : 'bg-zinc-200 dark:bg-zinc-700 text-zinc-700 dark:text-zinc-200 hover:bg-zinc-300 dark:hover:bg-zinc-600'}"
+						class="w-12 h-12 rounded-full flex items-center justify-center transition-colors cursor-pointer {isMuted ? 'bg-red-500 text-white' : 'bg-muted text-muted-foreground hover:bg-accent'}"
 					>
 						{#if isMuted}
 							<MicOff class="w-5 h-5" />
@@ -152,7 +152,7 @@
 					</button>
 					<button
 						onclick={() => isVideoOff = !isVideoOff}
-						class="w-12 h-12 rounded-full flex items-center justify-center transition-colors cursor-pointer {isVideoOff ? 'bg-red-500 text-white' : 'bg-zinc-200 dark:bg-zinc-700 text-zinc-700 dark:text-zinc-200 hover:bg-zinc-300 dark:hover:bg-zinc-600'}"
+						class="w-12 h-12 rounded-full flex items-center justify-center transition-colors cursor-pointer {isVideoOff ? 'bg-red-500 text-white' : 'bg-muted text-muted-foreground hover:bg-accent'}"
 					>
 						{#if isVideoOff}
 							<CameraOff class="w-5 h-5" />
@@ -168,7 +168,7 @@
 					</button>
 					<button
 						onclick={() => isChatOpen = !isChatOpen}
-						class="w-12 h-12 rounded-full flex items-center justify-center transition-colors cursor-pointer {isChatOpen ? 'bg-purple-500 text-white' : 'bg-zinc-200 dark:bg-zinc-700 text-zinc-700 dark:text-zinc-200 hover:bg-zinc-300 dark:hover:bg-zinc-600'}"
+						class="w-12 h-12 rounded-full flex items-center justify-center transition-colors cursor-pointer {isChatOpen ? 'bg-purple-500 text-white' : 'bg-muted text-muted-foreground hover:bg-accent'}"
 					>
 						<MessageCircle class="w-5 h-5" />
 					</button>
@@ -177,8 +177,8 @@
 
 			<!-- Chat Sidebar -->
 			{#if isChatOpen}
-				<div class="w-80 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl flex flex-col">
-					<div class="p-4 border-b border-zinc-200 dark:border-zinc-800">
+				<div class="w-80 bg-card border border-border rounded-xl flex flex-col">
+					<div class="p-4 border-b border-border">
 						<h3 class="font-semibold flex items-center gap-2">
 							<MessageCircle class="w-4 h-4" />
 							Chat
@@ -190,20 +190,20 @@
 							<div class="text-sm">
 								<div class="flex items-baseline gap-2">
 									<span class="font-medium text-purple-600 dark:text-purple-400">{msg.name}</span>
-									<span class="text-xs text-zinc-400">{msg.time}</span>
+									<span class="text-xs text-muted-foreground">{msg.time}</span>
 								</div>
-								<p class="text-zinc-700 dark:text-zinc-300 mt-0.5">{msg.text}</p>
+								<p class="text-muted-foreground mt-0.5">{msg.text}</p>
 							</div>
 						{/each}
 					</div>
 
-					<div class="p-3 border-t border-zinc-200 dark:border-zinc-800">
+					<div class="p-3 border-t border-border">
 						<form onsubmit={(e) => { e.preventDefault(); sendMessage(); }} class="flex gap-2">
 							<input
 								type="text"
 								bind:value={chatMessage}
 								placeholder="Send a message..."
-								class="flex-1 px-3 py-2 text-sm border border-zinc-300 dark:border-zinc-600 rounded-lg bg-white dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-purple-500"
+								class="flex-1 px-3 py-2 text-sm border border-border rounded-lg bg-input text-foreground focus:outline-none focus:ring-2 focus:ring-purple-500"
 							/>
 							<button
 								type="submit"
@@ -219,7 +219,7 @@
 
 		<!-- Participant count -->
 		<div class="text-center mt-4">
-			<span class="inline-flex items-center gap-2 text-sm text-zinc-500 dark:text-zinc-400">
+			<span class="inline-flex items-center gap-2 text-sm text-muted-foreground">
 				<Users class="w-4 h-4" />
 				{mockParticipants.length} meditators in session
 			</span>
@@ -229,16 +229,16 @@
 	<!-- Setup Instructions -->
 	<div class="mt-12 max-w-2xl mx-auto">
 		<h2 class="text-xl font-semibold mb-4">Setup Instructions</h2>
-		<div class="space-y-4 text-sm text-zinc-600 dark:text-zinc-400">
+		<div class="space-y-4 text-sm text-muted-foreground">
 			<p>When you scaffold a project with this module, you'll need to:</p>
 			<ol class="list-decimal list-inside space-y-2 ml-4">
 				<li>Create a free account at <a href="https://daily.co" target="_blank" class="text-purple-600 dark:text-purple-400 underline">daily.co</a></li>
 				<li>Get your API key from the Daily dashboard</li>
-				<li>Add <code class="bg-zinc-100 dark:bg-zinc-800 px-1 rounded">DAILY_API_KEY</code> to your <code class="bg-zinc-100 dark:bg-zinc-800 px-1 rounded">.env</code> file</li>
-				<li>Optionally set <code class="bg-zinc-100 dark:bg-zinc-800 px-1 rounded">DAILY_DOMAIN</code> for custom domains</li>
+				<li>Add <code class="bg-muted px-1 rounded">DAILY_API_KEY</code> to your <code class="bg-muted px-1 rounded">.env</code> file</li>
+				<li>Optionally set <code class="bg-muted px-1 rounded">DAILY_DOMAIN</code> for custom domains</li>
 			</ol>
 			<p class="mt-4">
-				The module uses <code class="bg-zinc-100 dark:bg-zinc-800 px-1 rounded">@daily-co/daily-js</code> for video
+				The module uses <code class="bg-muted px-1 rounded">@daily-co/daily-js</code> for video
 				and chat functionality, with a peaceful meditation-focused UI.
 			</p>
 		</div>

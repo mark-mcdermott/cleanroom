@@ -44,7 +44,7 @@
 
 <div class="max-w-4xl mx-auto px-6 py-12">
 	<h1 class="mb-2">Components</h1>
-	<p class="text-zinc-600 text-lg mb-12">
+	<p class="text-muted-foreground text-lg mb-12">
 		A collection of accessible, reusable UI components built with Svelte 5 and bits-ui.
 	</p>
 
@@ -178,7 +178,7 @@
 	<!-- Post Card -->
 	<section class="mb-12">
 		<h2>Post Card</h2>
-		<p class="text-zinc-600 mb-4">Composable blog post card for listing pages.</p>
+		<p class="text-muted-foreground mb-4">Composable blog post card for listing pages.</p>
 		<div class="space-y-6 max-w-xl">
 			<PostCard.Root href="#post-1">
 				<PostCard.Image src="https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=600&h=300&fit=crop" alt="Blog post" />
@@ -198,8 +198,8 @@
 	<!-- Prose -->
 	<section class="mb-12">
 		<h2>Prose</h2>
-		<p class="text-zinc-600 mb-4">Typography styling for HTML content like blog posts and articles.</p>
-		<div class="border border-zinc-200 rounded-lg p-6 bg-white">
+		<p class="text-muted-foreground mb-4">Typography styling for HTML content like blog posts and articles.</p>
+		<div class="border border-border rounded-lg p-6 bg-card">
 			<Prose.Root>
 				<h2>This is a Heading</h2>
 				<p>This is a paragraph with some <strong>bold text</strong> and <em>italic text</em>. The prose component provides consistent typography styling for rendered HTML content.</p>
@@ -216,17 +216,17 @@
 	</section>
 
 	<!-- Divider -->
-	<div class="border-t border-zinc-200 my-12"></div>
+	<div class="border-t border-border my-12"></div>
 
 	<h1 class="mb-2">Form Components</h1>
-	<p class="text-zinc-600 text-lg mb-12">
+	<p class="text-muted-foreground text-lg mb-12">
 		Styled form components with labels, validation errors, and Superforms integration.
 	</p>
 
 	<!-- Form Input -->
 	<section class="mb-12">
 		<h2>Form Input</h2>
-		<p class="text-zinc-600 mb-4">Text input with label and error support.</p>
+		<p class="text-muted-foreground mb-4">Text input with label and error support.</p>
 		<div class="max-w-sm space-y-4">
 			<FormInput
 				name="demo-input"
@@ -254,7 +254,7 @@
 	<!-- Form Email -->
 	<section class="mb-12">
 		<h2>Form Email</h2>
-		<p class="text-zinc-600 mb-4">Email input with default placeholder.</p>
+		<p class="text-muted-foreground mb-4">Email input with default placeholder.</p>
 		<div class="max-w-sm">
 			<FormEmail name="demo-email" label="Email Address" bind:value={formEmailValue} />
 		</div>
@@ -263,7 +263,7 @@
 	<!-- Form Select -->
 	<section class="mb-12">
 		<h2>Form Select</h2>
-		<p class="text-zinc-600 mb-4">Dropdown select with options array.</p>
+		<p class="text-muted-foreground mb-4">Dropdown select with options array.</p>
 		<div class="max-w-sm">
 			<FormSelect
 				name="demo-select"
@@ -278,7 +278,7 @@
 	<!-- Form Textarea -->
 	<section class="mb-12">
 		<h2>Form Textarea</h2>
-		<p class="text-zinc-600 mb-4">Multi-line text input.</p>
+		<p class="text-muted-foreground mb-4">Multi-line text input.</p>
 		<div class="max-w-sm">
 			<FormTextarea
 				name="demo-textarea"
@@ -292,7 +292,7 @@
 	<!-- Form Button -->
 	<section class="mb-12">
 		<h2>Form Button</h2>
-		<p class="text-zinc-600 mb-4">Submit button with variants.</p>
+		<p class="text-muted-foreground mb-4">Submit button with variants.</p>
 		<div class="space-y-4 max-w-sm">
 			<FormButton type="button">Primary (Full Width)</FormButton>
 			<FormButton type="button" variant="secondary">Secondary</FormButton>
@@ -306,7 +306,7 @@
 	<!-- Form Checkbox -->
 	<section class="mb-12">
 		<h2>Form Checkbox</h2>
-		<p class="text-zinc-600 mb-4">Checkbox with label and error support.</p>
+		<p class="text-muted-foreground mb-4">Checkbox with label and error support.</p>
 		<div class="max-w-sm space-y-4">
 			<FormCheckbox
 				name="demo-checkbox"
@@ -331,14 +331,14 @@
 				disabled
 				checked={true}
 			/>
-			<p class="text-sm text-zinc-500">Checked: {formCheckboxChecked}</p>
+			<p class="text-sm text-muted-foreground">Checked: {formCheckboxChecked}</p>
 		</div>
 	</section>
 
 	<!-- Form Radio Group -->
 	<section class="mb-12">
 		<h2>Form Radio Group</h2>
-		<p class="text-zinc-600 mb-4">Radio button group with options array.</p>
+		<p class="text-muted-foreground mb-4">Radio button group with options array.</p>
 		<div class="max-w-sm space-y-6">
 			<FormRadioGroup
 				name="demo-radio"
@@ -360,14 +360,14 @@
 				value=""
 				error={['Please select an option']}
 			/>
-			<p class="text-sm text-zinc-500">Selected: {formRadioValue}</p>
+			<p class="text-sm text-muted-foreground">Selected: {formRadioValue}</p>
 		</div>
 	</section>
 
 	<!-- Form Switch -->
 	<section class="mb-12">
 		<h2>Form Switch</h2>
-		<p class="text-zinc-600 mb-4">Toggle switch with label support.</p>
+		<p class="text-muted-foreground mb-4">Toggle switch with label support.</p>
 		<div class="max-w-sm space-y-4">
 			<FormSwitch name="demo-switch" label="Enable notifications" bind:checked={formSwitchChecked} />
 			<FormSwitch name="demo-switch-disabled" label="Disabled switch" disabled checked={true} />
@@ -377,7 +377,7 @@
 				checked={false}
 				error={['This setting is required']}
 			/>
-			<p class="text-sm text-zinc-500">Enabled: {formSwitchChecked}</p>
+			<p class="text-sm text-muted-foreground">Enabled: {formSwitchChecked}</p>
 		</div>
 	</section>
 </div>

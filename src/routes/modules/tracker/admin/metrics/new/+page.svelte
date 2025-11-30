@@ -26,14 +26,14 @@
 <div class="max-w-xl mx-auto px-6 py-8">
 	<a
 		href="/modules/tracker/admin"
-		class="inline-flex items-center gap-2 text-sm text-zinc-500 hover:text-zinc-700 mb-8"
+		class="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-muted-foreground mb-8"
 	>
 		<ArrowLeft class="w-4 h-4" />
 		Back to admin
 	</a>
 
 	<h1 class="text-3xl font-semibold tracking-tight mb-2">New Metric</h1>
-	<p class="text-zinc-500 mb-8">Create a new metric to track</p>
+	<p class="text-muted-foreground mb-8">Create a new metric to track</p>
 
 	<form
 		method="POST"
@@ -85,7 +85,7 @@
 					{#each valueTypes as type}
 						<Select.Item value={type.value}>
 							{type.label}
-							<span class="text-zinc-400 ml-2">— {type.description}</span>
+							<span class="text-muted-foreground ml-2">— {type.description}</span>
 						</Select.Item>
 					{/each}
 				</Select.Content>
@@ -102,7 +102,7 @@
 				placeholder="e.g., steps, lbs, min"
 				class="mt-1.5"
 			/>
-			<p class="text-sm text-zinc-500 mt-1">The unit of measurement (optional)</p>
+			<p class="text-sm text-muted-foreground mt-1">The unit of measurement (optional)</p>
 		</div>
 
 		<!-- Icon -->
@@ -116,7 +116,7 @@
 			<Label.Root for="color">Color</Label.Root>
 			<div class="flex items-center gap-3 mt-1.5">
 				<Input.Root type="color" id="color" name="color" value="#3b82f6" class="w-16 h-10 p-1" />
-				<span class="text-sm text-zinc-500">Choose a color for charts and badges</span>
+				<span class="text-sm text-muted-foreground">Choose a color for charts and badges</span>
 			</div>
 		</div>
 

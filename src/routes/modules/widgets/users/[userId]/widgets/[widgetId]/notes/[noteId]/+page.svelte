@@ -20,11 +20,11 @@
 
 <div class="max-w-2xl mx-auto px-6 py-16">
 	<a href="/modules/widgets/users/{data.targetUser.id}/widgets/{data.widget.id}"
-		class="inline-flex items-center gap-2 text-sm text-zinc-600 hover:text-zinc-900 mb-6">
+		class="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-6">
 		<ArrowLeft class="w-4 h-4" />Back to {data.widget.name}
 	</a>
 
-	<div class="bg-white border border-zinc-200 rounded-lg p-6">
+	<div class="bg-card border border-border rounded-lg p-6">
 		<div class="flex items-start justify-between mb-4">
 			<h1 class="text-lg font-semibold">Note</h1>
 			{#if data.canEdit}
@@ -41,7 +41,7 @@
 		<div class="prose prose-zinc max-w-none">
 			<p class="whitespace-pre-wrap">{data.note.content}</p>
 		</div>
-		<p class="text-sm text-zinc-400 mt-4">
+		<p class="text-sm text-muted-foreground mt-4">
 			Created {data.note.createdAt ? new Date(data.note.createdAt).toLocaleString() : 'N/A'}
 		</p>
 	</div>

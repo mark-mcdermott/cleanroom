@@ -11,7 +11,7 @@
 		'Pam Beesly': 'bg-pink-500',
 		'Ryan Howard': 'bg-purple-500',
 		'Andy Bernard': 'bg-red-500',
-		'Angela Martin': 'bg-gray-500',
+		'Angela Martin': 'bg-muted0',
 		'Kevin Malone': 'bg-orange-500',
 		'Oscar Martinez': 'bg-teal-500',
 		'Stanley Hudson': 'bg-indigo-500',
@@ -28,7 +28,7 @@
 	};
 
 	function getColor(name: string | null): string {
-		return characterColors[name || ''] || 'bg-zinc-500';
+		return characterColors[name || ''] || 'bg-muted0';
 	}
 
 	function getInitials(name: string | null): string {
@@ -52,20 +52,20 @@
 			<Users class="w-10 h-10 text-blue-600" />
 			<h1 class="text-3xl font-semibold tracking-tight">Office Users</h1>
 		</div>
-		<p class="text-zinc-600 dark:text-zinc-400">
+		<p class="text-muted-foreground">
 			Seed your database with characters from The Office for testing.
 		</p>
 	</div>
 
 	{#if data.users.length === 0}
-		<div class="bg-white border border-zinc-200 rounded-lg p-8 text-center">
-			<Users class="w-16 h-16 mx-auto text-zinc-300 mb-4" />
-			<p class="text-zinc-600 dark:text-zinc-400 mb-4">No users in the database yet.</p>
-			<p class="text-sm text-zinc-500 dark:text-zinc-400 mb-6">
+		<div class="bg-card border border-border rounded-lg p-8 text-center">
+			<Users class="w-16 h-16 mx-auto text-muted-foreground mb-4" />
+			<p class="text-muted-foreground mb-4">No users in the database yet.</p>
+			<p class="text-sm text-muted-foreground mb-6">
 				When you scaffold a project with this module, run:
 			</p>
-			<code class="bg-zinc-100 px-4 py-2 rounded font-mono text-sm">pnpm db:seed-office</code>
-			<p class="text-sm text-zinc-500 dark:text-zinc-400 mt-6">
+			<code class="bg-muted px-4 py-2 rounded font-mono text-sm">pnpm db:seed-office</code>
+			<p class="text-sm text-muted-foreground mt-6">
 				This will seed 20 characters from The Office with the password: <strong>dundermifflin</strong>
 			</p>
 		</div>
@@ -78,7 +78,7 @@
 
 		<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
 			{#each data.users as user}
-				<div class="bg-white border border-zinc-200 rounded-lg p-4 hover:border-zinc-300 transition-colors">
+				<div class="bg-card border border-border rounded-lg p-4 hover:border-border transition-colors">
 					<div class="flex items-center gap-3">
 						<div
 							class="w-10 h-10 rounded-full flex items-center justify-center text-white font-semibold text-sm {getColor(
@@ -89,14 +89,14 @@
 						</div>
 						<div class="min-w-0 flex-1">
 							<h3 class="font-medium truncate">{user.name || 'Unknown'}</h3>
-							<p class="text-xs text-zinc-500 dark:text-zinc-400 truncate">{user.email}</p>
+							<p class="text-xs text-muted-foreground truncate">{user.email}</p>
 						</div>
 					</div>
 				</div>
 			{/each}
 		</div>
 
-		<p class="text-center text-sm text-zinc-500 dark:text-zinc-400 mt-8">
+		<p class="text-center text-sm text-muted-foreground mt-8">
 			{data.users.length} users from Dunder Mifflin Scranton
 		</p>
 	{/if}

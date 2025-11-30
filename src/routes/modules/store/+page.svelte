@@ -22,7 +22,7 @@
 	<div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
 		<div>
 			<h1 class="text-4xl font-semibold tracking-tight mb-2">Shop</h1>
-			<p class="text-zinc-600 dark:text-zinc-400">Browse our collection of awesome products.</p>
+			<p class="text-muted-foreground">Browse our collection of awesome products.</p>
 		</div>
 
 		{#if data.categories.length > 0}
@@ -31,7 +31,7 @@
 					href="/modules/store"
 					class="px-3 py-1.5 rounded-full text-sm font-medium transition-colors {!data.selectedCategory
 						? 'bg-foreground text-background'
-						: 'bg-zinc-100 text-zinc-700 hover:bg-zinc-200 dark:hover:text-zinc-300'}"
+						: 'bg-muted text-muted-foreground hover:bg-muted'}"
 				>
 					All
 				</a>
@@ -41,7 +41,7 @@
 						class="px-3 py-1.5 rounded-full text-sm font-medium transition-colors {data.selectedCategory ===
 						category.slug
 							? 'bg-foreground text-background'
-							: 'bg-zinc-100 text-zinc-700 hover:bg-zinc-200 dark:hover:text-zinc-300'}"
+							: 'bg-muted text-muted-foreground hover:bg-muted'}"
 					>
 						{category.name}
 					</a>
@@ -51,8 +51,8 @@
 	</div>
 
 	{#if data.products.length === 0}
-		<div class="border border-zinc-200 rounded-lg p-8 text-center bg-white">
-			<p class="text-zinc-600 dark:text-zinc-400">
+		<div class="border border-border rounded-lg p-8 text-center bg-card">
+			<p class="text-muted-foreground">
 				No products yet. Go to the <a href="/modules/store/admin" class="underline">admin panel</a> and
 				click "Reset Demo" to load sample products.
 			</p>
