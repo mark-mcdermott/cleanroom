@@ -1,5 +1,8 @@
 @import 'tailwindcss';
 
+/* Exclude markdown files from Tailwind content scanning */
+@source not "../**/*.md";
+
 /* CSS Variables */
 :root {
 	--font-logo: 'Geist Variable', system-ui, sans-serif;
