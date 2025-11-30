@@ -189,6 +189,11 @@ export function getAppCss(): string {
     @apply bg-background border border-border rounded-2xl shadow-sm p-8 sm:p-12;
   }
 
+  .form-input {
+    @apply bg-white px-4 py-3 border border-border rounded-lg outline-none transition-shadow;
+    @apply focus:ring-2 focus:ring-ring focus:border-transparent;
+  }
+
   .btn {
     @apply inline-flex items-center justify-center px-4 py-2 text-sm font-medium rounded-md transition border border-border hover:border-foreground/50 no-underline;
   }

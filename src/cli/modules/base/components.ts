@@ -217,9 +217,11 @@ export function getHeader(config: ProjectConfig, links: { href: string; label: s
 		</a>
 
 		<!-- Desktop Nav -->
-		<nav class="hidden md:flex items-center gap-4">
-			${desktopLinks}
-		</nav>
+		<div class="hidden md:flex items-center gap-4">
+			<nav class="flex items-center gap-4">
+				${desktopLinks}
+			</nav>
+		</div>
 
 		<!-- Mobile Hamburger -->
 		<button
