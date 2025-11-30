@@ -1,6 +1,21 @@
 import { mkdir, writeFile, readFile } from 'node:fs/promises';
 import { join } from 'node:path';
+import { existsSync } from 'node:fs';
 import type { ProjectConfig, FeatureModule } from '../../types';
+
+// ============================================================================
+// UTILS FILE (cn helper for class merging)
+// ============================================================================
+
+function getUtilsFile(): string {
+	return `import { clsx, type ClassValue } from 'clsx';
+import { twMerge } from 'tailwind-merge';
+
+export function cn(...inputs: ClassValue[]) {
+	return twMerge(clsx(inputs));
+}
+`;
+}
 
 // ============================================================================
 // THEME TOGGLE COMPONENT
@@ -279,6 +294,13 @@ export const darkToggleModule: FeatureModule = {
 
 		console.log(`  → Adding dark/light theme toggle (${mode} mode)`);
 
+		// Create lib directory and utils file if it doesn't exist
+		await mkdir(join(outputDir, 'src', 'lib'), { recursive: true });
+		const utilsPath = join(outputDir, 'src', 'lib', 'utils.ts');
+		if (!existsSync(utilsPath)) {
+			await writeFile(utilsPath, getUtilsFile());
+		}
+
 		// Create theme-toggle component directory
 		await mkdir(join(outputDir, 'src', 'lib', 'components', 'ui', 'theme-toggle'), { recursive: true });
 
@@ -387,14 +409,16 @@ export const darkToggleModule: FeatureModule = {
 			}
 		}
 
-		// Add lucide-svelte dependency if not present
+		// Add required dependencies if not present
 		const packageJsonPath = join(outputDir, 'package.json');
 		try {
 			const packageJson = JSON.parse(await readFile(packageJsonPath, 'utf-8'));
 
 			packageJson.dependencies = {
 				...packageJson.dependencies,
-				'lucide-svelte': '^0.468.0'
+				'clsx': '^2.1.1',
+				'lucide-svelte': '^0.468.0',
+				'tailwind-merge': '^3.0.2'
 			};
 
 			await writeFile(packageJsonPath, JSON.stringify(packageJson, null, '\t'));
