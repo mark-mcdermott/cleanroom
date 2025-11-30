@@ -35,7 +35,7 @@ The CLI will guide you through:
 7. **Cloudflare Pages** - Guides you through deployment setup
 8. **Custom domain** - Optional Namecheap domain configuration
 
-Your project will be generated in `./generated/<project-name>/`.
+Your project will be generated in `./<project-name>/`.
 
 ## Requirements
 
@@ -74,8 +74,17 @@ pnpm db:push
 # Start dev server
 pnpm dev
 
-# Run the CLI locally
+# Run the CLI locally (dev mode, no build needed)
 pnpm cli
+
+# Build the CLI
+pnpm cli:build
+
+# Link CLI globally for testing
+pnpm link --global
+
+# Then test from anywhere:
+cleanroom
 
 # Type checking
 pnpm check

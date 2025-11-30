@@ -2,11 +2,18 @@
   "name": "cleanroom",
   "version": "0.0.1",
   "private": true,
+  "bin": {
+    "cleanroom": "./dist/cli/index.js"
+  },
+  "files": [
+    "dist/cli"
+  ],
   "scripts": {
     "dev": "vite dev",
     "build": "vite build",
     "preview": "vite preview",
     "cli": "npx tsx src/cli/index.ts",
+    "cli:build": "tsup --config tsup.cli.config.ts",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:push": "drizzle-kit push",
@@ -46,6 +53,7 @@
     "prettier-plugin-svelte": "^3.0.0",
     "svelte": "^5.0.0",
     "svelte-check": "^4.0.0",
+    "tsup": "^8.5.1",
     "tsx": "^4.20.6",
     "typescript": "^5.0.0",
     "typescript-eslint": "^8.0.0",

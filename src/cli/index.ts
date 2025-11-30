@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 import * as p from '@clack/prompts';
 import { join } from 'node:path';
 import { exec } from 'node:child_process';
@@ -87,17 +86,27 @@ async function main() {
 		process.exit(1);
 	}
 
-	const projectName = await p.text({
-		message: 'What is your project name?',
-		placeholder: 'My App',
-		validate(value) {
-			if (!value) return 'Project name is required';
-		}
-	});
+	// Check for project name as CLI argument
+	const argProjectName = process.argv[2];
 
-	if (p.isCancel(projectName)) {
-		p.cancel('Setup cancelled');
-		process.exit(0);
+	let projectName: string;
+	if (argProjectName) {
+		projectName = argProjectName;
+		p.log.info(`Project name: ${projectName}`);
+	} else {
+		const promptedName = await p.text({
+			message: 'What is your project name?',
+			placeholder: 'My App',
+			validate(value) {
+				if (!value) return 'Project name is required';
+			}
+		});
+
+		if (p.isCancel(promptedName)) {
+			p.cancel('Setup cancelled');
+			process.exit(0);
+		}
+		projectName = promptedName;
 	}
 
 	const hasLogoFile = await p.confirm({
@@ -289,7 +298,7 @@ async function main() {
 	p.log.step(`OK, let's 🚢 this.`);
 
 	const slug = slugify(projectName);
-	const outputDir = join(process.cwd(), 'generated', slug);
+	const outputDir = join(process.cwd(), slug);
 
 	// Build config object
 	const config: ProjectConfig = {
@@ -515,7 +524,7 @@ async function main() {
 
 	p.note(summaryLines.join('\n'), 'Project Configuration');
 
-	p.outro(`Project created in ./generated/${slug}`);
+	p.outro(`Project created in ./${slug}`);
 
 	return config;
 }
