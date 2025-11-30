@@ -5,14 +5,23 @@ import { exec } from 'node:child_process';
 import { promisify } from 'node:util';
 import { modules, type ProjectConfig } from './modules';
 import { featureModules } from './modules/features';
-import { commandExists, isGhLoggedIn, getOS, getGitHubUsername, slugify, isValidSlug, githubRepoExists, isGithubRepoBlank } from './helpers';
+import {
+	commandExists,
+	isGhLoggedIn,
+	getOS,
+	getGitHubUsername,
+	slugify,
+	isValidSlug,
+	githubRepoExists,
+	isGithubRepoBlank
+} from './helpers';
 
 const execAsync = promisify(exec);
 
 // Custom note function that preserves cyan color (p.note applies dim styling)
 function cyanNote(content: string, title: string): void {
 	const lines = content.split('\n');
-	const maxLen = Math.max(title.length + 2, ...lines.map(l => l.length));
+	const maxLen = Math.max(title.length + 2, ...lines.map((l) => l.length));
 
 	console.log(pc.gray('│'));
 	console.log(pc.cyan(`◇  ${title} ${pc.gray('─'.repeat(Math.max(0, maxLen - title.length)))}`));
@@ -144,7 +153,8 @@ async function main() {
 			placeholder: slug,
 			validate(value) {
 				if (!value) return 'Slug is required';
-				if (!isValidSlug(value)) return 'Slug must be lowercase with only letters, numbers, dots, and hyphens';
+				if (!isValidSlug(value))
+					return 'Slug must be lowercase with only letters, numbers, dots, and hyphens';
 			}
 		});
 
@@ -242,9 +252,10 @@ async function main() {
 
 	if (siteType === 'ssr-site') {
 		// Neon database setup
-		p.log.step('SSR sites need a database. Let\'s set up Neon (free PostgreSQL).');
+		p.log.step("SSR sites need a database. Let's set up Neon (free PostgreSQL).");
 
-		cyanNote([
+		cyanNote(
+			[
 				'1. Go to https://neon.tech and sign up (free tier available)',
 				'2. Create a new project',
 				'3. Copy the connection string from the dashboard',
@@ -295,10 +306,22 @@ async function main() {
 				{ value: 'blog', label: 'Blog', hint: 'Blog with posts and tags' },
 				{ value: 'dark-toggle', label: 'Dark Toggle', hint: 'Dark/light mode toggle in nav' },
 				{ value: 'leaderboard', label: 'Leaderboard', hint: 'Click game with high score tracking' },
-				{ value: 'lobby', label: 'Lobby', hint: 'Video room with Daily.co for meditation/hangouts' },
-				{ value: 'office-users', label: 'Office Users', hint: 'Seed users from The Office (requires auth)' },
+				{
+					value: 'lobby',
+					label: 'Lobby',
+					hint: 'Video room with Daily.co for meditation/hangouts'
+				},
+				{
+					value: 'office-users',
+					label: 'Office Users',
+					hint: 'Seed users from The Office (requires auth)'
+				},
 				{ value: 'resume', label: 'Resume', hint: 'Resume builder with PDF export' },
-				{ value: 'theme-preview', label: 'Theme Preview', hint: 'Live theme/font preview with ThemeForseen' },
+				{
+					value: 'theme-preview',
+					label: 'Theme Preview',
+					hint: 'Live theme/font preview with ThemeForseen'
+				},
 				{ value: 'tracker', label: 'Tracker', hint: 'Activity/habit tracking dashboard' },
 				{ value: 'videos', label: 'Videos', hint: 'Travel videos with interactive globe explorer' }
 			],
@@ -311,7 +334,20 @@ async function main() {
 		}
 
 		selectedModules = (modules as string[]).filter((m): m is ProjectConfig['modules'][number] =>
-			['auth', 'blog', 'dark-toggle', 'leaderboard', 'lobby', 'office-users', 'resume', 'store', 'theme-preview', 'tracker', 'videos', 'widgets'].includes(m)
+			[
+				'auth',
+				'blog',
+				'dark-toggle',
+				'leaderboard',
+				'lobby',
+				'office-users',
+				'resume',
+				'store',
+				'theme-preview',
+				'tracker',
+				'videos',
+				'widgets'
+			].includes(m)
 		);
 
 		// If dark-toggle was selected, ask about mode
@@ -319,7 +355,11 @@ async function main() {
 			const themeMode = await p.select({
 				message: 'Which theme toggle mode would you like?',
 				options: [
-					{ value: 'light-dark-system', label: 'Light / Dark / System', hint: 'Three-way toggle with system preference option' },
+					{
+						value: 'light-dark-system',
+						label: 'Light / Dark / System',
+						hint: 'Three-way toggle with system preference option'
+					},
 					{ value: 'light-dark', label: 'Light / Dark only', hint: 'Simple two-way toggle' }
 				]
 			});
@@ -421,7 +461,9 @@ async function main() {
 		} catch (error) {
 			spinner.stop('Database setup encountered an error');
 			p.log.warn(`Database setup: ${error instanceof Error ? error.message : 'Unknown error'}`);
-			p.log.info('You can run database commands manually later: pnpm db:push && pnpm db:seed-office');
+			p.log.info(
+				'You can run database commands manually later: pnpm db:push && pnpm db:seed-office'
+			);
 		}
 	}
 
@@ -436,7 +478,9 @@ async function main() {
 	// GitHub repo setup
 	const ghUsername = await getGitHubUsername();
 	if (!ghUsername) {
-		p.log.error('Could not detect GitHub username. Please ensure you are logged in with: gh auth login');
+		p.log.error(
+			'Could not detect GitHub username. Please ensure you are logged in with: gh auth login'
+		);
 		process.exit(1);
 	}
 
@@ -455,7 +499,9 @@ async function main() {
 	if (!repoExists) {
 		// Repo doesn't exist - prompt user to create it
 		p.log.warn(`No GitHub repo ${repoUrl} detected.`);
-		p.log.info(`Please create a blank repo in your ${ghUsername} GitHub account called ${currentSlug}.`);
+		p.log.info(
+			`Please create a blank repo in your ${ghUsername} GitHub account called ${currentSlug}.`
+		);
 
 		await p.confirm({
 			message: 'Press Enter when the blank repo is created',
@@ -504,8 +550,16 @@ async function main() {
 			const action = await p.select({
 				message: 'Would you like us to:',
 				options: [
-					{ value: 'try-again', label: 'Try again', hint: 'You will delete/move the current repo and create the blank repo now' },
-					{ value: 'force-push', label: 'Push --force this code there', hint: 'This will completely overwrite the current repo with the new code' },
+					{
+						value: 'try-again',
+						label: 'Try again',
+						hint: 'You will delete/move the current repo and create the blank repo now'
+					},
+					{
+						value: 'force-push',
+						label: 'Push --force this code there',
+						hint: 'This will completely overwrite the current repo with the new code'
+					},
 					{ value: 'new-repo', label: 'Create a new repo' },
 					{ value: 'cancel', label: 'Cancel the current Cleanroom session' }
 				]
@@ -522,7 +576,9 @@ async function main() {
 			}
 
 			if (action === 'try-again') {
-				p.log.info(`Please delete or move the current ${repoUrl} repo, then create a new blank repo with the same name.`);
+				p.log.info(
+					`Please delete or move the current ${repoUrl} repo, then create a new blank repo with the same name.`
+				);
 
 				await p.confirm({
 					message: 'Press Enter when the blank repo is created',
@@ -537,7 +593,9 @@ async function main() {
 				if (isNowBlank) {
 					shouldPush = true;
 				} else {
-					p.log.error(`Repo ${repoUrl} still has content. Please ensure the repo is blank and try again.`);
+					p.log.error(
+						`Repo ${repoUrl} still has content. Please ensure the repo is blank and try again.`
+					);
 					process.exit(1);
 				}
 			}
@@ -572,7 +630,8 @@ async function main() {
 						placeholder: `${currentSlug}-new`,
 						validate(value) {
 							if (!value) return 'Repo name is required';
-							if (!isValidSlug(value)) return 'That is not a valid slug. Use only lowercase letters, numbers, dots, and hyphens.';
+							if (!isValidSlug(value))
+								return 'That is not a valid slug. Use only lowercase letters, numbers, dots, and hyphens.';
 						}
 					});
 
@@ -593,7 +652,9 @@ async function main() {
 						p.log.warn(`Repo ${repoUrl} already exists. Please choose a different name.`);
 					} else {
 						validSlug = true;
-						p.log.info(`Please create a blank repo in your ${ghUsername} GitHub account called ${currentSlug}.`);
+						p.log.info(
+							`Please create a blank repo in your ${ghUsername} GitHub account called ${currentSlug}.`
+						);
 
 						await p.confirm({
 							message: 'Press Enter when the blank repo is created',
@@ -620,7 +681,9 @@ async function main() {
 	if (shouldPush) {
 		spinner.start('Pushing to GitHub...');
 		try {
-			await execAsync(`git remote add origin git@github.com:${ghUsername}/${currentSlug}.git`, { cwd: outputDir });
+			await execAsync(`git remote add origin git@github.com:${ghUsername}/${currentSlug}.git`, {
+				cwd: outputDir
+			});
 			if (forcePush) {
 				await execAsync('git push -u origin main --force', { cwd: outputDir });
 			} else {
@@ -636,23 +699,25 @@ async function main() {
 	}
 
 	// Guide user to create Cloudflare Pages project with Git integration
-	cyanNote([
-			'Now let\'s deploy to Cloudflare Pages:',
+	cyanNote(
+		[
+			"Now let's deploy to Cloudflare Pages:",
 			'',
 			'1. Go to https://dash.cloudflare.com/',
 			'2. Click "Workers & Pages" in the left sidebar',
-			'3. Click "Create" button',
-			'4. Click "Pages" tab, then "Connect to Git"',
-			'5. Select your GitHub account and the repo you just created',
-			'6. Configure build settings:',
+			'3. Click "Create application" button at the top right',
+			'4. Click "Get started" under at the bottom where it says, "Looking to deploy Pages?"',
+			'5. Next to "Import an existing Git repository" click "Get started"',
+			'6. Select your GitHub account and the repo you just created and click "Begin setup"',
+			'7. Configure build settings:',
 			`   • Project name: ${currentSlug}`,
 			'   • Production branch: main',
 			'   • Build command: pnpm build',
 			'   • Build output directory: .svelte-kit/cloudflare',
-			'7. Expand "Environment variables" and add:',
+			'8. Expand "Environment variables" and add:',
 			'   • Variable name: NODE_VERSION',
 			'   • Value: 22',
-			'8. Click "Save and Deploy"'
+			'9. Click "Save and Deploy"'
 		].join('\n'),
 		'Create Cloudflare Pages Project'
 	);
@@ -692,7 +757,8 @@ async function main() {
 			process.exit(0);
 		}
 
-		cyanNote([
+		cyanNote(
+			[
 				'To connect your Namecheap domain to Cloudflare Pages:',
 				'',
 				'1. In Cloudflare Pages, go to your project > Custom domains',
