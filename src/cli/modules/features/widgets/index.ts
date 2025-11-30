@@ -975,7 +975,7 @@ export const actions: Actions = {
 			const session = await lucia.createSession(officeUsers[0].id, {});
 			const sessionCookie = lucia.createSessionCookie(session.id);
 
-			cookies.set(sessionCookie.name, sessionCookie.value, { path: '.', ...sessionCookie.attributes });
+			cookies.set(sessionCookie.name, sessionCookie.value, { path: '/', ...sessionCookie.attributes });
 
 			return { success: true };
 		} catch {

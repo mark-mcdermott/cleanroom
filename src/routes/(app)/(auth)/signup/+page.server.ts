@@ -65,7 +65,7 @@ export const actions: Actions = {
 			const sessionCookie = lucia.createSessionCookie(session.id);
 
 			cookies.set(sessionCookie.name, sessionCookie.value, {
-				path: '.',
+				path: '/',
 				...sessionCookie.attributes
 			});
 		} catch {

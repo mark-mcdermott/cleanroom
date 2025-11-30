@@ -13,7 +13,7 @@ export const actions: Actions = {
 			await lucia.invalidateSession(sessionId);
 		}
 
-		cookies.delete('demo_auth_session', { path: '.' });
+		cookies.delete('demo_auth_session', { path: '/' });
 
 		redirect(302, '/modules/auth');
 	}
