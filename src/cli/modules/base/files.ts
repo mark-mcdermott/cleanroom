@@ -89,6 +89,7 @@ dist
 .env
 .env.*
 !.env.example
+.dev.vars
 
 # IDE
 .vscode

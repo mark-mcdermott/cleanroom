@@ -1,11 +1,18 @@
 import type { ProjectConfig } from '../types';
+import { getFaviconExtension } from './files';
+
+// Helper to get logo image src with correct extension
+function getLogoSrc(config: ProjectConfig): string {
+	const ext = getFaviconExtension(config.logo.value);
+	return `/logo.${ext}`;
+}
 
 // Desktop-only Nav - no mobile menu, hidden on small screens
 export function getDesktopOnlyNav(config: ProjectConfig, links?: { href: string; label: string }[]): string {
 	const logoDisplay =
 		config.logo.type === 'emoji'
 			? config.logo.value
-			: `<img src="/logo.png" alt="${config.projectName}" class="h-8 w-8" />`;
+			: `<img src="${getLogoSrc(config)}" alt="${config.projectName}" class="h-8 w-8" />`;
 
 	const navLinks = links
 		? links
@@ -33,7 +40,7 @@ export function getNav(
 	const logoDisplay =
 		config.logo.type === 'emoji'
 			? config.logo.value
-			: `<img src="/logo.png" alt="${config.projectName}" class="h-8 w-8" />`;
+			: `<img src="${getLogoSrc(config)}" alt="${config.projectName}" class="h-8 w-8" />`;
 
 	const desktopLinks = links
 		.map(
@@ -104,7 +111,7 @@ export function getSimpleHero(config: ProjectConfig): string {
 	const logoDisplay =
 		config.logo.type === 'emoji'
 			? `<span class="text-5xl sm:text-6xl">${config.logo.value}</span>`
-			: `<img src="/logo.png" alt="${config.projectName}" class="w-12 h-12 sm:w-16 sm:h-16" />`;
+			: `<img src="${getLogoSrc(config)}" alt="${config.projectName}" class="w-12 h-12 sm:w-16 sm:h-16" />`;
 
 	return `<div class="w-full flex justify-center items-center text-center min-h-[60vh]">
 	<div class="my-32 sm:my-48">
@@ -121,7 +128,7 @@ export function getSectionHero(config: ProjectConfig, sections: string[]): strin
 	const logoDisplay =
 		config.logo.type === 'emoji'
 			? `<span class="text-5xl sm:text-6xl">${config.logo.value}</span>`
-			: `<img src="/logo.png" alt="${config.projectName}" class="w-12 h-12 sm:w-16 sm:h-16" />`;
+			: `<img src="${getLogoSrc(config)}" alt="${config.projectName}" class="w-12 h-12 sm:w-16 sm:h-16" />`;
 
 	const sectionLinks = sections
 		.map((section) => `<a href="#${section.toLowerCase()}" class="btn btn-light">${section}</a>`)
@@ -175,7 +182,7 @@ export function getHeader(config: ProjectConfig, links: { href: string; label: s
 	const logoDisplay =
 		config.logo.type === 'emoji'
 			? config.logo.value
-			: `<img src="/logo.png" alt="${config.projectName}" class="h-6 w-6" />`;
+			: `<img src="${getLogoSrc(config)}" alt="${config.projectName}" class="h-6 w-6" />`;
 
 	const desktopLinks = links
 		.map(

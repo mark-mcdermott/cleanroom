@@ -45,10 +45,11 @@ function getLayoutSvelte(config: ProjectConfig): string {
 }
 
 function getHomePageSvelte(config: ProjectConfig): string {
+	const logoExt = getFaviconExtension(config.logo.value);
 	const logoDisplay =
 		config.logo.type === 'emoji'
 			? `<span class="text-5xl sm:text-6xl">${config.logo.value}</span>`
-			: `<img src="/logo.png" alt="${config.projectName}" class="w-12 h-12 sm:w-16 sm:h-16" />`;
+			: `<img src="/logo.${logoExt}" alt="${config.projectName}" class="w-12 h-12 sm:w-16 sm:h-16" />`;
 
 	return `<svelte:head>
 	<title>${config.projectName}</title>
@@ -145,11 +146,12 @@ export const staticSiteModule: GeneratorModule = {
 			getContactPageSvelte(config)
 		);
 
-		// Copy favicon if logo is a file
+		// Copy logo file to static folder (as both favicon and logo)
 		if (config.logo.type === 'file') {
 			try {
 				const ext = getFaviconExtension(config.logo.value);
 				await copyFile(config.logo.value, join(outputDir, 'static', `favicon.${ext}`));
+				await copyFile(config.logo.value, join(outputDir, 'static', `logo.${ext}`));
 			} catch {
 				// Logo file doesn't exist or can't be copied
 			}

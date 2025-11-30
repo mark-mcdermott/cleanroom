@@ -639,9 +639,12 @@ export const authModule: FeatureModule = {
 		await writeFile(join(outputDir, 'drizzle.config.ts'), getDrizzleConfig());
 		await writeFile(join(outputDir, '.env.example'), getEnvExample());
 
-		// Write .env file if database is configured
+		// Write .env and .dev.vars files if database is configured
+		// .env is for scripts (db:push, db:seed), .dev.vars is for Cloudflare local dev
 		if (config.database) {
-			await writeFile(join(outputDir, '.env'), `DATABASE_URL=${config.database.connectionString}\n`);
+			const envContent = `DATABASE_URL=${config.database.connectionString}\n`;
+			await writeFile(join(outputDir, '.env'), envContent);
+			await writeFile(join(outputDir, '.dev.vars'), envContent);
 		}
 
 		// Update package.json with auth dependencies

@@ -3,6 +3,7 @@ import pc from 'picocolors';
 import { join } from 'node:path';
 import { exec } from 'node:child_process';
 import { promisify } from 'node:util';
+import { existsSync } from 'node:fs';
 import { modules, type ProjectConfig } from './modules';
 import { featureModules } from './modules/features';
 import {
@@ -179,16 +180,31 @@ async function main() {
 
 	if (hasLogoFile) {
 		const logoPath = await p.text({
-			message: 'Path to your logo file',
+			message: 'Path to your logo file (PNG or ICO recommended)',
 			placeholder: './logo.png',
 			validate(value) {
 				if (!value) return 'Logo path is required';
+				if (!existsSync(value)) return 'File not found';
+				const ext = value.split('.').pop()?.toLowerCase();
+				if (!ext) return 'File must have an extension';
+				const supported = ['png', 'ico', 'jpg', 'jpeg', 'svg', 'webp'];
+				if (!supported.includes(ext)) {
+					return `Unsupported format. Use: ${supported.join(', ')}`;
+				}
 			}
 		});
 
 		if (p.isCancel(logoPath)) {
 			p.cancel('Setup cancelled');
 			process.exit(0);
+		}
+
+		// Warn about formats with limited browser support
+		const ext = logoPath.split('.').pop()?.toLowerCase();
+		if (ext === 'svg') {
+			p.log.warn('SVG favicons are not supported in Safari. Consider using PNG instead.');
+		} else if (ext === 'jpg' || ext === 'jpeg') {
+			p.log.warn('JPG favicons have no transparency. Consider using PNG instead.');
 		}
 
 		logo = { type: 'file', value: logoPath };
@@ -436,6 +452,7 @@ async function main() {
 	// Install dependencies
 	spinner.start('Installing dependencies...');
 	await execAsync('pnpm install', { cwd: outputDir });
+	await execAsync('npx svelte-kit sync', { cwd: outputDir });
 	spinner.stop('Dependencies installed!');
 
 	// If database is configured, set up tables and seed data
@@ -818,6 +835,10 @@ async function main() {
 	);
 
 	cyanNote(summaryLines.join('\n'), 'Project Configuration');
+
+	p.log.info('Next steps:');
+	p.log.step(`  cd ${slug}`);
+	p.log.step(`  pnpm dev`);
 
 	p.outro(`Project created in ./${slug}`);
 
