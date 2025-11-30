@@ -96,9 +96,12 @@
 	{:else}
 		<div class="grid gap-4">
 			{#each data.widgets as widget}
-				<a
-					href="/modules/widgets/users/{data.targetUser.id}/widgets/{widget.id}"
-					class="block bg-card border border-border rounded-lg p-6 hover:border-border hover:shadow-sm transition-all"
+				<div
+					role="button"
+					tabindex="0"
+					class="block bg-card border border-border rounded-lg p-6 hover:border-border hover:shadow-sm transition-all cursor-pointer"
+					onclick={() => goto(`/modules/widgets/users/${data.targetUser.id}/widgets/${widget.id}`)}
+					onkeydown={(e: KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); goto(`/modules/widgets/users/${data.targetUser.id}/widgets/${widget.id}`); } }}
 				>
 					<div class="flex items-start justify-between">
 						<div class="flex-1">
@@ -111,11 +114,12 @@
 							</p>
 						</div>
 						{#if data.canEdit}
-							<div class="flex items-center gap-2 ml-4" onclick={(e: MouseEvent) => e.preventDefault()}>
+							<div class="flex items-center gap-2 ml-4">
 								<a
 									href="/modules/widgets/users/{data.targetUser.id}/widgets/{widget.id}/edit"
 									class="p-2 rounded text-muted-foreground hover:text-muted-foreground hover:bg-muted transition-colors"
 									title="Edit widget"
+									onclick={(e: MouseEvent) => e.stopPropagation()}
 								>
 									<Pencil class="w-4 h-4" />
 								</a>
@@ -132,7 +136,7 @@
 							</div>
 						{/if}
 					</div>
-				</a>
+				</div>
 			{/each}
 		</div>
 	{/if}
