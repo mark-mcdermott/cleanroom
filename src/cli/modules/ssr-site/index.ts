@@ -29,7 +29,10 @@ function getPackageJsonWithComponents(config: ProjectConfig): string {
   },
   "dependencies": {
     "bits-ui": "^2.14.4",
-    "lucide-svelte": "^0.555.0"
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "lucide-svelte": "^0.555.0",
+    "tailwind-merge": "^3.4.0"
   },
   "devDependencies": {
     "@sveltejs/adapter-cloudflare": "^4.0.0",

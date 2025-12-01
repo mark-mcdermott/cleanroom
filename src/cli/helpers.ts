@@ -10,8 +10,9 @@ const execAsync = promisify(exec);
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-// Path to cleanroom's src/lib/components (relative to CLI source)
-const CLEANROOM_COMPONENTS_PATH = join(__dirname, '..', 'lib', 'components');
+// Path to cleanroom's src/lib (relative to CLI source)
+const CLEANROOM_LIB_PATH = join(__dirname, '..', 'lib');
+const CLEANROOM_COMPONENTS_PATH = join(CLEANROOM_LIB_PATH, 'components');
 
 // Helper to check if a command exists
 export async function commandExists(cmd: string): Promise<boolean> {
@@ -183,4 +184,10 @@ export async function copyComponentLibrary(
 		const formsDest = join(componentsDir, 'forms');
 		await copyDir(formsSource, formsDest).catch(() => {});
 	}
+
+	// Always copy utils.ts (needed by components for cn() function)
+	const utilsSource = join(CLEANROOM_LIB_PATH, 'utils.ts');
+	const utilsDest = join(outputDir, 'src', 'lib', 'utils.ts');
+	await mkdir(join(outputDir, 'src', 'lib'), { recursive: true });
+	await copyFile(utilsSource, utilsDest).catch(() => {});
 }
