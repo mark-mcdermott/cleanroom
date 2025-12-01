@@ -32,6 +32,7 @@ function getPackageJsonWithComponents(config: ProjectConfig): string {
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "lucide-svelte": "^0.555.0",
+    "svelte-sonner": "^0.3.28",
     "tailwind-merge": "^3.4.0"
   },
   "devDependencies": {
