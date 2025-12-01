@@ -390,10 +390,11 @@ export const darkToggleModule: FeatureModule = {
 						);
 					}
 
-					// Inject ThemeToggle inside the desktop nav wrapper div (after the nav element)
-					// The structure is: <div class="hidden md:flex items-center gap-4"><nav>...</nav></div>
+					// Inject ThemeToggle inside the desktop nav wrapper div (at the end, before closing </div>)
+					// The structure is: <div class="hidden md:flex items-center gap-4"><nav>...</nav>[optional auth section]</div>
+					// We match from the opening div to the closing </div> that's followed by <!-- Mobile Hamburger -->
 					layout = layout.replace(
-						/(<div class="hidden md:flex items-center gap-4">\s*<nav class="flex items-center gap-4">[\s\S]*?<\/nav>)(\s*<\/div>\s*\n\s*<!-- Mobile Hamburger -->)/,
+						/(<div class="hidden md:flex items-center gap-4">[\s\S]*?)(\s*<\/div>\s*\n\s*<!-- Mobile Hamburger -->)/,
 						`$1\n\t\t\t<ThemeToggle mode="${mode}" />$2`
 					);
 

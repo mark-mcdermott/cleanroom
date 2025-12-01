@@ -76,7 +76,7 @@ describe('Component Templates', () => {
 		it('includes mobile drawer', () => {
 			const nav = getNav(baseConfig, links);
 			expect(nav).toContain('fixed inset-0 z-50');
-			expect(nav).toContain('w-64 bg-white');
+			expect(nav).toContain('w-64 bg-card');
 		});
 
 		it('renders both desktop and mobile links', () => {

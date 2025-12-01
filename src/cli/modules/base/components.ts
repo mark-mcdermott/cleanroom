@@ -221,15 +221,17 @@ export function getHeader(
 		)
 		.join('\n\t\t\t\t\t');
 
-	// Auth-aware desktop section with avatar dropdown
+	// Auth-aware desktop section with avatar dropdown (matches main site Nav pattern)
 	const desktopAuthSection = hasAuth
 		? `
 				{#if data.user}
-					<!-- Avatar with Dropdown -->
-					<div class="relative">
+					<!-- Avatar with Dropdown - styled to match main site -->
+					<div class="relative" data-testid="avatar-container">
 						<button
+							type="button"
+							data-testid="nav-avatar"
 							onclick={() => avatarMenuOpen = !avatarMenuOpen}
-							class="w-8 h-8 rounded-full bg-muted flex items-center justify-center text-muted-foreground text-sm font-medium hover:bg-muted/80 transition-colors focus:outline-none focus:ring-2 focus:ring-ring"
+							class="w-8 h-8 rounded-full bg-muted flex items-center justify-center text-muted-foreground text-xs cursor-pointer hover:bg-muted/80 transition-colors focus:outline-none focus:ring-2 focus:ring-ring overflow-hidden"
 							aria-label="User menu"
 						>
 							{avatarLetter}
@@ -238,13 +240,14 @@ export function getHeader(
 						{#if avatarMenuOpen}
 							<!-- Backdrop to close menu -->
 							<button
-								class="fixed inset-0 z-40"
+								type="button"
+								class="fixed inset-0 z-40 cursor-default"
 								onclick={() => avatarMenuOpen = false}
 								aria-label="Close menu"
 							></button>
 
 							<!-- Dropdown Menu -->
-							<div class="absolute right-0 mt-2 w-48 bg-popover border border-border rounded-md shadow-lg z-50">
+							<div data-testid="nav-user-menu" class="absolute right-0 mt-2 w-48 bg-popover border border-border rounded-md shadow-lg z-50">
 								<div class="px-3 py-2 border-b border-border">
 									<p class="text-sm font-medium truncate">{data.user.email}</p>
 								</div>
@@ -252,8 +255,8 @@ export function getHeader(
 									<form action="/logout" method="POST">
 										<button
 											type="submit"
-											class="w-full px-3 py-2 text-left text-sm hover:bg-muted transition-colors flex items-center gap-2"
-											onclick={() => avatarMenuOpen = false}
+											data-testid="menu-signout"
+											class="w-full px-3 py-2 text-left text-sm hover:bg-muted transition-colors flex items-center gap-2 cursor-pointer"
 										>
 											<svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 												<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
@@ -277,7 +280,7 @@ export function getHeader(
 				{#if data.user}
 					<div class="pt-4 mt-2 border-t border-border">
 						<div class="flex items-center gap-3 mb-3">
-							<div class="w-8 h-8 rounded-full bg-muted flex items-center justify-center text-muted-foreground text-sm font-medium">
+							<div class="w-8 h-8 rounded-full bg-muted flex items-center justify-center text-muted-foreground text-xs overflow-hidden">
 								{avatarLetter}
 							</div>
 							<span class="text-sm text-muted-foreground truncate">{data.user.email}</span>
@@ -285,8 +288,7 @@ export function getHeader(
 						<form action="/logout" method="POST">
 							<button
 								type="submit"
-								class="flex items-center gap-2 py-2 hover:text-foreground w-full text-left"
-								onclick={() => mobileMenuOpen = false}
+								class="flex items-center gap-2 py-2 hover:text-foreground w-full text-left cursor-pointer"
 							>
 								<svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
@@ -311,12 +313,13 @@ export function getHeader(
 		<!-- Desktop Nav -->
 		<div class="hidden md:flex items-center gap-4">
 			<nav class="flex items-center gap-4">
-				${desktopLinks}${desktopAuthSection}
-			</nav>
+				${desktopLinks}
+			</nav>${desktopAuthSection}
 		</div>
 
 		<!-- Mobile Hamburger -->
 		<button
+			type="button"
 			class="md:hidden p-2"
 			onclick={() => mobileMenuOpen = true}
 			aria-label="Open navigation menu"
@@ -332,6 +335,7 @@ export function getHeader(
 {#if mobileMenuOpen}
 	<div class="fixed inset-0 z-50 md:hidden">
 		<button
+			type="button"
 			class="absolute inset-0 bg-black/50"
 			onclick={() => mobileMenuOpen = false}
 			aria-label="Close menu"
@@ -340,7 +344,7 @@ export function getHeader(
 		<div class="absolute left-0 top-0 h-full w-64 bg-card shadow-xl">
 			<div class="flex items-center justify-between p-4 border-b">
 				<span class="font-semibold">${displayName}</span>
-				<button onclick={() => mobileMenuOpen = false} aria-label="Close menu">
+				<button type="button" onclick={() => mobileMenuOpen = false} aria-label="Close menu">
 					<svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
 					</svg>
