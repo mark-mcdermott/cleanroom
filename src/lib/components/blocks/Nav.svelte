@@ -108,7 +108,7 @@
 	}
 </script>
 
-<nav data-testid="nav" class="w-full {maxWidth ? '' : 'flex items-center justify-between px-8'} py-6">
+<nav data-testid="nav" class="relative z-10 w-full {maxWidth ? '' : 'flex items-center justify-between px-8'} py-6">
 	<div class="{maxWidth ? `${maxWidth} mx-auto px-6 flex items-center justify-between` : 'contents'}">
 
 	<!-- Logo -->

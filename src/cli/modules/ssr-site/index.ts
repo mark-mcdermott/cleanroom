@@ -12,53 +12,155 @@ import {
 	getAppDts,
 	getFaviconExtension
 } from '../base/files';
-import { getHeader, getFooter } from '../base/components';
+import { copyComponentLibrary, slugify } from '../../helpers';
 
-const defaultPages = [
+// Package.json with component library dependencies
+function getPackageJsonWithComponents(config: ProjectConfig): string {
+	const slug = slugify(config.projectName);
+	return `{
+  "name": "${slug}",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "dev": "vite dev",
+    "build": "vite build",
+    "preview": "vite preview",
+    "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json"
+  },
+  "dependencies": {
+    "bits-ui": "^2.14.4",
+    "lucide-svelte": "^0.555.0"
+  },
+  "devDependencies": {
+    "@sveltejs/adapter-cloudflare": "^4.0.0",
+    "@sveltejs/kit": "^2.0.0",
+    "@sveltejs/vite-plugin-svelte": "^4.0.0",
+    "svelte": "^5.0.0",
+    "svelte-check": "^4.0.0",
+    "tailwindcss": "^4.0.0",
+    "@tailwindcss/vite": "^4.0.0",
+    "typescript": "^5.0.0",
+    "vite": "^5.0.0"
+  },
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  }
+}
+`;
+}
+
+const defaultLinks = [
 	{ href: '/', label: 'Home' },
 	{ href: '/about', label: 'About' },
 	{ href: '/services', label: 'Services' },
 	{ href: '/contact', label: 'Contact' }
 ];
 
-const authPages = [
-	{ href: '/login', label: 'Log In' },
-	{ href: '/signup', label: 'Sign Up' }
-];
-
 function getLayoutSvelte(config: ProjectConfig): string {
 	const hasAuth = config.modules.includes('auth');
-	const pages = hasAuth ? [...defaultPages, ...authPages] : defaultPages;
-	const header = getHeader(config, pages, { hasAuth });
-	const footer = getFooter(config);
+	const displayName = config.prettyName || config.projectName;
+	const logoExt = getFaviconExtension(config.logo.value);
+	const logoValue = config.logo.type === 'emoji'
+		? `"${config.logo.value}"`
+		: `"/logo.${logoExt}"`;
 
-	// When auth is enabled, include data prop and avatar state
+	// Build nav links array as code
+	const navLinksCode = hasAuth
+		? `[
+		{ href: '/', label: 'Home' },
+		{ href: '/about', label: 'About' },
+		{ href: '/services', label: 'Services' },
+		{ href: '/contact', label: 'Contact' },
+		{ href: '/login', label: 'Log In', hideWhenAuth: true, testId: 'nav-login' },
+		{ href: '/signup', label: 'Sign Up', hideWhenAuth: true, testId: 'nav-signup' }
+	]`
+		: `[
+		{ href: '/', label: 'Home' },
+		{ href: '/about', label: 'About' },
+		{ href: '/services', label: 'Services' },
+		{ href: '/contact', label: 'Contact' }
+	]`;
+
+	// Avatar config for auth sites
+	const avatarConfigCode = hasAuth
+		? `
+	const profileUrl = $derived(data.user?.id ? \`/u/\${data.user.id}\` : '#');
+
+	const avatarConfig = $derived<AvatarConfig>({
+		show: true,
+		links: [
+			{
+				label: 'Profile',
+				href: profileUrl,
+				icon: User,
+				testId: 'menu-profile'
+			},
+			{
+				label: 'Settings',
+				href: '/account',
+				icon: Settings,
+				testId: 'menu-settings'
+			},
+			{
+				label: 'Sign Out',
+				icon: LogOut,
+				action: '/logout',
+				testId: 'menu-signout',
+				separator: true
+			}
+		]
+	});`
+		: '';
+
+	// Imports for auth
+	const authImports = hasAuth
+		? `\n\timport { User, Settings, LogOut } from 'lucide-svelte';`
+		: '';
+
+	const typeImports = hasAuth
+		? 'import type { NavLink, AvatarConfig } from \'$lib/components/blocks\';'
+		: 'import type { NavLink } from \'$lib/components/blocks\';';
+
+	// Props declaration
 	const propsDeclaration = hasAuth
 		? 'let { children, data } = $props();'
 		: 'let { children } = $props();';
 
-	// Additional state for avatar dropdown when auth is enabled
-	const avatarState = hasAuth
-		? `let avatarMenuOpen = $state(false);
-	const avatarLetter = $derived(data.user?.email?.charAt(0).toUpperCase() ?? 'U');`
-		: '';
+	// Nav component props
+	const navProps = hasAuth
+		? `siteName="${displayName}"
+		logo={${logoValue}}
+		links={navLinks}
+		maxWidth="max-w-6xl"
+		user={data.user}
+		avatar={avatarConfig}`
+		: `siteName="${displayName}"
+		logo={${logoValue}}
+		links={navLinks}
+		maxWidth="max-w-6xl"`;
 
 	return `<script lang="ts">
 	import '../app.css';
+	import { Nav, Footer } from '$lib/components/blocks';
+	${typeImports}${authImports}
 
 	${propsDeclaration}
-	let mobileMenuOpen = $state(false);
-	${avatarState}
+
+	const navLinks: NavLink[] = ${navLinksCode};
+${avatarConfigCode}
 </script>
 
 <div class="min-h-dvh flex flex-col">
-	${header}
+	<Nav
+		${navProps}
+	/>
 
 	<main class="flex-1">
 		{@render children()}
 	</main>
 
-	${footer}
+	<Footer siteName="${displayName}" logo={${logoValue}} maxWidth="max-w-6xl" />
 </div>
 `;
 }
@@ -263,8 +365,11 @@ export const ssrSiteModule: GeneratorModule = {
 		await mkdir(join(outputDir, 'src', 'routes', 'contact'), { recursive: true });
 		await mkdir(join(outputDir, 'static'), { recursive: true });
 
-		// Write config files
-		await writeFile(join(outputDir, 'package.json'), getPackageJson(config));
+		// Copy component library (Nav, Footer, and required UI components)
+		await copyComponentLibrary(outputDir);
+
+		// Write config files (with lucide-svelte dependency)
+		await writeFile(join(outputDir, 'package.json'), getPackageJsonWithComponents(config));
 		await writeFile(join(outputDir, 'svelte.config.js'), getSvelteConfig());
 		await writeFile(join(outputDir, 'vite.config.ts'), getViteConfig());
 		await writeFile(join(outputDir, 'tsconfig.json'), getTsConfig());

@@ -3,9 +3,11 @@
 	import { Nav, BackLink, Footer } from '$lib/components/blocks';
 	import type { NavLink, AvatarConfig } from '$lib/components/blocks';
 	import { Sonner } from '$lib/components/ui';
-	import { Github, LogOut } from 'lucide-svelte';
+	import { Github, User, Settings, LogOut } from 'lucide-svelte';
 
 	let { children, data } = $props();
+
+	const profileUrl = $derived(data.user?.id ? `/modules/auth/u/${data.user.id}` : '#');
 
 	const navLinks: NavLink[] = [
 		{ href: '/modules/auth', label: 'Home' },
@@ -23,17 +25,30 @@
 		}
 	];
 
-	const avatarConfig: AvatarConfig = {
+	const avatarConfig = $derived<AvatarConfig>({
 		show: true,
 		links: [
 			{
-				label: 'Log Out',
+				label: 'Profile',
+				href: profileUrl,
+				icon: User,
+				testId: 'menu-profile'
+			},
+			{
+				label: 'Settings',
+				href: '/modules/auth/account',
+				icon: Settings,
+				testId: 'menu-settings'
+			},
+			{
+				label: 'Sign Out',
 				icon: LogOut,
 				action: '/modules/auth/logout',
-				testId: 'nav-logout'
+				testId: 'menu-signout',
+				separator: true
 			}
 		]
-	};
+	});
 </script>
 
 <style>

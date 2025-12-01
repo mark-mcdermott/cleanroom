@@ -343,10 +343,10 @@ export const actions: Actions = {
 `;
 }
 
-// Login page svelte
+// Login page svelte - uses LoginForm component from component library
 function getLoginPageSvelte(config: ProjectConfig): string {
 	return `<script lang="ts">
-	import { enhance } from '$app/forms';
+	import { LoginForm } from '$lib/components/blocks';
 	import type { ActionData } from './$types';
 
 	let { form }: { form: ActionData } = $props();
@@ -356,49 +356,7 @@ function getLoginPageSvelte(config: ProjectConfig): string {
 	<title>Login - ${config.projectName}</title>
 </svelte:head>
 
-<div class="max-w-4xl mx-auto px-6 py-16">
-	<h1 class="text-4xl font-semibold tracking-tight">Login</h1>
-
-	<div class="mt-8 card max-w-md">
-		<form method="POST" use:enhance class="space-y-4">
-			{#if form?.error}
-				<div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
-					{form.error}
-				</div>
-			{/if}
-
-			<div>
-				<label for="email" class="block text-sm font-medium text-muted-foreground mb-1">Email</label>
-				<input
-					type="email"
-					id="email"
-					name="email"
-					required
-					class="form-input w-full"
-					placeholder="you@example.com"
-				/>
-			</div>
-
-			<div>
-				<label for="password" class="block text-sm font-medium text-muted-foreground mb-1">Password</label>
-				<input
-					type="password"
-					id="password"
-					name="password"
-					required
-					class="form-input w-full"
-					placeholder="Your password"
-				/>
-			</div>
-
-			<button type="submit" class="btn btn-dark w-full">Login</button>
-
-			<p class="text-center text-sm text-muted-foreground">
-				Don't have an account? <a href="/signup" class="text-foreground underline">Sign up</a>
-			</p>
-		</form>
-	</div>
-</div>
+<LoginForm {form} signupHref="/signup" />
 `;
 }
 
@@ -480,10 +438,10 @@ export const actions: Actions = {
 `;
 }
 
-// Signup page svelte
+// Signup page svelte - uses SignUpForm component from component library
 function getSignupPageSvelte(config: ProjectConfig): string {
 	return `<script lang="ts">
-	import { enhance } from '$app/forms';
+	import { SignUpForm } from '$lib/components/blocks';
 	import type { ActionData } from './$types';
 
 	let { form }: { form: ActionData } = $props();
@@ -493,61 +451,7 @@ function getSignupPageSvelte(config: ProjectConfig): string {
 	<title>Sign Up - ${config.projectName}</title>
 </svelte:head>
 
-<div class="max-w-4xl mx-auto px-6 py-16">
-	<h1 class="text-4xl font-semibold tracking-tight">Sign Up</h1>
-
-	<div class="mt-8 card max-w-md">
-		<form method="POST" use:enhance class="space-y-4">
-			{#if form?.error}
-				<div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
-					{form.error}
-				</div>
-			{/if}
-
-			<div>
-				<label for="name" class="block text-sm font-medium text-muted-foreground mb-1">Name (optional)</label>
-				<input
-					type="text"
-					id="name"
-					name="name"
-					class="form-input w-full"
-					placeholder="Your name"
-				/>
-			</div>
-
-			<div>
-				<label for="email" class="block text-sm font-medium text-muted-foreground mb-1">Email</label>
-				<input
-					type="email"
-					id="email"
-					name="email"
-					required
-					class="form-input w-full"
-					placeholder="you@example.com"
-				/>
-			</div>
-
-			<div>
-				<label for="password" class="block text-sm font-medium text-muted-foreground mb-1">Password</label>
-				<input
-					type="password"
-					id="password"
-					name="password"
-					required
-					minlength="8"
-					class="form-input w-full"
-					placeholder="At least 8 characters"
-				/>
-			</div>
-
-			<button type="submit" class="btn btn-dark w-full">Sign Up</button>
-
-			<p class="text-center text-sm text-muted-foreground">
-				Already have an account? <a href="/login" class="text-foreground underline">Login</a>
-			</p>
-		</form>
-	</div>
-</div>
+<SignUpForm {form} loginHref="/login" />
 `;
 }
 
