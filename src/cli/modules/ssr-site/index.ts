@@ -32,16 +32,23 @@ function getLayoutSvelte(config: ProjectConfig): string {
 	const header = getHeader(config, pages, { hasAuth });
 	const footer = getFooter(config);
 
-	// When auth is enabled, include data prop to access user state
+	// When auth is enabled, include data prop and avatar state
 	const propsDeclaration = hasAuth
 		? 'let { children, data } = $props();'
 		: 'let { children } = $props();';
+
+	// Additional state for avatar dropdown when auth is enabled
+	const avatarState = hasAuth
+		? `let avatarMenuOpen = $state(false);
+	const avatarLetter = $derived(data.user?.email?.charAt(0).toUpperCase() ?? 'U');`
+		: '';
 
 	return `<script lang="ts">
 	import '../app.css';
 
 	${propsDeclaration}
 	let mobileMenuOpen = $state(false);
+	${avatarState}
 </script>
 
 <div class="min-h-dvh flex flex-col">

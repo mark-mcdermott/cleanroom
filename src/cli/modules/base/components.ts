@@ -188,7 +188,8 @@ export function getFooter(config: ProjectConfig): string {
 
 // Header with border (for multi-page sites)
 // Note: Requires `let mobileMenuOpen = $state(false);` in the parent component's script
-// When hasAuth is true, auth links (login/signup) are rendered conditionally based on data.user
+// When hasAuth is true, also requires `let avatarMenuOpen = $state(false);` and `const avatarLetter = $derived(data.user?.email?.charAt(0).toUpperCase() ?? 'U');`
+// Auth links (login/signup) are rendered conditionally based on data.user
 export function getHeader(
 	config: ProjectConfig,
 	links: { href: string; label: string }[],
@@ -220,26 +221,80 @@ export function getHeader(
 		)
 		.join('\n\t\t\t\t\t');
 
-	// Auth-aware desktop links
+	// Auth-aware desktop section with avatar dropdown
 	const desktopAuthSection = hasAuth
 		? `
 				{#if data.user}
-					<form action="/logout" method="POST" class="inline">
-						<button type="submit" class="hover:underline underline-offset-4">Log Out</button>
-					</form>
+					<!-- Avatar with Dropdown -->
+					<div class="relative">
+						<button
+							onclick={() => avatarMenuOpen = !avatarMenuOpen}
+							class="w-8 h-8 rounded-full bg-muted flex items-center justify-center text-muted-foreground text-sm font-medium hover:bg-muted/80 transition-colors focus:outline-none focus:ring-2 focus:ring-ring"
+							aria-label="User menu"
+						>
+							{avatarLetter}
+						</button>
+
+						{#if avatarMenuOpen}
+							<!-- Backdrop to close menu -->
+							<button
+								class="fixed inset-0 z-40"
+								onclick={() => avatarMenuOpen = false}
+								aria-label="Close menu"
+							></button>
+
+							<!-- Dropdown Menu -->
+							<div class="absolute right-0 mt-2 w-48 bg-popover border border-border rounded-md shadow-lg z-50">
+								<div class="px-3 py-2 border-b border-border">
+									<p class="text-sm font-medium truncate">{data.user.email}</p>
+								</div>
+								<div class="py-1">
+									<form action="/logout" method="POST">
+										<button
+											type="submit"
+											class="w-full px-3 py-2 text-left text-sm hover:bg-muted transition-colors flex items-center gap-2"
+											onclick={() => avatarMenuOpen = false}
+										>
+											<svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+												<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+											</svg>
+											Log Out
+										</button>
+									</form>
+								</div>
+							</div>
+						{/if}
+					</div>
 				{:else}
 					<a href="/login" class="hover:underline underline-offset-4">Log In</a>
 					<a href="/signup" class="hover:underline underline-offset-4">Sign Up</a>
 				{/if}`
 		: '';
 
-	// Auth-aware mobile links
+	// Auth-aware mobile section with avatar info
 	const mobileAuthSection = hasAuth
 		? `
 				{#if data.user}
-					<form action="/logout" method="POST">
-						<button type="submit" class="block py-2 hover:text-foreground w-full text-left" onclick={() => mobileMenuOpen = false}>Log Out</button>
-					</form>
+					<div class="pt-4 mt-2 border-t border-border">
+						<div class="flex items-center gap-3 mb-3">
+							<div class="w-8 h-8 rounded-full bg-muted flex items-center justify-center text-muted-foreground text-sm font-medium">
+								{avatarLetter}
+							</div>
+							<span class="text-sm text-muted-foreground truncate">{data.user.email}</span>
+						</div>
+						<form action="/logout" method="POST">
+							<button
+								type="submit"
+								class="flex items-center gap-2 py-2 hover:text-foreground w-full text-left"
+								onclick={() => mobileMenuOpen = false}
+							>
+								<svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+								</svg>
+								Log Out
+							</button>
+						</form>
+					</div>
 				{:else}
 					<a href="/login" class="block py-2 hover:text-foreground" onclick={() => mobileMenuOpen = false}>Log In</a>
 					<a href="/signup" class="block py-2 hover:text-foreground" onclick={() => mobileMenuOpen = false}>Sign Up</a>
