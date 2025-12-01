@@ -529,6 +529,141 @@ DATABASE_URL=postgresql://user:password@ep-xxx.region.aws.neon.tech/dbname?sslmo
 `;
 }
 
+// Profile page server
+function getProfilePageServer(): string {
+	return `import { error } from '@sveltejs/kit';
+import { eq } from 'drizzle-orm';
+import { createDb, users } from '$lib/server/db';
+import type { PageServerLoad } from './$types';
+
+export const load: PageServerLoad = async ({ params, platform }) => {
+	if (!platform?.env?.DATABASE_URL) {
+		error(500, 'Database not configured');
+	}
+
+	const db = createDb(platform.env.DATABASE_URL);
+
+	const [profileUser] = await db
+		.select({
+			id: users.id,
+			email: users.email,
+			name: users.name,
+			createdAt: users.createdAt
+		})
+		.from(users)
+		.where(eq(users.id, params.id))
+		.limit(1);
+
+	if (!profileUser) {
+		error(404, 'User not found');
+	}
+
+	return { profileUser };
+};
+`;
+}
+
+// Profile page svelte
+function getProfilePageSvelte(): string {
+	return `<script lang="ts">
+	import { ProfilePage } from '$lib/components/blocks';
+
+	let { data } = $props();
+</script>
+
+<svelte:head>
+	<title>{data.profileUser.name || data.profileUser.email} - Profile</title>
+	<meta name="description" content="User profile" />
+</svelte:head>
+
+<ProfilePage
+	user={data.profileUser}
+	currentUserId={data.user?.id}
+/>
+`;
+}
+
+// Account page server
+function getAccountPageServer(): string {
+	return `import { fail, redirect } from '@sveltejs/kit';
+import { eq } from 'drizzle-orm';
+import { createDb, users } from '$lib/server/db';
+import type { PageServerLoad, Actions } from './$types';
+
+export const load: PageServerLoad = async ({ locals }) => {
+	if (!locals.user) {
+		redirect(302, '/login');
+	}
+
+	return {
+		user: {
+			id: locals.user.id,
+			email: locals.user.email,
+			name: locals.user.name
+		}
+	};
+};
+
+export const actions: Actions = {
+	default: async ({ request, locals, platform }) => {
+		if (!locals.user) {
+			return fail(401, { error: 'Not authenticated' });
+		}
+
+		const databaseUrl = platform?.env?.DATABASE_URL;
+		if (!databaseUrl) {
+			return fail(500, { error: 'Database not configured' });
+		}
+
+		const db = createDb(databaseUrl);
+
+		const formData = await request.formData();
+		const name = formData.get('name') as string;
+		const email = formData.get('email') as string;
+
+		if (!email || !email.includes('@')) {
+			return fail(400, { error: 'Valid email is required' });
+		}
+
+		try {
+			await db
+				.update(users)
+				.set({
+					name: name?.trim() || null,
+					email: email.toLowerCase().trim(),
+					updatedAt: new Date()
+				})
+				.where(eq(users.id, locals.user.id));
+
+			return { success: true };
+		} catch (e) {
+			if ((e as { code?: string }).code === '23505') {
+				return fail(400, { error: 'Email already in use' });
+			}
+			return fail(500, { error: 'Failed to update profile' });
+		}
+	}
+};
+`;
+}
+
+// Account page svelte
+function getAccountPageSvelte(): string {
+	return `<script lang="ts">
+	import { AccountPage } from '$lib/components/blocks';
+
+	let { data, form } = $props();
+</script>
+
+<svelte:head>
+	<title>Account Settings</title>
+	<meta name="description" content="Manage your account settings" />
+</svelte:head>
+
+<AccountPage user={data.user} {form} />
+`;
+}
+
 export const authModule: FeatureModule = {
 	name: 'auth',
 	async apply(config: ProjectConfig, outputDir: string) {
@@ -537,6 +672,8 @@ export const authModule: FeatureModule = {
 		await mkdir(join(outputDir, 'src', 'routes', 'login'), { recursive: true });
 		await mkdir(join(outputDir, 'src', 'routes', 'signup'), { recursive: true });
 		await mkdir(join(outputDir, 'src', 'routes', 'logout'), { recursive: true });
+		await mkdir(join(outputDir, 'src', 'routes', 'u', '[id]'), { recursive: true });
+		await mkdir(join(outputDir, 'src', 'routes', 'account'), { recursive: true });
 
 		// Write server files
 		await writeFile(join(outputDir, 'src', 'lib', 'server', 'db', 'schema.ts'), getDbSchema());
@@ -556,6 +693,12 @@ export const authModule: FeatureModule = {
 		await writeFile(join(outputDir, 'src', 'routes', 'signup', '+page.server.ts'), getSignupPageServer());
 		await writeFile(join(outputDir, 'src', 'routes', 'signup', '+page.svelte'), getSignupPageSvelte(config));
 		await writeFile(join(outputDir, 'src', 'routes', 'logout', '+page.server.ts'), getLogoutPageServer());
+
+		// Write profile and account routes
+		await writeFile(join(outputDir, 'src', 'routes', 'u', '[id]', '+page.server.ts'), getProfilePageServer());
+		await writeFile(join(outputDir, 'src', 'routes', 'u', '[id]', '+page.svelte'), getProfilePageSvelte());
+		await writeFile(join(outputDir, 'src', 'routes', 'account', '+page.server.ts'), getAccountPageServer());
+		await writeFile(join(outputDir, 'src', 'routes', 'account', '+page.svelte'), getAccountPageSvelte());
 
 		// Write root layout server to pass user data to all pages
 		await writeFile(join(outputDir, 'src', 'routes', '+layout.server.ts'), getLayoutServer());

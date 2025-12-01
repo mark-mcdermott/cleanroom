@@ -18,6 +18,8 @@ export { default as EmojiList } from './EmojiList.svelte';
 export { default as CalloutFAQ } from './CalloutFAQ.svelte';
 export { default as LoginForm } from './LoginForm.svelte';
 export { default as SignUpForm } from './SignUpForm.svelte';
+export { default as ProfilePage } from './ProfilePage.svelte';
+export { default as AccountPage } from './AccountPage.svelte';
 export type { NavLink, DropdownLink, AvatarConfig } from './types';
 export type { Section } from './StripedSections.svelte';
 export type { Feature } from './Features.svelte';

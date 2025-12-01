@@ -1,11 +1,9 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	import { Card } from '$lib/components/ui';
-	import { User, Mail, Calendar } from 'lucide-svelte';
+	import { ProfilePage } from '$lib/components/blocks';
 
 	const { data } = $props();
-	const userId = $derived($page.params.id);
-	const isOwnProfile = $derived(data.user?.id === userId);
+	const userId = $derived($page.params.id ?? '');
 </script>
 
 <svelte:head>
@@ -13,56 +11,13 @@
 	<meta name="description" content="User Profile" />
 </svelte:head>
 
-<div class="max-w-2xl mx-auto px-6 py-12">
-	<Card.Root>
-		<Card.Header>
-			<div class="flex items-center gap-4">
-				<div
-					class="w-16 h-16 rounded-full bg-muted flex items-center justify-center text-muted-foreground text-2xl"
-				>
-					{data.user?.email?.charAt(0).toUpperCase() || 'U'}
-				</div>
-				<div>
-					<Card.Title class="text-2xl">
-						{#if isOwnProfile}
-							Your Profile
-						{:else}
-							User Profile
-						{/if}
-					</Card.Title>
-					<Card.Description>
-						{#if data.user?.name}
-							{data.user.name}
-						{:else}
-							User ID: {userId}
-						{/if}
-					</Card.Description>
-				</div>
-			</div>
-		</Card.Header>
-		<Card.Content class="space-y-4">
-			{#if data.user && isOwnProfile}
-				<div class="flex items-center gap-3 text-muted-foreground">
-					<Mail class="w-5 h-5" />
-					<span>{data.user.email}</span>
-				</div>
-				<div class="flex items-center gap-3 text-muted-foreground">
-					<User class="w-5 h-5" />
-					<span>ID: {data.user.id}</span>
-				</div>
-			{:else}
-				<p class="text-muted-foreground">Profile information is private.</p>
-			{/if}
-		</Card.Content>
-		{#if isOwnProfile}
-			<Card.Footer>
-				<a
-					href="/account"
-					class="text-sm text-muted-foreground hover:text-foreground transition-colors"
-				>
-					Edit your settings →
-				</a>
-			</Card.Footer>
-		{/if}
-	</Card.Root>
-</div>
+<ProfilePage
+	user={{
+		id: userId,
+		email: data.user?.email ?? '',
+		name: data.user?.name,
+		avatarUrl: data.user?.avatarUrl
+	}}
+	currentUserId={data.user?.id}
+	backHref={null}
+/>
