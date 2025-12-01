@@ -188,26 +188,63 @@ export function getFooter(config: ProjectConfig): string {
 
 // Header with border (for multi-page sites)
 // Note: Requires `let mobileMenuOpen = $state(false);` in the parent component's script
-export function getHeader(config: ProjectConfig, links: { href: string; label: string }[]): string {
+// When hasAuth is true, auth links (login/signup) are rendered conditionally based on data.user
+export function getHeader(
+	config: ProjectConfig,
+	links: { href: string; label: string }[],
+	options?: { hasAuth?: boolean }
+): string {
 	const displayName = getDisplayName(config);
 	const logoDisplay =
 		config.logo.type === 'emoji'
 			? config.logo.value
 			: `<img src="${getLogoSrc(config)}" alt="${displayName}" class="h-6 w-auto object-contain" />`;
 
-	const desktopLinks = links
+	const hasAuth = options?.hasAuth ?? false;
+
+	// Separate auth links from regular links
+	const authHrefs = ['/login', '/signup'];
+	const regularLinks = hasAuth ? links.filter((l) => !authHrefs.includes(l.href)) : links;
+
+	const desktopLinks = regularLinks
 		.map(
 			(link) =>
 				`<a href="${link.href}" class="hover:underline underline-offset-4">${link.label}</a>`
 		)
 		.join('\n\t\t\t\t');
 
-	const mobileLinks = links
+	const mobileLinks = regularLinks
 		.map(
 			(link) =>
 				`<a href="${link.href}" class="block py-2 hover:text-foreground" onclick={() => mobileMenuOpen = false}>${link.label}</a>`
 		)
 		.join('\n\t\t\t\t\t');
+
+	// Auth-aware desktop links
+	const desktopAuthSection = hasAuth
+		? `
+				{#if data.user}
+					<form action="/logout" method="POST" class="inline">
+						<button type="submit" class="hover:underline underline-offset-4">Log Out</button>
+					</form>
+				{:else}
+					<a href="/login" class="hover:underline underline-offset-4">Log In</a>
+					<a href="/signup" class="hover:underline underline-offset-4">Sign Up</a>
+				{/if}`
+		: '';
+
+	// Auth-aware mobile links
+	const mobileAuthSection = hasAuth
+		? `
+				{#if data.user}
+					<form action="/logout" method="POST">
+						<button type="submit" class="block py-2 hover:text-foreground w-full text-left" onclick={() => mobileMenuOpen = false}>Log Out</button>
+					</form>
+				{:else}
+					<a href="/login" class="block py-2 hover:text-foreground" onclick={() => mobileMenuOpen = false}>Log In</a>
+					<a href="/signup" class="block py-2 hover:text-foreground" onclick={() => mobileMenuOpen = false}>Sign Up</a>
+				{/if}`
+		: '';
 
 	return `<header class="border-b">
 	<div class="mx-auto max-w-6xl px-6 sm:px-10 h-16 flex items-center justify-between">
@@ -219,7 +256,7 @@ export function getHeader(config: ProjectConfig, links: { href: string; label: s
 		<!-- Desktop Nav -->
 		<div class="hidden md:flex items-center gap-4">
 			<nav class="flex items-center gap-4">
-				${desktopLinks}
+				${desktopLinks}${desktopAuthSection}
 			</nav>
 		</div>
 
@@ -255,7 +292,7 @@ export function getHeader(config: ProjectConfig, links: { href: string; label: s
 				</button>
 			</div>
 			<nav class="p-4 flex flex-col gap-2">
-				${mobileLinks}
+				${mobileLinks}${mobileAuthSection}
 			</nav>
 		</div>
 	</div>

@@ -29,13 +29,18 @@ const authPages = [
 function getLayoutSvelte(config: ProjectConfig): string {
 	const hasAuth = config.modules.includes('auth');
 	const pages = hasAuth ? [...defaultPages, ...authPages] : defaultPages;
-	const header = getHeader(config, pages);
+	const header = getHeader(config, pages, { hasAuth });
 	const footer = getFooter(config);
+
+	// When auth is enabled, include data prop to access user state
+	const propsDeclaration = hasAuth
+		? 'let { children, data } = $props();'
+		: 'let { children } = $props();';
 
 	return `<script lang="ts">
 	import '../app.css';
 
-	let { children } = $props();
+	${propsDeclaration}
 	let mobileMenuOpen = $state(false);
 </script>
 

@@ -281,9 +281,10 @@ import { verifyPassword } from '$lib/server/password';
 import type { Actions, PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ locals }) => {
-	if (locals.user) {
+	if (locals.user && locals.session) {
 		redirect(302, '/');
 	}
+	return {};
 };
 
 export const actions: Actions = {
@@ -412,9 +413,10 @@ import { hashPassword } from '$lib/server/password';
 import type { Actions, PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ locals }) => {
-	if (locals.user) {
+	if (locals.user && locals.session) {
 		redirect(302, '/');
 	}
+	return {};
 };
 
 export const actions: Actions = {
@@ -549,6 +551,18 @@ function getSignupPageSvelte(config: ProjectConfig): string {
 `;
 }
 
+// Root layout server (passes user to all pages)
+function getLayoutServer(): string {
+	return `import type { LayoutServerLoad } from './$types';
+
+export const load: LayoutServerLoad = async ({ locals }) => {
+	return {
+		user: locals.user
+	};
+};
+`;
+}
+
 // Logout page server
 function getLogoutPageServer(): string {
 	return `import { redirect } from '@sveltejs/kit';
@@ -638,6 +652,9 @@ export const authModule: FeatureModule = {
 		await writeFile(join(outputDir, 'src', 'routes', 'signup', '+page.server.ts'), getSignupPageServer());
 		await writeFile(join(outputDir, 'src', 'routes', 'signup', '+page.svelte'), getSignupPageSvelte(config));
 		await writeFile(join(outputDir, 'src', 'routes', 'logout', '+page.server.ts'), getLogoutPageServer());
+
+		// Write root layout server to pass user data to all pages
+		await writeFile(join(outputDir, 'src', 'routes', '+layout.server.ts'), getLayoutServer());
 
 		// Write config files
 		await writeFile(join(outputDir, 'drizzle.config.ts'), getDrizzleConfig());
