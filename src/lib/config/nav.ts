@@ -4,17 +4,17 @@ import { User, Settings, LogOut, Github } from 'lucide-svelte';
 export const defaultNavLinks: NavLink[] = [
 	{ label: 'components', href: '/components', testId: 'nav-components' },
 	{ label: 'blocks', href: '/blocks', testId: 'nav-blocks' },
-	{
-		label: 'sites',
-		testId: 'nav-sites',
-		children: [
-			{ label: 'demo', href: '/sites/demo', testId: 'nav-sites-demo' },
-			{ label: 'landing (no nav)', href: '/sites/landing-simple', testId: 'nav-sites-landing-simple' },
-			{ label: 'landing (jump links)', href: '/sites/landing-sections', testId: 'nav-sites-landing-sections' },
-			{ label: 'static site', href: '/sites/static-site', testId: 'nav-sites-static-site' },
-			{ label: 'ssr site', href: '/sites/ssr-site', testId: 'nav-sites-ssr-site' }
-		]
-	},
+	// {
+	// 	label: 'sites',
+	// 	testId: 'nav-sites',
+	// 	children: [
+	// 		{ label: 'demo', href: '/sites/demo', testId: 'nav-sites-demo' },
+	// 		{ label: 'landing (no nav)', href: '/sites/landing-simple', testId: 'nav-sites-landing-simple' },
+	// 		{ label: 'landing (jump links)', href: '/sites/landing-sections', testId: 'nav-sites-landing-sections' },
+	// 		{ label: 'static site', href: '/sites/static-site', testId: 'nav-sites-static-site' },
+	// 		{ label: 'ssr site', href: '/sites/ssr-site', testId: 'nav-sites-ssr-site' }
+	// 	]
+	// },
 	{
 		label: 'modules',
 		testId: 'nav-modules',
