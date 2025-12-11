@@ -28,9 +28,10 @@
     "test:unit": "vitest run",
     "test:unit:watch": "vitest",
     "test:unit:lightweight": "vitest run tests/unit/lightweight.test.ts",
-    "test:e2e": "playwright test",
+    "test:e2e": "playwright test --ignore-snapshots",
     "test:e2e:debug": "playwright test --debug",
     "test:e2e:lightweight": "playwright test tests/e2e/lightweight.spec.ts",
+    "test:e2e:generator": "playwright test tests/e2e/generator-full.spec.ts --timeout=300000",
     "test:lightweight": "pnpm test:unit:lightweight && pnpm test:e2e:lightweight"
   },
   "devDependencies": {
