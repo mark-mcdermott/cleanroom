@@ -4,6 +4,7 @@ import { join } from 'node:path';
 import { exec } from 'node:child_process';
 import { promisify } from 'node:util';
 import { existsSync } from 'node:fs';
+import { writeFile } from 'node:fs/promises';
 import { modules, type ProjectConfig } from './modules';
 import { featureModules } from './modules/features';
 import {
@@ -31,6 +32,9 @@ function cyanNote(content: string, title: string): void {
 	}
 	console.log(pc.gray('│'));
 }
+
+// Modules that require auth (and therefore SSR)
+const AUTH_REQUIRED_MODULES = ['lobby', 'resume', 'store', 'tracker', 'leaderboard', 'widgets'];
 
 // Setup CLI dependencies (gh and wrangler)
 async function setupDependencies(): Promise<boolean> {
@@ -98,6 +102,36 @@ async function setupDependencies(): Promise<boolean> {
 	return true;
 }
 
+// Prompt step types for back navigation
+type PromptStep =
+	| 'project-name'
+	| 'slug'
+	| 'pretty-name'
+	| 'logo'
+	| 'site-type'
+	| 'database'
+	| 'module'
+	| 'addons'
+	| 'dark-toggle-mode'
+	| 'stripe-config';
+
+interface PromptState {
+	projectName?: string;
+	slug?: string;
+	prettyName?: string;
+	logo?: ProjectConfig['logo'];
+	siteType?: ProjectConfig['siteType'];
+	databaseConfig?: ProjectConfig['database'];
+	selectedModule?: string;
+	selectedAddons?: string[];
+	darkToggleConfig?: ProjectConfig['darkToggle'];
+	stripeConfig?: {
+		secretKey?: string;
+		webhookSecret?: string;
+		printfulApiKey?: string;
+	};
+}
+
 async function main() {
 	console.clear();
 
@@ -110,333 +144,630 @@ async function main() {
 		process.exit(1);
 	}
 
+	// State for all prompts
+	const state: PromptState = {};
+	let currentStep: PromptStep = 'project-name';
+	const stepHistory: PromptStep[] = [];
+
 	// Check for project name as CLI argument
 	const argProjectName = process.argv[2];
-
-	let projectName: string;
 	if (argProjectName) {
-		projectName = argProjectName;
-		p.log.info(`App folder name: ${projectName}`);
-	} else {
-		const promptedName = await p.text({
-			message: 'What is your project name?',
-			placeholder: 'My App',
-			validate(value) {
-				if (!value) return 'Project name is required';
+		state.projectName = argProjectName;
+		p.log.info(`App folder name: ${argProjectName}`);
+		currentStep = 'slug';
+	}
+
+	// Main prompt loop with back navigation
+	while (true) {
+		// Helper to go back
+		const goBack = () => {
+			if (stepHistory.length > 0) {
+				currentStep = stepHistory.pop()!;
+				return true;
 			}
-		});
+			return false;
+		};
 
-		if (p.isCancel(promptedName)) {
-			p.cancel('Setup cancelled');
-			process.exit(0);
-		}
-		projectName = promptedName;
-		p.log.info(`App folder name: ${projectName}`);
-	}
-
-	// Slugify and confirm
-	let slug = slugify(projectName);
-	p.log.info(`Slugified app name: ${slug}`);
-
-	const slugOk = await p.confirm({
-		message: 'Is this ok?',
-		initialValue: true
-	});
-
-	if (p.isCancel(slugOk)) {
-		p.cancel('Setup cancelled');
-		process.exit(0);
-	}
-
-	if (!slugOk) {
-		const customSlug = await p.text({
-			message: 'Enter your preferred slug',
-			placeholder: slug,
-			validate(value) {
-				if (!value) return 'Slug is required';
-				if (!isValidSlug(value))
-					return 'Slug must be lowercase with only letters, numbers, dots, and hyphens';
+		// Helper to handle cancel or back
+		const handleResult = <T>(result: T | symbol, nextStep: PromptStep): T | 'back' | 'cancel' => {
+			if (p.isCancel(result)) {
+				return 'cancel';
 			}
-		});
-
-		if (p.isCancel(customSlug)) {
-			p.cancel('Setup cancelled');
-			process.exit(0);
-		}
-		slug = customSlug;
-	}
-
-	// Ask about pretty name for UI
-	const useFolderNameInUi = await p.confirm({
-		message: `Should the app be called "${slug}" in its UI?`,
-		initialValue: true
-	});
-
-	if (p.isCancel(useFolderNameInUi)) {
-		p.cancel('Setup cancelled');
-		process.exit(0);
-	}
-
-	let prettyName: string | undefined;
-	if (!useFolderNameInUi) {
-		const customPrettyName = await p.text({
-			message: 'What should the app be called in its UI?',
-			placeholder: projectName,
-			validate(value) {
-				if (!value) return 'App name is required';
+			if (result === 'back') {
+				return 'back';
 			}
-		});
+			stepHistory.push(currentStep);
+			currentStep = nextStep;
+			return result as T;
+		};
 
-		if (p.isCancel(customPrettyName)) {
-			p.cancel('Setup cancelled');
-			process.exit(0);
-		}
-		prettyName = customPrettyName;
-	}
+		switch (currentStep) {
+			case 'project-name': {
+				const result = await p.text({
+					message: 'What is your project name?',
+					placeholder: 'My App',
+					validate(value) {
+						if (!value) return 'Project name is required';
+					}
+				});
 
-	const hasLogoFile = await p.confirm({
-		message: 'Do you have a logo file?',
-		initialValue: false
-	});
-
-	if (p.isCancel(hasLogoFile)) {
-		p.cancel('Setup cancelled');
-		process.exit(0);
-	}
-
-	let logo: ProjectConfig['logo'];
-
-	if (hasLogoFile) {
-		const logoPath = await p.text({
-			message: 'Path to your logo file (PNG or ICO recommended)',
-			placeholder: './logo.png',
-			validate(value) {
-				if (!value) return 'Logo path is required';
-				if (!existsSync(value)) return 'File not found';
-				const ext = value.split('.').pop()?.toLowerCase();
-				if (!ext) return 'File must have an extension';
-				const supported = ['png', 'ico', 'jpg', 'jpeg', 'svg', 'webp'];
-				if (!supported.includes(ext)) {
-					return `Unsupported format. Use: ${supported.join(', ')}`;
+				if (p.isCancel(result)) {
+					p.cancel('Setup cancelled');
+					process.exit(0);
 				}
+
+				state.projectName = result;
+				p.log.info(`App folder name: ${state.projectName}`);
+				stepHistory.push(currentStep);
+				currentStep = 'slug';
+				break;
 			}
-		});
 
-		if (p.isCancel(logoPath)) {
-			p.cancel('Setup cancelled');
-			process.exit(0);
-		}
+			case 'slug': {
+				state.slug = slugify(state.projectName!);
+				p.log.info(`Slugified app name: ${state.slug}`);
 
-		// Warn about formats with limited browser support
-		const ext = logoPath.split('.').pop()?.toLowerCase();
-		if (ext === 'svg') {
-			p.log.warn('SVG favicons are not supported in Safari. Consider using PNG instead.');
-		} else if (ext === 'jpg' || ext === 'jpeg') {
-			p.log.warn('JPG favicons have no transparency. Consider using PNG instead.');
-		}
+				const slugOk = await p.select({
+					message: 'Is this ok?',
+					options: [
+						{ value: 'yes', label: 'Yes' },
+						{ value: 'no', label: 'No, let me enter a custom slug' },
+						{ value: 'back', label: '← Go back' }
+					]
+				});
 
-		logo = { type: 'file', value: logoPath };
-	} else {
-		const emoji = await p.text({
-			message: 'Choose an emoji for your project',
-			placeholder: '🚀',
-			validate(value) {
-				if (!value) return 'Emoji is required';
-			}
-		});
-
-		if (p.isCancel(emoji)) {
-			p.cancel('Setup cancelled');
-			process.exit(0);
-		}
-
-		logo = { type: 'emoji', value: emoji };
-	}
-
-	const siteType = await p.select({
-		message: 'What type of site do you want to create?',
-		options: [
-			{
-				value: 'demo-page',
-				label: 'Simple demo page',
-				hint: 'Prerendered, SPA-like navigation, no SSR'
-			},
-			{
-				value: 'landing-simple',
-				label: 'Simple landing page',
-				hint: 'Prerendered, SPA-like navigation, responsive'
-			},
-			{
-				value: 'landing-sections',
-				label: 'Landing page with scroll sections',
-				hint: 'Prerendered, SPA-like navigation, section nav & mobile menu'
-			},
-			{
-				value: 'static-site',
-				label: 'Simple static site',
-				hint: 'Prerendered, SPA-like navigation, multiple pages'
-			},
-			{
-				value: 'ssr-site',
-				label: 'SSR site (auth ready)',
-				hint: 'Server-rendered, ideal for auth, dynamic content'
-			}
-		]
-	});
-
-	if (p.isCancel(siteType)) {
-		p.cancel('Setup cancelled');
-		process.exit(0);
-	}
-
-	// For SSR sites, set up database and modules
-	let databaseConfig: ProjectConfig['database'];
-	let selectedModules: ProjectConfig['modules'] = [];
-	let darkToggleConfig: ProjectConfig['darkToggle'];
-
-	if (siteType === 'ssr-site') {
-		// Neon database setup
-		p.log.step("SSR sites need a database. Let's set up Neon (free PostgreSQL).");
-
-		cyanNote(
-			[
-				'1. Go to https://neon.tech and sign up (free tier available)',
-				'2. Create a new project',
-				'3. Copy the connection string from the dashboard',
-				'   (looks like: postgresql://user:pass@ep-xxx.region.aws.neon.tech/dbname?sslmode=require)'
-			].join('\n'),
-			'Neon Database Setup'
-		);
-
-		const hasNeonAccount = await p.confirm({
-			message: 'Do you have your Neon connection string ready?',
-			initialValue: false
-		});
-
-		if (p.isCancel(hasNeonAccount)) {
-			p.cancel('Setup cancelled');
-			process.exit(0);
-		}
-
-		if (hasNeonAccount) {
-			const connectionString = await p.text({
-				message: 'Paste your Neon connection string',
-				placeholder: 'postgresql://user:pass@ep-xxx.region.aws.neon.tech/dbname?sslmode=require',
-				validate(value) {
-					if (!value) return 'Connection string is required';
-					if (!value.startsWith('postgresql://')) return 'Must be a PostgreSQL connection string';
+				if (p.isCancel(slugOk)) {
+					p.cancel('Setup cancelled');
+					process.exit(0);
 				}
-			});
 
-			if (p.isCancel(connectionString)) {
-				p.cancel('Setup cancelled');
-				process.exit(0);
+				if (slugOk === 'back') {
+					goBack();
+					break;
+				}
+
+				if (slugOk === 'no') {
+					const customSlug = await p.text({
+						message: 'Enter your preferred slug',
+						placeholder: state.slug,
+						validate(value) {
+							if (!value) return 'Slug is required';
+							if (!isValidSlug(value))
+								return 'Slug must be lowercase with only letters, numbers, dots, and hyphens';
+						}
+					});
+
+					if (p.isCancel(customSlug)) {
+						p.cancel('Setup cancelled');
+						process.exit(0);
+					}
+					state.slug = customSlug;
+				}
+
+				stepHistory.push(currentStep);
+				currentStep = 'pretty-name';
+				break;
 			}
 
-			databaseConfig = {
-				provider: 'neon',
-				connectionString
-			};
-			p.log.success('Database configured!');
-		} else {
-			p.log.warn('You can add the database connection string later in your .env file');
-		}
+			case 'pretty-name': {
+				const result = await p.select({
+					message: `Should the app be called "${state.slug}" in its UI?`,
+					options: [
+						{ value: 'yes', label: 'Yes' },
+						{ value: 'no', label: 'No, let me enter a custom name' },
+						{ value: 'back', label: '← Go back' }
+					]
+				});
 
-		// Module selection
-		const modules = await p.multiselect({
-			message: 'Which modules would you like to add?',
-			options: [
-				{ value: 'auth', label: 'Auth', hint: 'Lucia v3 authentication with login/signup' },
-				{ value: 'blog', label: 'Blog', hint: 'Blog with posts and tags' },
-				{ value: 'dark-toggle', label: 'Dark Toggle', hint: 'Dark/light mode toggle in nav' },
-				{ value: 'leaderboard', label: 'Leaderboard', hint: 'Click game with high score tracking' },
-				{
-					value: 'lobby',
-					label: 'Lobby',
-					hint: 'Video room with Daily.co for meditation/hangouts'
-				},
-				{
-					value: 'office-users',
-					label: 'Office Users',
-					hint: 'Seed users from The Office (requires auth)'
-				},
-				{ value: 'resume', label: 'Resume', hint: 'Resume builder with PDF export' },
-				{
-					value: 'theme-preview',
-					label: 'Theme Preview',
-					hint: 'Live theme/font preview with ThemeForseen'
-				},
-				{ value: 'tracker', label: 'Tracker', hint: 'Activity/habit tracking dashboard' },
-				{ value: 'videos', label: 'Videos', hint: 'Travel videos with interactive globe explorer' }
-			],
-			required: false
-		});
+				if (p.isCancel(result)) {
+					p.cancel('Setup cancelled');
+					process.exit(0);
+				}
 
-		if (p.isCancel(modules)) {
-			p.cancel('Setup cancelled');
-			process.exit(0);
-		}
+				if (result === 'back') {
+					goBack();
+					break;
+				}
 
-		selectedModules = (modules as string[]).filter((m): m is ProjectConfig['modules'][number] =>
-			[
-				'auth',
-				'blog',
-				'dark-toggle',
-				'leaderboard',
-				'lobby',
-				'office-users',
-				'resume',
-				'store',
-				'theme-preview',
-				'tracker',
-				'videos',
-				'widgets'
-			].includes(m)
-		);
+				if (result === 'no') {
+					const customPrettyName = await p.text({
+						message: 'What should the app be called in its UI?',
+						placeholder: state.projectName,
+						validate(value) {
+							if (!value) return 'App name is required';
+						}
+					});
 
-		// If dark-toggle was selected, ask about mode
-		if (selectedModules.includes('dark-toggle')) {
-			const themeMode = await p.select({
-				message: 'Which theme toggle mode would you like?',
-				options: [
-					{
-						value: 'light-dark-system',
-						label: 'Light / Dark / System',
-						hint: 'Three-way toggle with system preference option'
-					},
-					{ value: 'light-dark', label: 'Light / Dark only', hint: 'Simple two-way toggle' }
-				]
-			});
+					if (p.isCancel(customPrettyName)) {
+						p.cancel('Setup cancelled');
+						process.exit(0);
+					}
+					state.prettyName = customPrettyName;
+				}
 
-			if (p.isCancel(themeMode)) {
-				p.cancel('Setup cancelled');
-				process.exit(0);
+				stepHistory.push(currentStep);
+				currentStep = 'logo';
+				break;
 			}
 
-			darkToggleConfig = {
-				mode: themeMode as 'light-dark' | 'light-dark-system'
-			};
+			case 'logo': {
+				const hasLogoFile = await p.select({
+					message: 'Do you have a logo file?',
+					options: [
+						{ value: 'no', label: 'No, I\'ll use an emoji' },
+						{ value: 'yes', label: 'Yes, I have a logo file' },
+						{ value: 'back', label: '← Go back' }
+					]
+				});
+
+				if (p.isCancel(hasLogoFile)) {
+					p.cancel('Setup cancelled');
+					process.exit(0);
+				}
+
+				if (hasLogoFile === 'back') {
+					goBack();
+					break;
+				}
+
+				if (hasLogoFile === 'yes') {
+					const logoPath = await p.text({
+						message: 'Path to your logo file (PNG or ICO recommended)',
+						placeholder: './logo.png',
+						validate(value) {
+							if (!value) return 'Logo path is required';
+							if (!existsSync(value)) return 'File not found';
+							const ext = value.split('.').pop()?.toLowerCase();
+							if (!ext) return 'File must have an extension';
+							const supported = ['png', 'ico', 'jpg', 'jpeg', 'svg', 'webp'];
+							if (!supported.includes(ext)) {
+								return `Unsupported format. Use: ${supported.join(', ')}`;
+							}
+						}
+					});
+
+					if (p.isCancel(logoPath)) {
+						p.cancel('Setup cancelled');
+						process.exit(0);
+					}
+
+					// Warn about formats with limited browser support
+					const ext = logoPath.split('.').pop()?.toLowerCase();
+					if (ext === 'svg') {
+						p.log.warn('SVG favicons are not supported in Safari. Consider using PNG instead.');
+					} else if (ext === 'jpg' || ext === 'jpeg') {
+						p.log.warn('JPG favicons have no transparency. Consider using PNG instead.');
+					}
+
+					state.logo = { type: 'file', value: logoPath };
+				} else {
+					const emoji = await p.text({
+						message: 'Choose an emoji for your project',
+						placeholder: '🚀',
+						validate(value) {
+							if (!value) return 'Emoji is required';
+						}
+					});
+
+					if (p.isCancel(emoji)) {
+						p.cancel('Setup cancelled');
+						process.exit(0);
+					}
+
+					state.logo = { type: 'emoji', value: emoji };
+				}
+
+				stepHistory.push(currentStep);
+				currentStep = 'site-type';
+				break;
+			}
+
+			case 'site-type': {
+				p.note(
+					`Auth and auth-required modules (${AUTH_REQUIRED_MODULES.join(', ')}) require SSR.`,
+					'Note'
+				);
+
+				const result = await p.select({
+					message: 'What type of site do you want to create?',
+					initialValue: 'ssr-site',
+					options: [
+						{
+							value: 'ssr-site',
+							label: 'SSR site (auth ready)',
+							hint: 'Server-rendered, ideal for auth, dynamic content'
+						},
+						{
+							value: 'demo-page',
+							label: 'Simple demo page',
+							hint: 'Prerendered, SPA-like navigation, no SSR'
+						},
+						{
+							value: 'landing-simple',
+							label: 'Simple landing page',
+							hint: 'Prerendered, SPA-like navigation, responsive'
+						},
+						{
+							value: 'landing-sections',
+							label: 'Landing page with scroll sections',
+							hint: 'Prerendered, SPA-like navigation, section nav & mobile menu'
+						},
+						{
+							value: 'static-site',
+							label: 'Simple static site',
+							hint: 'Prerendered, SPA-like navigation, multiple pages'
+						},
+						{ value: 'back', label: '← Go back' }
+					]
+				});
+
+				if (p.isCancel(result)) {
+					p.cancel('Setup cancelled');
+					process.exit(0);
+				}
+
+				if (result === 'back') {
+					goBack();
+					break;
+				}
+
+				state.siteType = result as ProjectConfig['siteType'];
+				stepHistory.push(currentStep);
+
+				// For SSR sites, go to database setup, then module selection
+				if (state.siteType === 'ssr-site') {
+					currentStep = 'database';
+				} else {
+					// For non-SSR sites, skip to deployment
+					currentStep = 'done' as PromptStep;
+				}
+				break;
+			}
+
+			case 'database': {
+				p.log.step("SSR sites need a database. Let's set up Neon (free PostgreSQL).");
+
+				cyanNote(
+					[
+						'1. Go to https://neon.tech and sign up (free tier available)',
+						'2. Create a new project',
+						'3. Copy the connection string from the dashboard',
+						'   (looks like: postgresql://user:pass@ep-xxx.region.aws.neon.tech/dbname?sslmode=require)'
+					].join('\n'),
+					'Neon Database Setup'
+				);
+
+				const hasNeonAccount = await p.select({
+					message: 'Do you have your Neon connection string ready?',
+					options: [
+						{ value: 'yes', label: 'Yes, I have it ready' },
+						{ value: 'no', label: 'No, I\'ll add it later' },
+						{ value: 'back', label: '← Go back' }
+					]
+				});
+
+				if (p.isCancel(hasNeonAccount)) {
+					p.cancel('Setup cancelled');
+					process.exit(0);
+				}
+
+				if (hasNeonAccount === 'back') {
+					goBack();
+					break;
+				}
+
+				if (hasNeonAccount === 'yes') {
+					const connectionString = await p.text({
+						message: 'Paste your Neon connection string',
+						placeholder: 'postgresql://user:pass@ep-xxx.region.aws.neon.tech/dbname?sslmode=require',
+						validate(value) {
+							if (!value) return 'Connection string is required';
+							if (!value.startsWith('postgresql://')) return 'Must be a PostgreSQL connection string';
+						}
+					});
+
+					if (p.isCancel(connectionString)) {
+						p.cancel('Setup cancelled');
+						process.exit(0);
+					}
+
+					state.databaseConfig = {
+						provider: 'neon',
+						connectionString
+					};
+					p.log.success('Database configured!');
+				} else {
+					p.log.warn('You can add the database connection string later in your .env file');
+				}
+
+				stepHistory.push(currentStep);
+				currentStep = 'module';
+				break;
+			}
+
+			case 'module': {
+				const result = await p.select({
+					message: 'Which module would you like to use?',
+					options: [
+						{ value: 'none', label: 'None', hint: 'Just the base SSR site' },
+						{ value: 'blog', label: 'Blog', hint: 'Blog with posts and tags' },
+						{ value: 'leaderboard', label: 'Leaderboard', hint: 'Click game with high score tracking (requires auth)' },
+						{ value: 'lobby', label: 'Lobby', hint: 'Video room with Daily.co for meditation/hangouts (requires auth)' },
+						{ value: 'resume', label: 'Resume', hint: 'Resume builder with PDF export (requires auth)' },
+						{ value: 'store', label: 'Store', hint: 'E-commerce store (requires auth)' },
+						{ value: 'tracker', label: 'Tracker', hint: 'Activity/habit tracking dashboard (requires auth)' },
+						{ value: 'videos', label: 'Videos', hint: 'Travel videos with interactive globe explorer' },
+						{ value: 'widgets', label: 'Widgets', hint: 'Dashboard widgets (requires auth)' },
+						{ value: 'back', label: '← Go back' }
+					]
+				});
+
+				if (p.isCancel(result)) {
+					p.cancel('Setup cancelled');
+					process.exit(0);
+				}
+
+				if (result === 'back') {
+					goBack();
+					break;
+				}
+
+				state.selectedModule = result === 'none' ? undefined : result;
+				stepHistory.push(currentStep);
+				currentStep = 'addons';
+				break;
+			}
+
+			case 'addons': {
+				// Build add-on options
+				const addonOptions: { value: string; label: string; hint?: string }[] = [
+					{ value: 'auth', label: 'Auth', hint: 'Lucia v3 authentication with login/signup' },
+					{ value: 'dark-toggle', label: 'Dark Toggle', hint: 'Dark/light mode toggle in nav' },
+					{ value: 'office-users', label: 'Office Users', hint: 'Seed users from The Office (requires auth)' },
+					{ value: 'theme-preview', label: 'Theme Preview', hint: 'Live theme/font preview with ThemeForseen' }
+				];
+
+				// Only show merch if store wasn't selected as the main module
+				if (state.selectedModule !== 'store') {
+					addonOptions.push({
+						value: 'merch',
+						label: 'Merch',
+						hint: 'Add a merchandise/e-commerce section (requires auth)'
+					});
+				}
+
+				// Determine which modules auto-require auth
+				const authAutoSelected = state.selectedModule && AUTH_REQUIRED_MODULES.includes(state.selectedModule);
+
+				// Build initial values (auto-select auth for certain modules)
+				const initialAddons: string[] = [];
+				if (authAutoSelected) {
+					initialAddons.push('auth');
+				}
+
+				const result = await p.multiselect({
+					message: 'Which add-ons would you like?',
+					options: addonOptions,
+					initialValues: initialAddons,
+					required: false
+				});
+
+				if (p.isCancel(result)) {
+					p.cancel('Setup cancelled');
+					process.exit(0);
+				}
+
+				// Check if user deselected auth but has a module that requires it
+				const selectedAddons = result as string[];
+				if (authAutoSelected && !selectedAddons.includes('auth')) {
+					p.log.warn(`The ${state.selectedModule} module requires auth. Auth has been automatically added.`);
+					selectedAddons.push('auth');
+				}
+
+				// Check if merch or office-users selected but auth not
+				if ((selectedAddons.includes('merch') || selectedAddons.includes('office-users')) && !selectedAddons.includes('auth')) {
+					const addonName = selectedAddons.includes('merch') ? 'Merch' : 'Office Users';
+					p.log.warn(`${addonName} requires auth. Auth has been automatically added.`);
+					selectedAddons.push('auth');
+				}
+
+				state.selectedAddons = selectedAddons;
+
+				stepHistory.push(currentStep);
+
+				// If dark-toggle was selected, ask about mode
+				if (selectedAddons.includes('dark-toggle')) {
+					currentStep = 'dark-toggle-mode';
+				} else {
+					// Check if store or merch is selected - need Stripe config
+					const needsStripe = state.selectedModule === 'store' || selectedAddons.includes('merch');
+					if (needsStripe) {
+						currentStep = 'stripe-config';
+					} else {
+						currentStep = 'done' as PromptStep;
+					}
+				}
+				break;
+			}
+
+			case 'dark-toggle-mode': {
+				const result = await p.select({
+					message: 'Which theme toggle mode would you like?',
+					options: [
+						{
+							value: 'light-dark-system',
+							label: 'Light / Dark / System',
+							hint: 'Three-way toggle with system preference option'
+						},
+						{ value: 'light-dark', label: 'Light / Dark only', hint: 'Simple two-way toggle' },
+						{ value: 'back', label: '← Go back' }
+					]
+				});
+
+				if (p.isCancel(result)) {
+					p.cancel('Setup cancelled');
+					process.exit(0);
+				}
+
+				if (result === 'back') {
+					goBack();
+					break;
+				}
+
+				state.darkToggleConfig = {
+					mode: result as 'light-dark' | 'light-dark-system'
+				};
+
+				stepHistory.push(currentStep);
+
+				// Check if store or merch is selected - need Stripe config
+				const needsStripe = state.selectedModule === 'store' || state.selectedAddons?.includes('merch');
+				if (needsStripe) {
+					currentStep = 'stripe-config';
+				} else {
+					currentStep = 'done' as PromptStep;
+				}
+				break;
+			}
+
+			case 'stripe-config': {
+				cyanNote(
+					[
+						'Store/Merch requires Stripe for payments.',
+						'',
+						'To get your Stripe API keys:',
+						'1. Go to https://dashboard.stripe.com/apikeys',
+						'2. Copy your "Secret key" (starts with sk_test_ or sk_live_)',
+						'',
+						'To get your webhook secret:',
+						'1. Go to https://dashboard.stripe.com/webhooks',
+						'2. Click "Add endpoint"',
+						'3. Add your URL: https://your-site.pages.dev/api/stripe/webhook',
+						'4. Select events: checkout.session.completed, payment_intent.payment_failed',
+						'5. Copy the "Signing secret" (starts with whsec_)',
+						'',
+						'Optional: For automatic order fulfillment via Printful:',
+						'1. Go to https://www.printful.com/dashboard/settings/developers',
+						'2. Create an API token'
+					].join('\n'),
+					'Stripe & Printful Setup'
+				);
+
+				const hasStripeKeys = await p.select({
+					message: 'Do you have your Stripe keys ready?',
+					options: [
+						{ value: 'yes', label: 'Yes, I have them ready' },
+						{ value: 'no', label: 'No, I\'ll add them later' },
+						{ value: 'back', label: '← Go back' }
+					]
+				});
+
+				if (p.isCancel(hasStripeKeys)) {
+					p.cancel('Setup cancelled');
+					process.exit(0);
+				}
+
+				if (hasStripeKeys === 'back') {
+					goBack();
+					break;
+				}
+
+				if (hasStripeKeys === 'yes') {
+					const stripeSecretKey = await p.text({
+						message: 'Paste your Stripe Secret Key',
+						placeholder: 'sk_test_...',
+						validate(value) {
+							if (!value) return 'Stripe Secret Key is required';
+							if (!value.startsWith('sk_test_') && !value.startsWith('sk_live_')) {
+								return 'Must be a valid Stripe secret key (starts with sk_test_ or sk_live_)';
+							}
+						}
+					});
+
+					if (p.isCancel(stripeSecretKey)) {
+						p.cancel('Setup cancelled');
+						process.exit(0);
+					}
+
+					const stripeWebhookSecret = await p.text({
+						message: 'Paste your Stripe Webhook Secret (or press Enter to skip)',
+						placeholder: 'whsec_...'
+					});
+
+					if (p.isCancel(stripeWebhookSecret)) {
+						p.cancel('Setup cancelled');
+						process.exit(0);
+					}
+
+					const printfulApiKey = await p.text({
+						message: 'Paste your Printful API Key (or press Enter to skip)',
+						placeholder: 'Your Printful API token'
+					});
+
+					if (p.isCancel(printfulApiKey)) {
+						p.cancel('Setup cancelled');
+						process.exit(0);
+					}
+
+					state.stripeConfig = {
+						secretKey: stripeSecretKey,
+						webhookSecret: stripeWebhookSecret || undefined,
+						printfulApiKey: printfulApiKey || undefined
+					};
+
+					p.log.success('Stripe configuration saved!');
+				} else {
+					p.log.warn('You\'ll need to add Stripe keys to .env and .dev.vars files later');
+					p.log.warn('And add them as environment variables in Cloudflare Pages dashboard');
+				}
+
+				stepHistory.push(currentStep);
+				currentStep = 'done' as PromptStep;
+				break;
+			}
+
+			default:
+				// Exit the prompt loop
+				break;
 		}
 
-		if (selectedModules.length > 0) {
-			p.log.success(`Selected modules: ${selectedModules.join(', ')}`);
+		// Check if we're done with prompts
+		if (currentStep === ('done' as PromptStep)) {
+			break;
 		}
+	}
+
+	// Build the final modules list
+	const selectedModules: ProjectConfig['modules'] = [];
+	if (state.selectedModule) {
+		selectedModules.push(state.selectedModule as ProjectConfig['modules'][number]);
+	}
+	if (state.selectedAddons) {
+		for (const addon of state.selectedAddons) {
+			if (!selectedModules.includes(addon as ProjectConfig['modules'][number])) {
+				selectedModules.push(addon as ProjectConfig['modules'][number]);
+			}
+		}
+	}
+
+	if (selectedModules.length > 0) {
+		p.log.success(`Selected: ${selectedModules.join(', ')}`);
 	}
 
 	// Deployment section
 	p.log.step(`OK, let's 🚢 this.`);
 
-	const outputDir = join(process.cwd(), slug);
+	const outputDir = join(process.cwd(), state.slug!);
 
 	// Build config object
 	const config: ProjectConfig = {
-		projectName,
-		prettyName,
-		logo,
-		siteType: siteType as ProjectConfig['siteType'],
-		database: databaseConfig,
+		projectName: state.projectName!,
+		prettyName: state.prettyName,
+		logo: state.logo!,
+		siteType: state.siteType!,
+		database: state.databaseConfig,
 		modules: selectedModules,
-		darkToggle: darkToggleConfig,
+		darkToggle: state.darkToggleConfig,
 		github: {
 			repoUrl: '' // Will be set after repo creation
 		},
@@ -483,6 +814,41 @@ async function main() {
 	await execAsync('pnpm install', { cwd: outputDir });
 	await execAsync('npx svelte-kit sync', { cwd: outputDir });
 	spinner.stop('Dependencies installed!');
+
+	// Write environment variables to .env and .dev.vars files
+	const envVars: string[] = [];
+	const devVars: string[] = [];
+
+	// Add database connection string
+	if (config.database?.connectionString) {
+		envVars.push(`DATABASE_URL="${config.database.connectionString}"`);
+		devVars.push(`DATABASE_URL="${config.database.connectionString}"`);
+	}
+
+	// Add Stripe/Printful config
+	if (state.stripeConfig?.secretKey) {
+		envVars.push(`STRIPE_SECRET_KEY="${state.stripeConfig.secretKey}"`);
+		devVars.push(`STRIPE_SECRET_KEY="${state.stripeConfig.secretKey}"`);
+	}
+	if (state.stripeConfig?.webhookSecret) {
+		envVars.push(`STRIPE_WEBHOOK_SECRET="${state.stripeConfig.webhookSecret}"`);
+		devVars.push(`STRIPE_WEBHOOK_SECRET="${state.stripeConfig.webhookSecret}"`);
+	}
+	if (state.stripeConfig?.printfulApiKey) {
+		envVars.push(`PRINTFUL_API_KEY="${state.stripeConfig.printfulApiKey}"`);
+		devVars.push(`PRINTFUL_API_KEY="${state.stripeConfig.printfulApiKey}"`);
+	}
+
+	// Write .env file
+	if (envVars.length > 0) {
+		const envContent = envVars.join('\n') + '\n';
+		await writeFile(join(outputDir, '.env'), envContent);
+		p.log.success('Environment variables written to .env');
+
+		// Write .dev.vars for Cloudflare local dev
+		await writeFile(join(outputDir, '.dev.vars'), envContent);
+		p.log.success('Environment variables written to .dev.vars');
+	}
 
 	// If database is configured, set up tables and seed data
 	if (config.database && config.modules.length > 0) {
@@ -532,7 +898,7 @@ async function main() {
 
 	p.log.info(`We've detected your GitHub username is ${ghUsername}`);
 
-	let currentSlug = slug;
+	let currentSlug = state.slug!;
 	let repoUrl = `https://github.com/${ghUsername}/${currentSlug}`;
 	let shouldPush = false;
 	let forcePush = false;
@@ -744,6 +1110,33 @@ async function main() {
 		}
 	}
 
+	// Build the environment variables instructions
+	const envVarsInstructions: string[] = [
+		'   • Variable name: NODE_VERSION',
+		'   • Value: 22'
+	];
+
+	// Add database env var if configured
+	if (config.database?.connectionString) {
+		envVarsInstructions.push('');
+		envVarsInstructions.push('   • Variable name: DATABASE_URL');
+		envVarsInstructions.push('   • Value: (your Neon connection string)');
+	}
+
+	// Add Stripe/Printful env vars if store or merch is selected
+	const needsStripeEnvVars = config.modules.includes('store') || config.modules.includes('merch');
+	if (needsStripeEnvVars) {
+		envVarsInstructions.push('');
+		envVarsInstructions.push('   • Variable name: STRIPE_SECRET_KEY');
+		envVarsInstructions.push('   • Value: (your Stripe secret key)');
+		envVarsInstructions.push('');
+		envVarsInstructions.push('   • Variable name: STRIPE_WEBHOOK_SECRET');
+		envVarsInstructions.push('   • Value: (your Stripe webhook signing secret)');
+		envVarsInstructions.push('');
+		envVarsInstructions.push('   • Variable name: PRINTFUL_API_KEY');
+		envVarsInstructions.push('   • Value: (your Printful API key - optional)');
+	}
+
 	// Guide user to create Cloudflare Pages project with Git integration
 	cyanNote(
 		[
@@ -761,8 +1154,7 @@ async function main() {
 			'   • Build command: pnpm build',
 			'   • Build output directory: .svelte-kit/cloudflare',
 			'8. Expand "Environment variables" and add:',
-			'   • Variable name: NODE_VERSION',
-			'   • Value: 22',
+			...envVarsInstructions,
 			'9. Click "Save and Deploy"'
 		].join('\n'),
 		'Create Cloudflare Pages Project'
@@ -866,10 +1258,10 @@ async function main() {
 	cyanNote(summaryLines.join('\n'), 'Project Configuration');
 
 	p.log.info('Next steps:');
-	p.log.step(`  cd ${slug}`);
+	p.log.step(`  cd ${state.slug}`);
 	p.log.step(`  pnpm dev`);
 
-	p.outro(`Project created in ./${slug}`);
+	p.outro(`Project created in ./${state.slug}`);
 
 	return config;
 }

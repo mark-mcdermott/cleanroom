@@ -19,18 +19,25 @@ export const defaultNavLinks: NavLink[] = [
 		label: 'modules',
 		testId: 'nav-modules',
 		children: [
-			{ label: 'auth', href: '/modules/auth', testId: 'nav-modules-auth' },
 			{ label: 'blog', href: '/modules/blog', testId: 'nav-modules-blog' },
-			{ label: 'dark toggle', href: '/modules/dark-toggle', testId: 'nav-modules-dark-toggle' },
 			{ label: 'leaderboard', href: '/modules/leaderboard', testId: 'nav-modules-leaderboard' },
 			{ label: 'lobby', href: '/modules/lobby', testId: 'nav-modules-lobby' },
-			{ label: 'office users', href: '/modules/office-users', testId: 'nav-modules-office' },
 			{ label: 'resume', href: '/modules/resume', testId: 'nav-modules-resume' },
 			{ label: 'store', href: '/modules/store', testId: 'nav-modules-store' },
-			{ label: 'theme preview', href: '/modules/theme-preview', testId: 'nav-modules-theme-preview' },
 			{ label: 'tracker', href: '/modules/tracker', testId: 'nav-modules-tracker' },
 			{ label: 'videos', href: '/modules/videos', testId: 'nav-modules-videos' },
 			{ label: 'widgets', href: '/modules/widgets', testId: 'nav-modules-widgets' }
+		]
+	},
+	{
+		label: 'add-ons',
+		testId: 'nav-addons',
+		children: [
+			{ label: 'auth', href: '/modules/auth', testId: 'nav-addons-auth' },
+			{ label: 'dark toggle', href: '/modules/dark-toggle', testId: 'nav-addons-dark-toggle' },
+			{ label: 'merch', href: '/modules/store', testId: 'nav-addons-merch' },
+			{ label: 'office users', href: '/modules/office-users', testId: 'nav-addons-office' },
+			{ label: 'theme preview', href: '/modules/theme-preview', testId: 'nav-addons-theme-preview' }
 		]
 	},
 	{ label: 'login', href: '/login', testId: 'nav-login', hideWhenAuth: true },
