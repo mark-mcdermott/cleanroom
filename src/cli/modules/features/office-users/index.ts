@@ -8,7 +8,7 @@ function getOfficeSeedScript(): string {
 import { neon } from '@neondatabase/serverless';
 import { drizzle } from 'drizzle-orm/neon-http';
 import { generateId } from 'lucia';
-import { users } from './src/lib/server/db/schema';
+import { users } from '../src/lib/server/db/schema';
 
 if (!process.env.DATABASE_URL) {
 	throw new Error('DATABASE_URL environment variable is required');

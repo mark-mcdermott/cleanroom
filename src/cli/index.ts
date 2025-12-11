@@ -5,7 +5,7 @@ import { exec } from 'node:child_process';
 import { promisify } from 'node:util';
 import { existsSync } from 'node:fs';
 import { writeFile } from 'node:fs/promises';
-import { modules, type ProjectConfig } from './modules';
+import { modules, type ProjectConfig, type NameCapitalization } from './modules';
 import { featureModules } from './modules/features';
 import {
 	commandExists,
@@ -19,6 +19,30 @@ import {
 } from './helpers';
 
 const execAsync = promisify(exec);
+
+// Exec with timeout - rejects if command takes longer than specified ms
+async function execWithTimeout(
+	command: string,
+	options: { cwd: string },
+	timeoutMs: number
+): Promise<{ stdout: string; stderr: string }> {
+	return new Promise((resolve, reject) => {
+		const child = exec(command, options, (error, stdout, stderr) => {
+			if (error) {
+				reject(error);
+			} else {
+				resolve({ stdout, stderr });
+			}
+		});
+
+		const timeout = setTimeout(() => {
+			child.kill();
+			reject(new Error(`Command timed out after ${timeoutMs / 1000} seconds`));
+		}, timeoutMs);
+
+		child.on('exit', () => clearTimeout(timeout));
+	});
+}
 
 // Custom note function that preserves cyan color (p.note applies dim styling)
 function cyanNote(content: string, title: string): void {
@@ -107,6 +131,7 @@ type PromptStep =
 	| 'project-name'
 	| 'slug'
 	| 'pretty-name'
+	| 'name-capitalization'
 	| 'logo'
 	| 'site-type'
 	| 'database'
@@ -119,6 +144,7 @@ interface PromptState {
 	projectName?: string;
 	slug?: string;
 	prettyName?: string;
+	nameCapitalization?: NameCapitalization;
 	logo?: ProjectConfig['logo'];
 	siteType?: ProjectConfig['siteType'];
 	databaseConfig?: ProjectConfig['database'];
@@ -284,6 +310,60 @@ async function main() {
 					}
 					state.prettyName = customPrettyName;
 				}
+
+				stepHistory.push(currentStep);
+				currentStep = 'name-capitalization';
+				break;
+			}
+
+			case 'name-capitalization': {
+				// Get the display name for previewing
+				const baseName = state.prettyName || state.slug || state.projectName || 'my-app';
+
+				// Helper to apply capitalization
+				const applyCapitalization = (name: string, cap: NameCapitalization): string => {
+					switch (cap) {
+						case 'title':
+							return name.split(/[\s-]+/).map(word =>
+								word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+							).join(' ');
+						case 'sentence':
+							const words = name.split(/[\s-]+/);
+							return words.map((word, i) =>
+								i === 0 ? word.charAt(0).toUpperCase() + word.slice(1).toLowerCase() : word.toLowerCase()
+							).join(' ');
+						case 'lower':
+							return name.toLowerCase().replace(/-/g, ' ');
+						default:
+							return name;
+					}
+				};
+
+				const result = await p.select({
+					message: 'How should the site name be capitalized in the UI?',
+					options: [
+						{ value: 'title', label: `Title Case (${applyCapitalization(baseName, 'title')})` },
+						{ value: 'sentence', label: `Sentence case (${applyCapitalization(baseName, 'sentence')})` },
+						{ value: 'lower', label: `lowercase (${applyCapitalization(baseName, 'lower')})` },
+						{ value: 'back', label: '← Go back' }
+					]
+				});
+
+				if (p.isCancel(result)) {
+					p.cancel('Setup cancelled');
+					process.exit(0);
+				}
+
+				if (result === 'back') {
+					goBack();
+					break;
+				}
+
+				state.nameCapitalization = result as NameCapitalization;
+
+				// Apply the capitalization to the prettyName
+				const nameToCapitalize = state.prettyName || state.slug || state.projectName || 'my-app';
+				state.prettyName = applyCapitalization(nameToCapitalize, state.nameCapitalization);
 
 				stepHistory.push(currentStep);
 				currentStep = 'logo';
@@ -519,13 +599,26 @@ async function main() {
 			}
 
 			case 'addons': {
-				// Build add-on options
-				const addonOptions: { value: string; label: string; hint?: string }[] = [
-					{ value: 'auth', label: 'Auth', hint: 'Lucia v3 authentication with login/signup' },
+				// Determine if auth is required by the selected module
+				const authRequired = state.selectedModule && AUTH_REQUIRED_MODULES.includes(state.selectedModule);
+
+				// Show note if auth is required
+				if (authRequired) {
+					p.log.info(`Auth is required for ${state.selectedModule} and will be included automatically.`);
+				}
+
+				// Build add-on options - exclude auth if it's required (will be added automatically)
+				const addonOptions: { value: string; label: string; hint?: string }[] = [];
+
+				if (!authRequired) {
+					addonOptions.push({ value: 'auth', label: 'Auth', hint: 'Lucia v3 authentication with login/signup' });
+				}
+
+				addonOptions.push(
 					{ value: 'dark-toggle', label: 'Dark Toggle', hint: 'Dark/light mode toggle in nav' },
 					{ value: 'office-users', label: 'Office Users', hint: 'Seed users from The Office (requires auth)' },
 					{ value: 'theme-preview', label: 'Theme Preview', hint: 'Live theme/font preview with ThemeForseen' }
-				];
+				);
 
 				// Only show merch if store wasn't selected as the main module
 				if (state.selectedModule !== 'store') {
@@ -536,19 +629,12 @@ async function main() {
 					});
 				}
 
-				// Determine which modules auto-require auth
-				const authAutoSelected = state.selectedModule && AUTH_REQUIRED_MODULES.includes(state.selectedModule);
-
-				// Build initial values (auto-select auth for certain modules)
-				const initialAddons: string[] = [];
-				if (authAutoSelected) {
-					initialAddons.push('auth');
-				}
+				// Add go back option at the end
+				addonOptions.push({ value: 'back', label: '← Go back' });
 
 				const result = await p.multiselect({
 					message: 'Which add-ons would you like?',
 					options: addonOptions,
-					initialValues: initialAddons,
 					required: false
 				});
 
@@ -557,10 +643,16 @@ async function main() {
 					process.exit(0);
 				}
 
-				// Check if user deselected auth but has a module that requires it
 				const selectedAddons = result as string[];
-				if (authAutoSelected && !selectedAddons.includes('auth')) {
-					p.log.warn(`The ${state.selectedModule} module requires auth. Auth has been automatically added.`);
+
+				// Check if user selected "go back"
+				if (selectedAddons.includes('back')) {
+					goBack();
+					break;
+				}
+
+				// Auto-add auth if required by selected module
+				if (authRequired && !selectedAddons.includes('auth')) {
 					selectedAddons.push('auth');
 				}
 
@@ -763,6 +855,7 @@ async function main() {
 	const config: ProjectConfig = {
 		projectName: state.projectName!,
 		prettyName: state.prettyName,
+		nameCapitalization: state.nameCapitalization,
 		logo: state.logo!,
 		siteType: state.siteType!,
 		database: state.databaseConfig,
@@ -852,31 +945,29 @@ async function main() {
 
 	// If database is configured, set up tables and seed data
 	if (config.database && config.modules.length > 0) {
-		spinner.start('Setting up database...');
-		try {
-			await execAsync('pnpm db:push', { cwd: outputDir });
-			spinner.stop('Database tables created!');
+		p.log.step('Database setup requires interactive confirmation.');
+		cyanNote(
+			[
+				'Run these commands in your project directory:',
+				'',
+				'  cd ' + state.slug,
+				'  pnpm db:push',
+				'',
+				'When prompted "Is X table created or renamed?", select "create table".',
+				'',
+				'Then seed data (if applicable):',
+				config.modules.includes('office-users') ? '  pnpm db:seed-office' : '',
+				config.modules.includes('blog') ? '  pnpm db:seed-blog' : ''
+			]
+				.filter(Boolean)
+				.join('\n'),
+			'Database Setup'
+		);
 
-			// Run seed scripts for selected modules
-			if (config.modules.includes('office-users')) {
-				spinner.start('Seeding The Office users...');
-				await execAsync('pnpm db:seed-office', { cwd: outputDir });
-				spinner.stop('The Office users seeded!');
-				p.log.success('Login as: michael.scott@dundermifflin.com / dundermifflin');
-			}
-
-			if (config.modules.includes('blog')) {
-				spinner.start('Seeding blog posts...');
-				await execAsync('pnpm db:seed-blog', { cwd: outputDir });
-				spinner.stop('Blog posts seeded!');
-			}
-		} catch (error) {
-			spinner.stop('Database setup encountered an error');
-			p.log.warn(`Database setup: ${error instanceof Error ? error.message : 'Unknown error'}`);
-			p.log.info(
-				'You can run database commands manually later: pnpm db:push && pnpm db:seed-office'
-			);
-		}
+		await p.confirm({
+			message: 'Press Enter to continue (you can set up the database later)',
+			initialValue: true
+		});
 	}
 
 	// Initialize git

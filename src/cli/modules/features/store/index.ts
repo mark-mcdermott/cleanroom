@@ -1131,15 +1131,15 @@ export const storeModule: FeatureModule = {
 			let existingSchema = await readFile(schemaPath, 'utf-8');
 
 			// Add jsonb and integer imports if not present
-			if (!existingSchema.includes('jsonb')) {
+			if (!existingSchema.includes('jsonb') || !existingSchema.includes('integer')) {
 				existingSchema = existingSchema.replace(
-					/import \{ pgTable, text, timestamp/,
-					'import { pgTable, text, timestamp, jsonb, integer'
-				);
-			} else if (!existingSchema.includes('integer')) {
-				existingSchema = existingSchema.replace(
-					/import \{ pgTable, text, timestamp, jsonb/,
-					'import { pgTable, text, timestamp, jsonb, integer'
+					/import \{([^}]+)\} from 'drizzle-orm\/pg-core'/,
+					(match, imports) => {
+						const currentImports = imports.split(',').map((s: string) => s.trim());
+						if (!currentImports.includes('jsonb')) currentImports.push('jsonb');
+						if (!currentImports.includes('integer')) currentImports.push('integer');
+						return `import { ${currentImports.join(', ')} } from 'drizzle-orm/pg-core'`;
+					}
 				);
 			}
 

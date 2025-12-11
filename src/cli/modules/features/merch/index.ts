@@ -709,25 +709,35 @@ function getMerchOrderConfirmationPage(config: ProjectConfig): string {
 // ============================================================================
 
 function injectMerchNavLink(layoutContent: string): string {
+	// Skip if merch link already exists
+	if (layoutContent.includes("'/merch'") || layoutContent.includes('"/merch"')) {
+		return layoutContent;
+	}
+
 	// Look for navLinks array definition and add merch link
-	if (layoutContent.includes('navLinks') && layoutContent.includes("href: '/'")) {
+	// Match the closing of the navLinks array and insert merch before it
+	if (layoutContent.includes('const navLinks')) {
+		// Find the navLinks array and add merch link before the closing ];
+		// Match pattern like: { href: '/contact', label: 'Contact' }\n\t];
 		layoutContent = layoutContent.replace(
-			/(const\s+navLinks\s*=\s*\[[\s\S]*?)(\s*\];)/,
-			(match, before, after) => {
-				if (before.includes("'/merch'")) return match;
-				const merchLink = `\n\t{ label: 'merch', href: '/merch' },`;
-				return before + merchLink + after;
-			}
+			/(\{\s*href:\s*'\/contact',\s*label:\s*'Contact'\s*\})([\s\n\t]*\];)/,
+			`$1,\n\t\t{ href: '/merch', label: 'Merch' }$2`
+		);
+
+		// Also try matching after hideWhenAuth links (for auth-enabled sites)
+		layoutContent = layoutContent.replace(
+			/(hideWhenAuth:\s*true[^}]*\})([\s\n\t]*\];)/,
+			`$1,\n\t\t{ href: '/merch', label: 'Merch' }$2`
 		);
 	}
 
 	// Pattern 2: Look for inline nav links in HTML and add merch
 	if (layoutContent.includes('<nav') && layoutContent.includes('href="/"')) {
-		const navLinkPattern = /(<a\s+href="\/[^"]*"[^>]*>[^<]*<\/a>)(\s*)(<!--\s*(Auth|User|Login|Desktop Auth)/i;
+		const navLinkPattern = /(<a\s+href="\/[^"]*"[^>]*>[^<]*<\/a>)(\s*)(<!--\s*(Auth|User|Login|Desktop Auth))/i;
 		if (navLinkPattern.test(layoutContent)) {
 			layoutContent = layoutContent.replace(
 				navLinkPattern,
-				`$1\n\t\t\t\t<a href="/merch" class="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">merch</a>$2$3`
+				`$1\n\t\t\t\t<a href="/merch" class="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">Merch</a>$2$3`
 			);
 		}
 	}
@@ -861,15 +871,15 @@ export function createPrintfulClient(apiKey: string): PrintfulClient {
 			let existingSchema = await readFile(schemaPath, 'utf-8');
 
 			// Add jsonb and integer imports if not present
-			if (!existingSchema.includes('jsonb')) {
+			if (!existingSchema.includes('jsonb') || !existingSchema.includes('integer')) {
 				existingSchema = existingSchema.replace(
-					/import \{ pgTable, text, timestamp/,
-					'import { pgTable, text, timestamp, jsonb, integer'
-				);
-			} else if (!existingSchema.includes('integer')) {
-				existingSchema = existingSchema.replace(
-					/import \{ pgTable, text, timestamp, jsonb/,
-					'import { pgTable, text, timestamp, jsonb, integer'
+					/import \{([^}]+)\} from 'drizzle-orm\/pg-core'/,
+					(match, imports) => {
+						const currentImports = imports.split(',').map((s: string) => s.trim());
+						if (!currentImports.includes('jsonb')) currentImports.push('jsonb');
+						if (!currentImports.includes('integer')) currentImports.push('integer');
+						return `import { ${currentImports.join(', ')} } from 'drizzle-orm/pg-core'`;
+					}
 				);
 			}
 

@@ -116,19 +116,28 @@ export const themePreviewModule: FeatureModule = {
 		// Write theme-preview page
 		await writeFile(join(routeDir, '+page.svelte'), getThemePreviewPage());
 
-		// Update the root layout to import theme-forseen
+		// Update the root layout to import theme-forseen (client-side only)
 		const layoutPath = join(outputDir, 'src', 'routes', '+layout.svelte');
 		try {
 			let layoutContent = await readFile(layoutPath, 'utf-8');
 
 			// Check if theme-forseen is already imported
 			if (!layoutContent.includes('theme-forseen')) {
-				// Add import to existing script block
+				// Add onMount import and dynamic theme-forseen import
 				if (layoutContent.includes('<script')) {
-					layoutContent = layoutContent.replace(
-						/<script([^>]*)>/,
-						`<script$1>\n\timport 'theme-forseen';`
-					);
+					// Check if onMount is already imported
+					if (layoutContent.includes('onMount')) {
+						// Just add the theme-forseen import inside existing onMount or add new one
+						layoutContent = layoutContent.replace(
+							/<script([^>]*)>/,
+							`<script$1>\n\timport { onMount } from 'svelte';\n\tonMount(() => { import('theme-forseen'); });`
+						);
+					} else {
+						layoutContent = layoutContent.replace(
+							/<script([^>]*)>/,
+							`<script$1>\n\timport { onMount } from 'svelte';\n\tonMount(() => { import('theme-forseen'); });`
+						);
+					}
 				}
 
 				await writeFile(layoutPath, layoutContent);
@@ -144,7 +153,7 @@ export const themePreviewModule: FeatureModule = {
 
 			packageJson.dependencies = {
 				...packageJson.dependencies,
-				'theme-forseen': '^1.0.0',
+				'theme-forseen': '^0.1.1',
 				'lucide-svelte': '^0.468.0'
 			};
 

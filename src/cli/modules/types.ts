@@ -1,6 +1,9 @@
+export type NameCapitalization = 'title' | 'sentence' | 'lower';
+
 export interface ProjectConfig {
 	projectName: string;
 	prettyName?: string;
+	nameCapitalization?: NameCapitalization;
 	logo: {
 		type: 'file' | 'emoji';
 		value: string;

@@ -1120,7 +1120,7 @@ function getWidgetsSeedScript(names: WidgetEntityNames): string {
 	return `import 'dotenv/config';
 import { neon } from '@neondatabase/serverless';
 import { drizzle } from 'drizzle-orm/neon-http';
-import { demoUsers, demo${names.widget.pascalPlural}, demo${names.thingy.pascalPlural}, demoNotes, demoPhotos } from './src/lib/server/db/schema';
+import { demoUsers, demo${names.widget.pascalPlural}, demo${names.thingy.pascalPlural}, demoNotes, demoPhotos } from '../src/lib/server/db/schema';
 import { hash } from '@node-rs/argon2';
 
 if (!process.env.DATABASE_URL) {

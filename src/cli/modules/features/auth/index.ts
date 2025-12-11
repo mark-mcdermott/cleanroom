@@ -736,7 +736,7 @@ export const authModule: FeatureModule = {
 		packageJson.scripts = {
 			...packageJson.scripts,
 			'db:generate': 'drizzle-kit generate',
-			'db:push': 'drizzle-kit push',
+			'db:push': 'drizzle-kit push --force',
 			'db:studio': 'drizzle-kit studio'
 		};
 

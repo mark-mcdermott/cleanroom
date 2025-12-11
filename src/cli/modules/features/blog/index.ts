@@ -122,7 +122,7 @@ function getBlogSeedScript(): string {
 import { neon } from '@neondatabase/serverless';
 import { drizzle } from 'drizzle-orm/neon-http';
 import { generateId } from 'lucia';
-import { posts } from './src/lib/server/db/schema';
+import { posts } from '../src/lib/server/db/schema';
 
 if (!process.env.DATABASE_URL) {
 	throw new Error('DATABASE_URL environment variable is required');
@@ -734,7 +734,7 @@ export * from './schema';
 	packageJson.scripts = {
 		...packageJson.scripts,
 		'db:generate': 'drizzle-kit generate',
-		'db:push': 'drizzle-kit push',
+		'db:push': 'drizzle-kit push --force',
 		'db:studio': 'drizzle-kit studio',
 		'db:seed-blog': 'npx tsx scripts/seed-blog.ts'
 	};

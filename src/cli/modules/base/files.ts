@@ -128,6 +128,17 @@ export function getAppCss(): string {
   --app-border: hsl(240 5.9% 90%);
   --app-input: hsl(240 5.9% 90%);
   --app-ring: hsl(240 5.9% 10%);
+
+  /* ThemeForseen-compatible CSS variables (for live theme preview) */
+  --color-bg: hsl(0 0% 100%);
+  --color-text: hsl(240 10% 3.9%);
+  --color-primary: hsl(240 5.9% 10%);
+  --color-accent: hsl(240 4.8% 95.9%);
+  --color-card-bg: hsl(240 4.8% 95.9%);
+  --color-extra: hsl(200 80% 60%);
+  --color-primary-shadow: hsl(240 5.9% 5%);
+  --font-heading: "Geist Variable", Georgia, serif;
+  --font-body: "Inter", system-ui, sans-serif;
 }
 
 /* Tailwind v4 theme - reference CSS variables */
@@ -210,6 +221,41 @@ export function getAppCss(): string {
 @layer utilities {
   .font-logo {
     font-family: var(--font-logo);
+  }
+}
+
+/* View Transitions API - smooth page transitions */
+@keyframes fade-in {
+  from { opacity: 0; }
+}
+
+@keyframes fade-out {
+  to { opacity: 0; }
+}
+
+@keyframes slide-from-right {
+  from { transform: translateX(30px); }
+}
+
+@keyframes slide-to-left {
+  to { transform: translateX(-30px); }
+}
+
+::view-transition-old(root) {
+  animation: 90ms cubic-bezier(0.4, 0, 1, 1) both fade-out,
+    300ms cubic-bezier(0.4, 0, 0.2, 1) both slide-to-left;
+}
+
+::view-transition-new(root) {
+  animation: 210ms cubic-bezier(0, 0, 0.2, 1) 90ms both fade-in,
+    300ms cubic-bezier(0.4, 0, 0.2, 1) both slide-from-right;
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none;
   }
 }
 `;

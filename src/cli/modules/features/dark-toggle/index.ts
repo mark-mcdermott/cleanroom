@@ -192,6 +192,17 @@ function getDarkModeCSS(): string {
 	--app-input: hsl(240 5.9% 90%);
 	--app-ring: hsl(240 5.9% 10%);
 
+	/* ThemeForseen-compatible CSS variables (for live theme preview) */
+	--color-bg: hsl(0 0% 100%);
+	--color-text: hsl(240 10% 3.9%);
+	--color-primary: hsl(240 5.9% 10%);
+	--color-accent: hsl(240 4.8% 95.9%);
+	--color-card-bg: hsl(240 4.8% 95.9%);
+	--color-extra: hsl(200 80% 60%);
+	--color-primary-shadow: hsl(240 5.9% 5%);
+	--font-heading: "Geist Variable", Georgia, serif;
+	--font-body: "Inter", system-ui, sans-serif;
+
 	/* Animations */
 	--app-animate-accordion-down: accordion-down 0.2s ease-out;
 	--app-animate-accordion-up: accordion-up 0.2s ease-out;
@@ -218,6 +229,15 @@ function getDarkModeCSS(): string {
 	--app-border: hsl(240 3.7% 15.9%);
 	--app-input: hsl(240 3.7% 15.9%);
 	--app-ring: hsl(240 4.9% 83.9%);
+
+	/* ThemeForseen-compatible CSS variables (dark mode) */
+	--color-bg: hsl(240 10% 3.9%);
+	--color-text: hsl(0 0% 98%);
+	--color-primary: hsl(0 0% 98%);
+	--color-accent: hsl(240 3.7% 15.9%);
+	--color-card-bg: hsl(240 3.7% 15.9%);
+	--color-extra: hsl(200 70% 50%);
+	--color-primary-shadow: hsl(240 10% 8%);
 }
 
 /* Keyframe animations */
@@ -364,9 +384,9 @@ export const darkToggleModule: FeatureModule = {
 
 				// Check if Nav component is used and add showThemeToggle prop
 				if (layout.includes('<Nav') && !layout.includes('showThemeToggle')) {
-					// Add showThemeToggle prop to Nav component
+					// Add showThemeToggle prop to Nav component (handles multiline)
 					layout = layout.replace(
-						/<Nav(\s)/,
+						/<Nav([\s\n\t]+)/,
 						`<Nav showThemeToggle={true} themeToggleMode="${mode}"$1`
 					);
 
