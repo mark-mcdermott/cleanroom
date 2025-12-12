@@ -842,6 +842,13 @@ async function main() {
 		}
 	}
 
+	// Ensure auth runs first if present (creates schema.ts that other modules append to)
+	if (selectedModules.includes('auth') && selectedModules[0] !== 'auth') {
+		const authIndex = selectedModules.indexOf('auth');
+		selectedModules.splice(authIndex, 1);
+		selectedModules.unshift('auth');
+	}
+
 	if (selectedModules.length > 0) {
 		p.log.success(`Selected: ${selectedModules.join(', ')}`);
 	}

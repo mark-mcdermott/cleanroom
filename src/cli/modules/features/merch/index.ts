@@ -911,6 +911,31 @@ export type NewOrder = typeof orders.$inferInsert;
 `;
 				await writeFile(schemaPath, existingSchema + '\n' + ordersSchema);
 			}
+			// Update db index to export orders
+			const dbIndexPath = join(outputDir, 'src', 'lib', 'server', 'db', 'index.ts');
+			try {
+				let dbIndex = await readFile(dbIndexPath, 'utf-8');
+				if (!dbIndex.includes('orders')) {
+					// Handle both "export * from './schema'" and "export { ... } from './schema'" patterns
+					if (dbIndex.includes("export * from './schema'")) {
+						// Already exports everything, no change needed
+					} else if (dbIndex.includes("export {")) {
+						dbIndex = dbIndex.replace(
+							/export \{([^}]*)\} from ['"]\.\/schema['"]/,
+							(match, exports) => {
+								const currentExports = exports.split(',').map((s: string) => s.trim()).filter(Boolean);
+								if (!currentExports.includes('orders')) {
+									currentExports.push('orders');
+								}
+								return `export { ${currentExports.join(', ')} } from './schema'`;
+							}
+						);
+						await writeFile(dbIndexPath, dbIndex);
+					}
+				}
+			} catch {
+				// db/index.ts doesn't exist or can't be read
+			}
 		} catch {
 			console.log('  → Note: Orders schema requires auth module to be installed first');
 		}
