@@ -171,73 +171,70 @@ function getDarkModeCSS(): string {
 	--app-radius-lg: var(--app-radius);
 	--app-radius-xl: calc(var(--app-radius) + 4px);
 
-	/* Colors - Light mode defaults */
-	--app-background: hsl(0 0% 100%);
-	--app-foreground: hsl(240 10% 3.9%);
-	--app-card: hsl(0 0% 100%);
-	--app-card-foreground: hsl(240 10% 3.9%);
-	--app-popover: hsl(0 0% 100%);
-	--app-popover-foreground: hsl(240 10% 3.9%);
-	--app-primary: hsl(240 5.9% 10%);
+	/* ThemeForseen CSS variables - these get updated by ThemeForseen when previewing themes */
+	/* Default values are the site's base light theme */
+	--color-bg: hsl(0 0% 100%);
+	--color-text: hsl(240 10% 3.9%);
+	--color-primary: hsl(240 5.9% 10%);
+	--color-primary-shadow: hsl(240 5.9% 5%);
+	--color-accent: hsl(200 80% 50%);
+	--color-accent-shadow: hsl(200 80% 40%);
+	--color-card-bg: hsl(240 4.8% 95.9%);
+	--color-extra: hsl(280 80% 60%);
+	--color-heading: hsl(240 10% 3.9%);
+	--color-h1: hsl(240 10% 3.9%);
+	--color-h2: hsl(240 10% 3.9%);
+	--color-h3: hsl(240 10% 3.9%);
+	--font-heading: "Geist Variable", Georgia, serif;
+	--font-body: "Inter", system-ui, sans-serif;
+
+	/* App design system colors (derived from ThemeForseen vars for live preview) */
+	--app-background: var(--color-bg);
+	--app-foreground: var(--color-text);
+	--app-card: var(--color-bg);
+	--app-card-foreground: var(--color-text);
+	--app-popover: var(--color-bg);
+	--app-popover-foreground: var(--color-text);
+	--app-primary: var(--color-primary);
 	--app-primary-foreground: hsl(0 0% 98%);
-	--app-secondary: hsl(240 4.8% 95.9%);
-	--app-secondary-foreground: hsl(240 5.9% 10%);
-	--app-muted: hsl(240 4.8% 95.9%);
+	--app-secondary: var(--color-card-bg);
+	--app-secondary-foreground: var(--color-text);
+	--app-muted: var(--color-card-bg);
 	--app-muted-foreground: hsl(240 3.8% 46.1%);
-	--app-accent: hsl(240 4.8% 95.9%);
-	--app-accent-foreground: hsl(240 5.9% 10%);
+	--app-accent: var(--color-accent);
+	--app-accent-foreground: hsl(0 0% 98%);
 	--app-destructive: hsl(0 84.2% 60.2%);
 	--app-destructive-foreground: hsl(0 0% 98%);
 	--app-border: hsl(240 5.9% 90%);
 	--app-input: hsl(240 5.9% 90%);
-	--app-ring: hsl(240 5.9% 10%);
-
-	/* ThemeForseen-compatible CSS variables (for live theme preview) */
-	--color-bg: hsl(0 0% 100%);
-	--color-text: hsl(240 10% 3.9%);
-	--color-primary: hsl(240 5.9% 10%);
-	--color-accent: hsl(240 4.8% 95.9%);
-	--color-card-bg: hsl(240 4.8% 95.9%);
-	--color-extra: hsl(200 80% 60%);
-	--color-primary-shadow: hsl(240 5.9% 5%);
-	--font-heading: "Geist Variable", Georgia, serif;
-	--font-body: "Inter", system-ui, sans-serif;
+	--app-ring: var(--color-primary);
 
 	/* Animations */
 	--app-animate-accordion-down: accordion-down 0.2s ease-out;
 	--app-animate-accordion-up: accordion-up 0.2s ease-out;
 }
 
-/* Dark mode overrides */
+/* Dark mode overrides - update ThemeForseen base vars */
 .dark {
-	--app-background: hsl(240 10% 3.9%);
-	--app-foreground: hsl(0 0% 98%);
-	--app-card: hsl(240 10% 3.9%);
-	--app-card-foreground: hsl(0 0% 98%);
-	--app-popover: hsl(240 10% 3.9%);
-	--app-popover-foreground: hsl(0 0% 98%);
-	--app-primary: hsl(0 0% 98%);
-	--app-primary-foreground: hsl(240 5.9% 10%);
-	--app-secondary: hsl(240 3.7% 15.9%);
-	--app-secondary-foreground: hsl(0 0% 98%);
-	--app-muted: hsl(240 3.7% 15.9%);
-	--app-muted-foreground: hsl(240 5% 64.9%);
-	--app-accent: hsl(240 3.7% 15.9%);
-	--app-accent-foreground: hsl(0 0% 98%);
-	--app-destructive: hsl(0 62.8% 30.6%);
-	--app-destructive-foreground: hsl(0 0% 98%);
-	--app-border: hsl(240 3.7% 15.9%);
-	--app-input: hsl(240 3.7% 15.9%);
-	--app-ring: hsl(240 4.9% 83.9%);
-
-	/* ThemeForseen-compatible CSS variables (dark mode) */
 	--color-bg: hsl(240 10% 3.9%);
 	--color-text: hsl(0 0% 98%);
 	--color-primary: hsl(0 0% 98%);
-	--color-accent: hsl(240 3.7% 15.9%);
-	--color-card-bg: hsl(240 3.7% 15.9%);
-	--color-extra: hsl(200 70% 50%);
 	--color-primary-shadow: hsl(240 10% 8%);
+	--color-accent: hsl(200 70% 50%);
+	--color-accent-shadow: hsl(200 70% 40%);
+	--color-card-bg: hsl(240 3.7% 15.9%);
+	--color-extra: hsl(280 70% 60%);
+	--color-heading: hsl(0 0% 98%);
+	--color-h1: hsl(0 0% 98%);
+	--color-h2: hsl(0 0% 98%);
+	--color-h3: hsl(0 0% 98%);
+
+	/* Dark-specific app overrides that don't map to ThemeForseen */
+	--app-primary-foreground: hsl(240 5.9% 10%);
+	--app-muted-foreground: hsl(240 5% 64.9%);
+	--app-destructive: hsl(0 62.8% 30.6%);
+	--app-border: hsl(240 3.7% 15.9%);
+	--app-input: hsl(240 3.7% 15.9%);
 }
 
 /* Keyframe animations */
@@ -279,6 +276,8 @@ function getDarkModeCSS(): string {
 	--radius-xl: var(--app-radius-xl);
 	--animate-accordion-down: var(--app-animate-accordion-down);
 	--animate-accordion-up: var(--app-animate-accordion-up);
+	--font-heading: var(--font-heading);
+	--font-body: var(--font-body);
 }
 
 /* Base dark mode styles */
@@ -287,8 +286,27 @@ function getDarkModeCSS(): string {
 		@apply border-border;
 	}
 
+	html {
+		font-family: var(--font-body);
+	}
+
 	body {
 		@apply bg-background text-foreground;
+	}
+
+	h1 {
+		font-family: var(--font-heading);
+		color: var(--color-h1, var(--color-heading, inherit));
+	}
+
+	h2 {
+		font-family: var(--font-heading);
+		color: var(--color-h2, var(--color-heading, inherit));
+	}
+
+	h3 {
+		font-family: var(--font-heading);
+		color: var(--color-h3, var(--color-heading, inherit));
 	}
 
 	.dark body {

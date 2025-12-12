@@ -134,6 +134,7 @@ type PromptStep =
 	| 'name-capitalization'
 	| 'logo'
 	| 'site-type'
+	| 'smaller-site-type'
 	| 'database'
 	| 'module'
 	| 'addons'
@@ -423,7 +424,7 @@ async function main() {
 				} else {
 					const emoji = await p.text({
 						message: 'Choose an emoji for your project',
-						placeholder: '🚀',
+						placeholder: 'e.g. rocket, star, coffee',
 						validate(value) {
 							if (!value) return 'Emoji is required';
 						}
@@ -458,24 +459,66 @@ async function main() {
 							hint: 'Server-rendered, ideal for auth, dynamic content'
 						},
 						{
+							value: 'static-site',
+							label: 'Static site',
+							hint: 'Good for most blogs and static content sites'
+						},
+						{
+							value: 'smaller',
+							label: 'A smaller site',
+							hint: 'Hello World, demo or landing page'
+						},
+						{ value: 'back', label: '← Go back' }
+					]
+				});
+
+				if (p.isCancel(result)) {
+					p.cancel('Setup cancelled');
+					process.exit(0);
+				}
+
+				if (result === 'back') {
+					goBack();
+					break;
+				}
+
+				if (result === 'smaller') {
+					stepHistory.push(currentStep);
+					currentStep = 'smaller-site-type';
+					break;
+				}
+
+				state.siteType = result as ProjectConfig['siteType'];
+				stepHistory.push(currentStep);
+
+				// For SSR sites, go to database setup, then module selection
+				if (state.siteType === 'ssr-site') {
+					currentStep = 'database';
+				} else {
+					// For non-SSR sites, skip to deployment
+					currentStep = 'done' as PromptStep;
+				}
+				break;
+			}
+
+			case 'smaller-site-type': {
+				const result = await p.select({
+					message: 'What type of smaller site?',
+					options: [
+						{
 							value: 'demo-page',
-							label: 'Simple demo page',
-							hint: 'Prerendered, SPA-like navigation, no SSR'
+							label: 'Hello World / demo page',
+							hint: 'Minimal single page'
 						},
 						{
 							value: 'landing-simple',
 							label: 'Simple landing page',
-							hint: 'Prerendered, SPA-like navigation, responsive'
+							hint: 'Responsive single page'
 						},
 						{
 							value: 'landing-sections',
 							label: 'Landing page with scroll sections',
-							hint: 'Prerendered, SPA-like navigation, section nav & mobile menu'
-						},
-						{
-							value: 'static-site',
-							label: 'Simple static site',
-							hint: 'Prerendered, SPA-like navigation, multiple pages'
+							hint: 'Section nav & mobile menu'
 						},
 						{ value: 'back', label: '← Go back' }
 					]
@@ -493,14 +536,7 @@ async function main() {
 
 				state.siteType = result as ProjectConfig['siteType'];
 				stepHistory.push(currentStep);
-
-				// For SSR sites, go to database setup, then module selection
-				if (state.siteType === 'ssr-site') {
-					currentStep = 'database';
-				} else {
-					// For non-SSR sites, skip to deployment
-					currentStep = 'done' as PromptStep;
-				}
+				currentStep = 'done' as PromptStep;
 				break;
 			}
 

@@ -110,35 +110,41 @@ export function getAppCss(): string {
 :root {
   --font-logo: "Geist Variable", system-ui, sans-serif;
 
-  /* Colors - Light mode */
-  --app-background: hsl(0 0% 100%);
-  --app-foreground: hsl(240 10% 3.9%);
-  --app-card: hsl(0 0% 100%);
-  --app-card-foreground: hsl(240 10% 3.9%);
-  --app-primary: hsl(240 5.9% 10%);
+  /* ThemeForseen CSS variables - these get updated by ThemeForseen when previewing themes */
+  /* Default values are the site's base theme */
+  --color-bg: hsl(0 0% 100%);
+  --color-text: hsl(240 10% 3.9%);
+  --color-primary: hsl(240 5.9% 10%);
+  --color-primary-shadow: hsl(240 5.9% 5%);
+  --color-accent: hsl(200 80% 50%);
+  --color-accent-shadow: hsl(200 80% 40%);
+  --color-card-bg: hsl(240 4.8% 95.9%);
+  --color-extra: hsl(280 80% 60%);
+  --color-heading: hsl(240 10% 3.9%);
+  --color-h1: hsl(240 10% 3.9%);
+  --color-h2: hsl(240 10% 3.9%);
+  --color-h3: hsl(240 10% 3.9%);
+  --font-heading: "Geist Variable", Georgia, serif;
+  --font-body: "Inter", system-ui, sans-serif;
+
+  /* App design system colors (derived from ThemeForseen vars for live preview) */
+  --app-background: var(--color-bg);
+  --app-foreground: var(--color-text);
+  --app-card: var(--color-bg);
+  --app-card-foreground: var(--color-text);
+  --app-primary: var(--color-primary);
   --app-primary-foreground: hsl(0 0% 98%);
-  --app-secondary: hsl(240 4.8% 95.9%);
-  --app-secondary-foreground: hsl(240 5.9% 10%);
-  --app-muted: hsl(240 4.8% 95.9%);
+  --app-secondary: var(--color-card-bg);
+  --app-secondary-foreground: var(--color-text);
+  --app-muted: var(--color-card-bg);
   --app-muted-foreground: hsl(240 3.8% 46.1%);
-  --app-accent: hsl(240 4.8% 95.9%);
-  --app-accent-foreground: hsl(240 5.9% 10%);
+  --app-accent: var(--color-accent);
+  --app-accent-foreground: hsl(0 0% 98%);
   --app-destructive: hsl(0 84.2% 60.2%);
   --app-destructive-foreground: hsl(0 0% 98%);
   --app-border: hsl(240 5.9% 90%);
   --app-input: hsl(240 5.9% 90%);
-  --app-ring: hsl(240 5.9% 10%);
-
-  /* ThemeForseen-compatible CSS variables (for live theme preview) */
-  --color-bg: hsl(0 0% 100%);
-  --color-text: hsl(240 10% 3.9%);
-  --color-primary: hsl(240 5.9% 10%);
-  --color-accent: hsl(240 4.8% 95.9%);
-  --color-card-bg: hsl(240 4.8% 95.9%);
-  --color-extra: hsl(200 80% 60%);
-  --color-primary-shadow: hsl(240 5.9% 5%);
-  --font-heading: "Geist Variable", Georgia, serif;
-  --font-body: "Inter", system-ui, sans-serif;
+  --app-ring: var(--color-primary);
 }
 
 /* Tailwind v4 theme - reference CSS variables */
@@ -160,11 +166,13 @@ export function getAppCss(): string {
   --color-border: var(--app-border);
   --color-input: var(--app-input);
   --color-ring: var(--app-ring);
+  --font-heading: var(--font-heading);
+  --font-body: var(--font-body);
 }
 
 @layer base {
   html {
-    font-family: "Inter", system-ui, sans-serif;
+    font-family: var(--font-body);
     @apply antialiased bg-background text-foreground;
     scroll-behavior: smooth;
   }
@@ -182,11 +190,20 @@ export function getAppCss(): string {
   }
 
   h1 {
+    font-family: var(--font-heading);
+    color: var(--color-h1, var(--color-heading, inherit));
     @apply font-semibold tracking-tight text-4xl sm:text-5xl;
   }
 
   h2 {
+    font-family: var(--font-heading);
+    color: var(--color-h2, var(--color-heading, inherit));
     @apply font-semibold tracking-tight text-2xl mt-10 mb-4;
+  }
+
+  h3 {
+    font-family: var(--font-heading);
+    color: var(--color-h3, var(--color-heading, inherit));
   }
 
   h1, h2, h3, h4 {
