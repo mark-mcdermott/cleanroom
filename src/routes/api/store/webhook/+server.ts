@@ -96,8 +96,9 @@ export const POST: RequestHandler = async ({ request, platform }) => {
 			});
 
 			// Get shipping address from Stripe session
-			const shippingDetails = (session as unknown as {
-				shipping_details?: {
+			// Stripe puts shipping in different places depending on API version
+			const sessionAny = session as unknown as {
+				shipping?: {
 					name?: string;
 					address?: {
 						line1?: string;
@@ -108,9 +109,27 @@ export const POST: RequestHandler = async ({ request, platform }) => {
 						country?: string;
 					};
 				};
-			}).shipping_details;
+				collected_information?: {
+					shipping_details?: {
+						name?: string;
+						address?: {
+							line1?: string;
+							line2?: string;
+							city?: string;
+							state?: string;
+							postal_code?: string;
+							country?: string;
+						};
+					};
+				};
+			};
 
-			console.log('Shipping details from Stripe:', JSON.stringify(shippingDetails, null, 2));
+			// Try multiple locations for shipping info
+			const shippingDetails = sessionAny.shipping || sessionAny.collected_information?.shipping_details;
+
+			console.log('Shipping from session.shipping:', JSON.stringify(sessionAny.shipping, null, 2));
+			console.log('Shipping from collected_information:', JSON.stringify(sessionAny.collected_information?.shipping_details, null, 2));
+			console.log('Final shippingDetails:', JSON.stringify(shippingDetails, null, 2));
 
 			if (!shippingDetails?.address) {
 				console.error('No shipping address in session');
