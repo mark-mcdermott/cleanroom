@@ -16,6 +16,9 @@ declare global {
 				DATABASE_URL: string;
 				AVATARS: R2Bucket;
 				WIDGET_PHOTOS: R2Bucket;
+				STRIPE_SECRET_KEY?: string;
+				STRIPE_WEBHOOK_SECRET?: string;
+				PRINTFUL_API_KEY?: string;
 			};
 		}
 	}

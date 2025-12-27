@@ -24,6 +24,36 @@ function getDefaultEntityNames(): WidgetEntityNames {
 // DATABASE SCHEMA
 // ============================================================================
 
+// Demo auth tables (required for widgets module)
+function getDemoAuthSchema(): string {
+	return `
+// Demo users table for sandboxed auth demos
+export const demoUsers = pgTable('demo_users', {
+	id: text('id').primaryKey(),
+	email: text('email').notNull().unique(),
+	passwordHash: text('password_hash').notNull(),
+	name: text('name'),
+	admin: boolean('admin').notNull().default(false),
+	createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+	updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow()
+});
+
+// Demo sessions table for sandboxed auth demos
+export const demoSessions = pgTable('demo_sessions', {
+	id: text('id').primaryKey(),
+	userId: text('user_id')
+		.notNull()
+		.references(() => demoUsers.id, { onDelete: 'cascade' }),
+	expiresAt: timestamp('expires_at', { withTimezone: true, mode: 'date' }).notNull()
+});
+
+// Demo auth types
+export type DemoUser = typeof demoUsers.$inferSelect;
+export type NewDemoUser = typeof demoUsers.$inferInsert;
+export type DemoSession = typeof demoSessions.$inferSelect;
+`;
+}
+
 function getWidgetsSchema(names: WidgetEntityNames): string {
 	return `// Demo ${names.widget.plural} - parent items owned by users
 export const demo${names.widget.pascalPlural} = pgTable('demo_${names.widget.plural}', {
@@ -1184,6 +1214,34 @@ seed().catch(console.error);
 }
 
 // ============================================================================
+// DEMO AUTH FUNCTION (appended to auth.ts)
+// ============================================================================
+
+function getDemoLuciaFunction(): string {
+	return `
+
+// Demo auth for widgets module (separate from main auth)
+export function createDemoLucia(db: Database) {
+	const adapter = new DrizzlePostgreSQLAdapter(db, demoSessions, demoUsers);
+
+	return new Lucia(adapter, {
+		sessionCookie: {
+			name: 'demo_auth_session',
+			attributes: {
+				secure: !dev
+			}
+		},
+		getUserAttributes: (attributes) => ({
+			email: attributes.email,
+			name: attributes.name,
+			admin: attributes.admin
+		})
+	});
+}
+`;
+}
+
+// ============================================================================
 // MAIN MODULE EXPORT
 // ============================================================================
 
@@ -1220,9 +1278,51 @@ export const widgetsModule: FeatureModule = {
 			await mkdir(join(outputDir, 'src', 'lib', 'server', 'db'), { recursive: true });
 		}
 
-		// Append widgets schema
+		// Append widgets schema (including demo auth tables if not present)
 		if (existingSchema) {
-			await writeFile(schemaPath, existingSchema + '\n' + getWidgetsSchema(names));
+			let schemaToAppend = '';
+
+			// Add demoUsers and demoSessions if not already in schema
+			// Use specific pattern to avoid matching comments or partial strings
+			if (!existingSchema.includes('export const demoUsers')) {
+				// Ensure boolean is imported (demo auth schema uses it)
+				if (!existingSchema.includes('boolean') && existingSchema.includes("from 'drizzle-orm/pg-core'")) {
+					existingSchema = existingSchema.replace(
+						/import \{ ([^}]+) \} from 'drizzle-orm\/pg-core'/,
+						"import { $1, boolean } from 'drizzle-orm/pg-core'"
+					);
+				}
+				schemaToAppend += getDemoAuthSchema();
+			}
+
+			schemaToAppend += '\n' + getWidgetsSchema(names);
+			await writeFile(schemaPath, existingSchema + schemaToAppend);
+		}
+
+		// Add createDemoLucia function to auth.ts
+		const authPath = join(outputDir, 'src', 'lib', 'server', 'auth.ts');
+		try {
+			let authContent = await readFile(authPath, 'utf-8');
+			if (!authContent.includes('createDemoLucia')) {
+				// Add demoUsers and demoSessions to imports
+				if (authContent.includes("from '$lib/server/db'")) {
+					authContent = authContent.replace(
+						/import \{ ([^}]+) \} from '\$lib\/server\/db'/,
+						(match, imports) => {
+							const currentImports = imports.split(',').map((s: string) => s.trim());
+							if (!currentImports.includes('demoUsers')) currentImports.push('demoUsers');
+							if (!currentImports.includes('demoSessions')) currentImports.push('demoSessions');
+							return `import { ${currentImports.join(', ')} } from '$lib/server/db'`;
+						}
+					);
+				}
+				// Append createDemoLucia function
+				authContent += getDemoLuciaFunction();
+				await writeFile(authPath, authContent);
+			}
+		} catch {
+			// auth.ts doesn't exist - this shouldn't happen if auth module ran first
+			console.log('  → Warning: auth.ts not found. Make sure auth module is enabled.');
 		}
 
 		// Write API route

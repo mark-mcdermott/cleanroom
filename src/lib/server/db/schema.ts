@@ -1,4 +1,4 @@
-import { pgTable, text, timestamp, boolean } from 'drizzle-orm/pg-core';
+import { pgTable, text, timestamp, boolean, jsonb, integer } from 'drizzle-orm/pg-core';
 
 // Users table for authentication
 export const users = pgTable('users', {
@@ -367,3 +367,30 @@ export const demoResumes = pgTable('demo_resumes', {
 // Resume types
 export type DemoResume = typeof demoResumes.$inferSelect;
 export type NewDemoResume = typeof demoResumes.$inferInsert;
+
+// ============================================================================
+// MERCH ORDERS TABLE
+// ============================================================================
+
+// Store/Merch orders
+export const orders = pgTable('orders', {
+	id: text('id').primaryKey(),
+	email: text('email').notNull(),
+	userId: text('user_id').references(() => users.id, { onDelete: 'set null' }),
+	stripeSessionId: text('stripe_session_id'),
+	stripePaymentIntentId: text('stripe_payment_intent_id'),
+	printfulOrderId: text('printful_order_id'),
+	status: text('status').notNull().default('pending'),
+	shippingAddress: jsonb('shipping_address'),
+	items: jsonb('items').notNull(),
+	subtotal: integer('subtotal').notNull(),
+	shipping: integer('shipping').notNull().default(0),
+	total: integer('total').notNull(),
+	trackingNumber: text('tracking_number'),
+	trackingUrl: text('tracking_url'),
+	createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+	updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow()
+});
+
+export type Order = typeof orders.$inferSelect;
+export type NewOrder = typeof orders.$inferInsert;

@@ -249,11 +249,11 @@ function getTrackerDashboardSvelte(): string {
 			<p class="text-muted-foreground mt-1">{formatDate(new Date())} - Track your progress</p>
 		</div>
 		<div class="flex gap-2">
-			<Button.Root variant="outline" onclick={() => goto('/tracker/dashboard/admin')} class="cursor-pointer">
+			<Button.Root variant="outline" onclick={() => goto('/dashboard/admin')} class="cursor-pointer">
 				<Settings class="w-4 h-4 mr-2" />
 				Settings
 			</Button.Root>
-			<Button.Root onclick={() => goto('/tracker/dashboard/log')} class="cursor-pointer">
+			<Button.Root onclick={() => goto('/dashboard/log')} class="cursor-pointer">
 				<Plus class="w-4 h-4 mr-2" />
 				Log Entry
 			</Button.Root>
@@ -286,7 +286,7 @@ function getTrackerDashboardSvelte(): string {
 	{#if data.categories.length === 0}
 		<div class="border border-dashed border-border rounded-lg p-8 text-center">
 			<p class="text-muted-foreground mb-4">Set up categories and metrics to start tracking.</p>
-			<Button.Root variant="outline" onclick={() => goto('/tracker/dashboard/admin')} class="cursor-pointer">
+			<Button.Root variant="outline" onclick={() => goto('/dashboard/admin')} class="cursor-pointer">
 				Set Up Tracker
 			</Button.Root>
 		</div>
@@ -359,16 +359,15 @@ export const trackerModule: FeatureModule = {
 	async apply(config: ProjectConfig, outputDir: string) {
 		console.log('  → Adding tracker module for activity/habit tracking');
 
-		// Create tracker routes
-		await mkdir(join(outputDir, 'src', 'routes', 'tracker'), { recursive: true });
-		await mkdir(join(outputDir, 'src', 'routes', 'tracker', 'dashboard'), { recursive: true });
+		// Create dashboard route
+		await mkdir(join(outputDir, 'src', 'routes', 'dashboard'), { recursive: true });
 
-		// Homepage at /tracker (public)
-		await writeFile(join(outputDir, 'src', 'routes', 'tracker', '+page.svelte'), getTrackerHomepageSvelte());
+		// Replace homepage with tracker homepage
+		await writeFile(join(outputDir, 'src', 'routes', '+page.svelte'), getTrackerHomepageSvelte());
 
-		// Dashboard at /tracker/dashboard (auth protected)
-		await writeFile(join(outputDir, 'src', 'routes', 'tracker', 'dashboard', '+page.svelte'), getTrackerDashboardSvelte());
-		await writeFile(join(outputDir, 'src', 'routes', 'tracker', 'dashboard', '+page.server.ts'), getTrackerDashboardServer());
+		// Dashboard at /dashboard (auth protected)
+		await writeFile(join(outputDir, 'src', 'routes', 'dashboard', '+page.svelte'), getTrackerDashboardSvelte());
+		await writeFile(join(outputDir, 'src', 'routes', 'dashboard', '+page.server.ts'), getTrackerDashboardServer());
 
 		const schemaPath = join(outputDir, 'src', 'lib', 'server', 'db', 'schema.ts');
 		try {

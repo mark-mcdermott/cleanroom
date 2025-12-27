@@ -40,6 +40,7 @@ export const defaultNavLinks: NavLink[] = [
 			{ label: 'theme preview', href: '/modules/theme-preview', testId: 'nav-addons-theme-preview' }
 		]
 	},
+	{ label: 'merch', href: '/merch', testId: 'nav-merch' },
 	{ label: 'login', href: '/login', testId: 'nav-login', hideWhenAuth: true },
 	{ label: 'signup', href: '/signup', testId: 'nav-signup', hideWhenAuth: true },
 	{ label: 'users', href: '/admin/users', testId: 'nav-users', requiresAuth: true, requiresAdmin: true },
