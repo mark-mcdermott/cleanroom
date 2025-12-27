@@ -87,7 +87,7 @@
 			<!-- Color Selector -->
 			{#if colors.length > 1}
 				<div class="mb-6">
-					<label class="block text-sm font-medium mb-3">Color: {selectedColor}</label>
+					<span class="block text-sm font-medium mb-3">Color: {selectedColor}</span>
 					<div class="flex gap-3">
 						{#each colors as { color, hex }}
 							<button
@@ -108,7 +108,7 @@
 
 			<!-- Size Selector -->
 			<div class="mb-8">
-				<label class="block text-sm font-medium mb-3">Size</label>
+				<span class="block text-sm font-medium mb-3">Size</span>
 				<div class="flex flex-wrap gap-3">
 					{#each sizes as size}
 						<button

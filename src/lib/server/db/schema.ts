@@ -380,6 +380,7 @@ export const orders = pgTable('orders', {
 	stripeSessionId: text('stripe_session_id'),
 	stripePaymentIntentId: text('stripe_payment_intent_id'),
 	printfulOrderId: text('printful_order_id'),
+	printfulStatus: text('printful_status'),
 	status: text('status').notNull().default('pending'),
 	shippingAddress: jsonb('shipping_address'),
 	items: jsonb('items').notNull(),
