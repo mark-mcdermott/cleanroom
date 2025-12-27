@@ -71,9 +71,10 @@ export function createPrintfulClient(apiKey: string, storeId?: string) {
 	}
 
 	return {
-		async createOrder(order: PrintfulOrderRequest): Promise<PrintfulOrderResponse> {
+		async createOrder(order: PrintfulOrderRequest, confirm = true): Promise<PrintfulOrderResponse> {
 			console.log('Creating Printful order:', JSON.stringify(order, null, 2));
-			return request<PrintfulOrderResponse>('/orders', {
+			// confirm=true auto-confirms the order instead of leaving it as draft
+			return request<PrintfulOrderResponse>(`/orders?confirm=${confirm}`, {
 				method: 'POST',
 				body: JSON.stringify(order)
 			});
