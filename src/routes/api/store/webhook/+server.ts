@@ -6,14 +6,24 @@ import { createDb, orders } from '$lib/server/db';
 import type { RequestHandler } from './$types';
 import type Stripe from 'stripe';
 
-// Printful store ID - you can also put this in env if needed
-const PRINTFUL_STORE_ID = '17441436';
-
 export const POST: RequestHandler = async ({ request, platform }) => {
+	console.log('=== WEBHOOK RECEIVED ===');
+	console.log('Timestamp:', new Date().toISOString());
+
 	const stripeSecretKey = platform?.env?.STRIPE_SECRET_KEY;
 	const stripeWebhookSecret = platform?.env?.STRIPE_WEBHOOK_SECRET;
 	const printfulApiKey = platform?.env?.PRINTFUL_API_KEY;
+	const printfulStoreId = platform?.env?.PRINTFUL_STORE_ID;
 	const databaseUrl = platform?.env?.DATABASE_URL;
+
+	console.log('Environment check:', {
+		hasStripeSecretKey: !!stripeSecretKey,
+		hasStripeWebhookSecret: !!stripeWebhookSecret,
+		hasPrintfulApiKey: !!printfulApiKey,
+		hasPrintfulStoreId: !!printfulStoreId,
+		printfulStoreId: printfulStoreId,
+		hasDatabaseUrl: !!databaseUrl
+	});
 
 	if (!stripeSecretKey || !stripeWebhookSecret || !databaseUrl) {
 		console.error('Missing required environment variables');
@@ -34,9 +44,15 @@ export const POST: RequestHandler = async ({ request, platform }) => {
 	let event: Stripe.Event;
 
 	try {
+		console.log('Attempting signature verification...');
+		console.log('Signature header:', signature?.substring(0, 50) + '...');
+		console.log('Webhook secret starts with:', stripeWebhookSecret?.substring(0, 10) + '...');
+		console.log('Body length:', body.length);
 		event = stripe.webhooks.constructEvent(body, signature, stripeWebhookSecret);
+		console.log('Signature verification SUCCESS');
 	} catch (err) {
 		console.error('Webhook signature verification failed:', err);
+		console.error('Full error:', JSON.stringify(err, Object.getOwnPropertyNames(err)));
 		error(400, 'Webhook signature verification failed');
 	}
 
@@ -60,14 +76,23 @@ export const POST: RequestHandler = async ({ request, platform }) => {
 			}
 
 			console.log(`Processing order: ${orderId}`);
+			console.log('Session metadata:', session.metadata);
+			console.log('Session customer_details:', session.customer_details);
 
 			// Get order from database
 			const [order] = await db.select().from(orders).where(eq(orders.id, orderId)).limit(1);
 
 			if (!order) {
-				console.error(`Order not found: ${orderId}`);
+				console.error(`Order not found in database: ${orderId}`);
 				return json({ received: true });
 			}
+
+			console.log('Order from database:', {
+				id: order.id,
+				email: order.email,
+				status: order.status,
+				itemCount: Array.isArray(order.items) ? order.items.length : 'not array'
+			});
 
 			// Get shipping address from Stripe session
 			const shippingDetails = (session as unknown as {
@@ -83,6 +108,8 @@ export const POST: RequestHandler = async ({ request, platform }) => {
 					};
 				};
 			}).shipping_details;
+
+			console.log('Shipping details from Stripe:', JSON.stringify(shippingDetails, null, 2));
 
 			if (!shippingDetails?.address) {
 				console.error('No shipping address in session');
@@ -107,14 +134,17 @@ export const POST: RequestHandler = async ({ request, platform }) => {
 			// Create Printful order if API key is available
 			if (printfulApiKey) {
 				try {
-					const printful = createPrintfulClient(printfulApiKey, PRINTFUL_STORE_ID);
+					console.log('Creating Printful client with store ID:', printfulStoreId);
+					const printful = createPrintfulClient(printfulApiKey, printfulStoreId);
 
 					const orderItems = order.items as Array<{
 						printfulSyncVariantId: string;
 						quantity: number;
 					}>;
 
-					const printfulOrder = await printful.createOrder({
+					console.log('Order items for Printful:', JSON.stringify(orderItems, null, 2));
+
+					const printfulRequest = {
 						recipient: {
 							name: shippingDetails.name || 'Customer',
 							address1: shippingDetails.address.line1 || '',
@@ -129,9 +159,13 @@ export const POST: RequestHandler = async ({ request, platform }) => {
 							sync_variant_id: parseInt(item.printfulSyncVariantId, 10),
 							quantity: item.quantity
 						}))
-					});
+					};
 
-					console.log(`Printful order created: ${printfulOrder.id}`);
+					console.log('Printful order request:', JSON.stringify(printfulRequest, null, 2));
+
+					const printfulOrder = await printful.createOrder(printfulRequest);
+
+					console.log('Printful order created successfully:', JSON.stringify(printfulOrder, null, 2));
 
 					// Update order with Printful info
 					await db
