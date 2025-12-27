@@ -48,7 +48,8 @@ export const POST: RequestHandler = async ({ request, platform }) => {
 		console.log('Signature header:', signature?.substring(0, 50) + '...');
 		console.log('Webhook secret starts with:', stripeWebhookSecret?.substring(0, 10) + '...');
 		console.log('Body length:', body.length);
-		event = stripe.webhooks.constructEvent(body, signature, stripeWebhookSecret);
+		// Use async version for Cloudflare Workers compatibility
+		event = await stripe.webhooks.constructEventAsync(body, signature, stripeWebhookSecret);
 		console.log('Signature verification SUCCESS');
 	} catch (err) {
 		console.error('Webhook signature verification failed:', err);
